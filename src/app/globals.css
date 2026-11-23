@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-brand-purple: #5733F0;
+  --color-neon-lime: #CDFE02;
+  --color-ice-blue: #D2EFF7;
+  --color-dark-surface: #101010;
+  --color-pure-white: #FFFFFF;
+
+  --font-gilroy: "Gilroy", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+:root {
+  --background: #FFFFFF;
+  --foreground: #101010;
+  --brand-purple: #5733F0;
+  --neon-lime: #CDFE02;
+  --ice-blue: #D2EFF7;
+  --dark-surface: #101010;
+}
+
+.dark {
+  --background: #101010;
+  --foreground: #FFFFFF;
+  --brand-purple: #5733F0;
+  --neon-lime: #CDFE02;
+  --ice-blue: #D2EFF7;
+  --dark-surface: #171717;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: local('Gilroy-Regular'), local('Gilroy');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: local('Gilroy-Medium');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: local('Gilroy-SemiBold'), local('Gilroy-Semibold');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: local('Gilroy-Bold');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: "Gilroy", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
