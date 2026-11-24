@@ -144,6 +144,13 @@ export default function Home() {
             </div>
 
             <a
+              href="/login"
+              className="text-xs px-3.5 py-1.5 rounded-full bg-[#CDFE02] hover:bg-[#CDFE02]/90 text-[#101010] font-bold flex items-center gap-1.5 transition-all shadow-md"
+            >
+              <span>Sign In</span>
+            </a>
+
+            <a
               href="https://github.com/omshinde04/bajaj-canteen"
               target="_blank"
               rel="noreferrer"
@@ -172,18 +179,21 @@ export default function Home() {
               Real-time monitoring for check sheets, shift operations (Shift A, B, C), multi-tiered approvals, photo evidence, and automated compliance for Bajaj facilities.
             </p>
 
-            <div className="flex flex-wrap gap-3 pt-2">
-              <span className="px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-xs text-zinc-300 flex items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-3 pt-3">
+              <a
+                href="/login"
+                className="px-5 py-2.5 rounded-xl bg-[#5733F0] hover:bg-[#5733F0]/90 text-white font-semibold text-xs flex items-center gap-2 shadow-lg shadow-[#5733F0]/30 transition-all"
+              >
+                <span>Launch Admin Console</span>
+                <ArrowUpRight className="w-4 h-4 text-[#CDFE02]" />
+              </a>
+              <span className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-zinc-300 flex items-center gap-1.5">
                 <Database className="w-3.5 h-3.5 text-[#CDFE02]" />
                 MongoDB Atlas: {health.database?.name || "bajaj_enterprise"}
               </span>
-              <span className="px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-xs text-zinc-300 flex items-center gap-1.5">
+              <span className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-zinc-300 flex items-center gap-1.5">
                 <Server className="w-3.5 h-3.5 text-[#5733F0]" />
                 Next.js 16 App Router
-              </span>
-              <span className="px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-xs text-zinc-300 flex items-center gap-1.5">
-                <CloudCheck className="w-3.5 h-3.5 text-[#D2EFF7]" />
-                Vercel Deploy Ready
               </span>
             </div>
           </div>
