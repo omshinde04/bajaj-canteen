@@ -48,7 +48,11 @@ export default function LoginPage() {
 
       setSuccess(true);
       setTimeout(() => {
-        router.push("/admin/dashboard");
+        if (data.user?.role?.code === "OPERATOR") {
+          router.push("/operator");
+        } else {
+          router.push("/admin/dashboard");
+        }
       }, 500);
     } catch (err) {
       setError(err.message);
@@ -57,9 +61,14 @@ export default function LoginPage() {
     }
   };
 
-  const handleFillDemo = () => {
-    setEmail("admin@bajaj.com");
-    setPassword("AdminPassword@2026");
+  const handleFillDemo = (type = "admin") => {
+    if (type === "operator") {
+      setEmail("operator@bajaj.com");
+      setPassword("Operator@2026");
+    } else {
+      setEmail("admin@bajaj.com");
+      setPassword("AdminPassword@2026");
+    }
     setError("");
   };
 
@@ -302,29 +311,38 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Refined Staging / Demo Instance Preset */}
+          {/* Refined Staging / Demo Instance Presets */}
           <div className="pt-4 border-t border-white/5 space-y-2">
             <div className="flex items-center justify-between text-[11px] text-zinc-400">
               <span className="flex items-center gap-1.5">
                 <KeyRound className="w-3.5 h-3.5 text-[#5733F0]" />
-                <span>Demo Staging Account</span>
+                <span>Demo Staging Accounts</span>
               </span>
+              <span className="text-[10px] text-zinc-500 font-mono">1-Click Fast Fill</span>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
-                onClick={handleFillDemo}
-                className="text-xs font-semibold text-[#CDFE02] hover:underline"
+                onClick={() => handleFillDemo("admin")}
+                className="p-2.5 rounded-xl bg-white/[0.02] hover:bg-[#5733F0]/10 border border-white/5 hover:border-[#5733F0]/40 text-left transition-all group"
               >
-                1-Click Autofill
+                <div className="text-white font-medium text-[11px] group-hover:text-[#CDFE02]">
+                  Super Admin
+                </div>
+                <div className="text-zinc-500 text-[10px] font-mono truncate">admin@bajaj.com</div>
               </button>
-            </div>
-            <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-between text-xs">
-              <div className="truncate">
-                <div className="text-white font-medium text-[11px]">Super Administrator</div>
-                <div className="text-zinc-500 text-[10px] font-mono">admin@bajaj.com</div>
-              </div>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-white/10 text-zinc-300 font-mono">
-                Super Admin
-              </span>
+
+              <button
+                type="button"
+                onClick={() => handleFillDemo("operator")}
+                className="p-2.5 rounded-xl bg-white/[0.02] hover:bg-[#CDFE02]/10 border border-white/5 hover:border-[#CDFE02]/40 text-left transition-all group"
+              >
+                <div className="text-white font-medium text-[11px] group-hover:text-[#CDFE02]">
+                  Floor Operator
+                </div>
+                <div className="text-zinc-500 text-[10px] font-mono truncate">operator@bajaj.com</div>
+              </button>
             </div>
           </div>
         </div>

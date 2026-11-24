@@ -4,8 +4,8 @@ export function middleware(request) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("bajaj_token")?.value;
 
-  // Protect all /admin routes
-  if (pathname.startsWith("/admin")) {
+  // Protect all /admin and /operator routes
+  if (pathname.startsWith("/admin") || pathname.startsWith("/operator")) {
     if (!token) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("callbackUrl", pathname);
@@ -27,5 +27,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/login", "/"],
+  matcher: ["/admin/:path*", "/operator/:path*", "/login", "/"],
 };
