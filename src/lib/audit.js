@@ -7,10 +7,12 @@ import { connectDB } from "@/lib/db";
  */
 export async function recordAuditLog({
   actorId = null,
+  actor = null,
   actorName = "System",
   action,
   module,
   recordId = null,
+  targetId = null,
   previousValue = null,
   updatedValue = null,
   req = null,
@@ -18,6 +20,9 @@ export async function recordAuditLog({
 }) {
   try {
     await connectDB();
+
+    const actualActorId = actorId || actor;
+    const actualRecordId = recordId || targetId;
 
     let ipAddress = "unknown";
     let userAgent = "unknown";
@@ -31,11 +36,11 @@ export async function recordAuditLog({
     }
 
     const log = await AuditLog.create({
-      actorId,
+      actorId: actualActorId,
       actorName,
       action,
       module,
-      recordId: recordId ? String(recordId) : null,
+      recordId: actualRecordId ? String(actualRecordId) : null,
       previousValue,
       updatedValue,
       ipAddress,

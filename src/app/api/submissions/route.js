@@ -167,11 +167,13 @@ export const POST = requirePermission("add")(async (req, { user }) => {
     );
     const hasDefects = nonConformingCount > 0;
 
+    const userId = user._id || user.id;
+
     const submission = await Submission.create({
       checkSheet: checkSheetId,
       department: departmentId,
       shift: shiftId,
-      submittedBy: user._id,
+      submittedBy: userId,
       responses,
       photos,
       notes,
@@ -184,7 +186,7 @@ export const POST = requirePermission("add")(async (req, { user }) => {
     });
 
     await recordAuditLog({
-      actor: user._id,
+      actor: userId,
       actorEmail: user.email,
       actorName: user.name,
       actorRole: user.role?.code,

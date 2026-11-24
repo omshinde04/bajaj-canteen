@@ -29,6 +29,10 @@ const AuditLogSchema = new mongoose.Schema(
         "DOWNLOAD_REPORT",
         "RESTORE",
         "SECURITY_ALERT",
+        "SUBMISSION_CREATED",
+        "SUBMISSION_APPROVED",
+        "SUBMISSION_REJECTED",
+        "SUBMISSION_FLAGGED",
       ],
     },
     module: {

@@ -110,6 +110,7 @@ export async function POST(req) {
     // Cache user session
     const sessionCacheKey = `user:session:${user._id}`;
     const userSafe = {
+      _id: user._id,
       id: user._id,
       employeeId: user.employeeId,
       name: user.name,

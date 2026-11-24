@@ -49,15 +49,17 @@ export const PATCH = requirePermission("approve")(async (req, { params, user }) 
     if (action === "REJECT") newStatus = "REJECTED";
     if (action === "FLAG") newStatus = "FLAGGED";
 
+    const userId = user._id || user.id;
+
     // Generate SHA-256 Digital Signature Hash
-    const signaturePayload = `${submission._id}:${user._id}:${now.toISOString()}:${newStatus}`;
+    const signaturePayload = `${submission._id}:${userId}:${now.toISOString()}:${newStatus}`;
     const signatureHash = crypto
       .createHash("sha256")
       .update(signaturePayload)
       .digest("hex");
 
     submission.status = newStatus;
-    submission.reviewedBy = user._id;
+    submission.reviewedBy = userId;
     submission.reviewedAt = now;
     submission.supervisorRemarks = supervisorRemarks || "";
     submission.rejectionReason = action === "REJECT" ? rejectionReason : null;
@@ -70,7 +72,7 @@ export const PATCH = requirePermission("approve")(async (req, { params, user }) 
     await submission.save();
 
     await recordAuditLog({
-      actor: user._id,
+      actor: userId,
       actorEmail: user.email,
       actorName: user.name,
       actorRole: user.role?.code,
