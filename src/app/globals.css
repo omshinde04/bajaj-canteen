@@ -1,31 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme inline {
   --color-brand-purple: #5733F0;
   --color-neon-lime: #CDFE02;
   --color-ice-blue: #D2EFF7;
-  --color-dark-surface: #101010;
+  --color-dark-surface: #0E0E11;
   --color-pure-white: #FFFFFF;
 
-  --font-gilroy: "Gilroy", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-gilroy: "Gilroy", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
 :root {
-  --background: #FFFFFF;
-  --foreground: #101010;
+  --background: #0B0B0E;
+  --foreground: #F4F4F5;
   --brand-purple: #5733F0;
   --neon-lime: #CDFE02;
   --ice-blue: #D2EFF7;
-  --dark-surface: #101010;
-}
-
-.dark {
-  --background: #101010;
-  --foreground: #FFFFFF;
-  --brand-purple: #5733F0;
-  --neon-lime: #CDFE02;
-  --ice-blue: #D2EFF7;
-  --dark-surface: #171717;
+  --dark-surface: #131318;
 }
 
 @font-face {
@@ -63,7 +56,20 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: "Gilroy", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: "Gilroy", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle SaaS Background Grid Pattern */
+.bg-saas-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+}
+
+.bg-dot-pattern {
+  background-size: 24px 24px;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
 }
