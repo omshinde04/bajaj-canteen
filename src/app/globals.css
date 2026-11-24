@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme inline {
@@ -8,12 +7,12 @@
   --color-dark-surface: #0E0E11;
   --color-pure-white: #FFFFFF;
 
-  --font-gilroy: "Gilroy", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-gilroy: "Gilroy", var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
 }
 
 :root {
-  --background: #0B0B0E;
+  --background: #09090C;
   --foreground: #F4F4F5;
   --brand-purple: #5733F0;
   --neon-lime: #CDFE02;
@@ -56,7 +55,7 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: "Gilroy", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: "Gilroy", var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
