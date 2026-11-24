@@ -23,6 +23,8 @@ import {
   Sparkles,
   RefreshCw,
   Hash,
+  ZoomIn,
+  MessageSquare,
 } from "lucide-react";
 
 export default function SubmissionsPage() {
@@ -40,13 +42,30 @@ export default function SubmissionsPage() {
   const [shiftFilter, setShiftFilter] = useState("ALL");
   const [loading, setLoading] = useState(true);
 
-  // Inspection Drawer State
+  // Centered Inspection Modal State
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
   const [rejectModalOpen, setRejectModalOpen] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
   const [supervisorRemarks, setSupervisorRemarks] = useState("");
   const [zoomPhoto, setZoomPhoto] = useState(null);
+
+  // Close modal on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        if (zoomPhoto) {
+          setZoomPhoto(null);
+        } else if (rejectModalOpen) {
+          setRejectModalOpen(false);
+        } else if (selectedSubmission) {
+          setSelectedSubmission(null);
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedSubmission, rejectModalOpen, zoomPhoto]);
 
   const fetchSubmissions = async () => {
     try {
@@ -103,7 +122,7 @@ export default function SubmissionsPage() {
         throw new Error(data.error || "Review action failed");
       }
 
-      // Update local state
+      // Update local state and refresh
       setSelectedSubmission(data.submission);
       setRejectModalOpen(false);
       setRejectionReason("");
@@ -120,27 +139,27 @@ export default function SubmissionsPage() {
     switch (status) {
       case "APPROVED":
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#CDFE02]/15 text-[#CDFE02] border border-[#CDFE02]/30">
-            <CheckCircle2 className="w-3 h-3" /> Approved
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#CDFE02]/15 text-[#CDFE02] border border-[#CDFE02]/30">
+            <CheckCircle2 className="w-3.5 h-3.5" /> Approved & Signed
           </span>
         );
       case "REJECTED":
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">
-            <XCircle className="w-3 h-3" /> Rejected
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">
+            <XCircle className="w-3.5 h-3.5" /> Rejected
           </span>
         );
       case "FLAGGED":
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">
-            <AlertTriangle className="w-3 h-3" /> Flagged Defect
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">
+            <AlertTriangle className="w-3.5 h-3.5" /> Flagged Defect
           </span>
         );
       case "PENDING_APPROVAL":
       default:
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#5733F0]/20 text-[#D2EFF7] border border-[#5733F0]/40">
-            <Clock className="w-3 h-3 text-[#CDFE02]" /> Pending Approval
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#5733F0]/20 text-[#D2EFF7] border border-[#5733F0]/40">
+            <Clock className="w-3.5 h-3.5 text-[#CDFE02]" /> Pending Approval
           </span>
         );
     }
@@ -321,7 +340,7 @@ export default function SubmissionsPage() {
                     <td className="py-3.5 px-4 text-right">
                       <button
                         onClick={() => setSelectedSubmission(sub)}
-                        className="px-3 py-1.5 rounded-xl font-semibold text-xs text-white bg-[#5733F0] hover:bg-[#5733F0]/90 transition-all shadow-sm shadow-[#5733F0]/30 inline-flex items-center gap-1.5"
+                        className="px-3.5 py-1.5 rounded-xl font-semibold text-xs text-white bg-[#5733F0] hover:bg-[#5733F0]/90 transition-all shadow-sm shadow-[#5733F0]/30 inline-flex items-center gap-1.5 cursor-pointer"
                       >
                         <Eye className="w-3 h-3 text-[#CDFE02]" />
                         <span>Inspect</span>
@@ -335,207 +354,260 @@ export default function SubmissionsPage() {
         </div>
       </div>
 
-      {/* Slide-over Inspection Drawer */}
+      {/* ========================================================================= */}
+      {/* PROPERLY CENTERED SAAS MODAL DIALOG (BALANCED, INTUITIVE, EASY UX)        */}
+      {/* ========================================================================= */}
       {selectedSubmission && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-2xl bg-[#141418] border-l border-white/10 h-screen flex flex-col justify-between shadow-2xl overflow-hidden animate-in slide-in-from-right duration-300">
-            {/* Drawer Header */}
-            <div className="p-6 border-b border-white/10 flex items-start justify-between bg-[#101014] shrink-0">
+        <div
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setSelectedSubmission(null);
+          }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 lg:p-8 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+        >
+          <div className="relative w-full max-w-4xl max-h-[92vh] bg-[#141418] border border-white/15 rounded-3xl flex flex-col shadow-2xl shadow-black/80 overflow-hidden animate-in zoom-in-95 duration-200">
+            {/* Modal Header */}
+            <div className="p-6 border-b border-white/10 bg-[#101014] shrink-0 flex items-start justify-between gap-4">
               <div className="space-y-1.5">
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#5733F0]/20 text-[#D2EFF7] border border-[#5733F0]/40">
-                    {selectedSubmission.checkSheet?.code}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#5733F0]/25 text-[#D2EFF7] border border-[#5733F0]/40 font-mono">
+                    {selectedSubmission.checkSheet?.code || "CS-RECORD"}
                   </span>
                   {getStatusBadge(selectedSubmission.status)}
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-zinc-300">
+                    {selectedSubmission.department?.name || "Kitchen"}
+                  </span>
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-zinc-300">
+                    {selectedSubmission.shift?.name || "Shift A"}
+                  </span>
                 </div>
-                <h2 className="text-lg font-bold text-white">
-                  {selectedSubmission.checkSheet?.title}
+
+                <h2 className="text-xl font-extrabold text-white tracking-tight">
+                  {selectedSubmission.checkSheet?.title || "Check Sheet Inspection"}
                 </h2>
+
                 <p className="text-xs text-zinc-400">
-                  Submitted by {selectedSubmission.submittedBy?.name} ({selectedSubmission.submittedBy?.employeeId}) •{" "}
+                  Submitted by <strong className="text-zinc-200">{selectedSubmission.submittedBy?.name}</strong> (
+                  <span className="font-mono">{selectedSubmission.submittedBy?.employeeId}</span>) on{" "}
                   {new Date(selectedSubmission.submissionDate).toLocaleString()}
                 </p>
               </div>
 
               <button
+                type="button"
                 onClick={() => setSelectedSubmission(null)}
-                className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/5 transition-colors"
+                className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-all shrink-0 cursor-pointer"
+                title="Close (Esc)"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Drawer Scrollable Body */}
-            <div className="p-6 space-y-6 overflow-y-auto flex-1 custom-scrollbar">
-              {/* Compliance & SLA Gauge Card */}
-              <div className="rounded-xl bg-white/[0.02] border border-white/5 p-4 grid grid-cols-3 gap-3 text-center">
-                <div>
-                  <div className="text-[11px] text-zinc-400">Compliance Score</div>
-                  <div className="text-xl font-extrabold text-[#CDFE02] mt-0.5">
+            {/* Modal Body: Balanced 2-Column Responsive Grid */}
+            <div className="p-6 overflow-y-auto flex-1 custom-scrollbar space-y-6">
+              {/* Top Quick Status & Compliance Strip */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1">
+                  <span className="text-[11px] text-zinc-400">Compliance Index</span>
+                  <div className="text-xl font-extrabold text-[#CDFE02] tracking-tight">
                     {selectedSubmission.complianceScore}%
                   </div>
                 </div>
-                <div className="border-x border-white/5">
-                  <div className="text-[11px] text-zinc-400">Department</div>
-                  <div className="text-xs font-semibold text-white mt-1 truncate">
-                    {selectedSubmission.department?.name}
+
+                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1">
+                  <span className="text-[11px] text-zinc-400">Conformity Status</span>
+                  <div className="text-xs font-bold text-white mt-1 flex items-center gap-1.5">
+                    {selectedSubmission.hasDefects ? (
+                      <span className="text-rose-400 flex items-center gap-1">
+                        <AlertTriangle className="w-3.5 h-3.5" /> Defect Identified
+                      </span>
+                    ) : (
+                      <span className="text-[#CDFE02] flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" /> 100% Nominal
+                      </span>
+                    )}
                   </div>
                 </div>
-                <div>
-                  <div className="text-[11px] text-zinc-400">Shift Execution</div>
-                  <div className="text-xs font-semibold text-white mt-1">
-                    {selectedSubmission.shift?.name}
+
+                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1">
+                  <span className="text-[11px] text-zinc-400">Photo Evidence</span>
+                  <div className="text-xs font-bold text-white mt-1 flex items-center gap-1">
+                    <Camera className="w-3.5 h-3.5 text-[#CDFE02]" />
+                    <span>{selectedSubmission.photos?.length || 0} Attached</span>
+                  </div>
+                </div>
+
+                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1">
+                  <span className="text-[11px] text-zinc-400">Operational SLA</span>
+                  <div className="text-xs font-bold text-[#D2EFF7] mt-1 flex items-center gap-1">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>Within Target</span>
                   </div>
                 </div>
               </div>
 
-              {/* Digital Signature Seal if Approved */}
+              {/* Status Alert Banners (if Approved or Rejected) */}
+              {selectedSubmission.status === "REJECTED" && (
+                <div className="rounded-2xl bg-rose-500/10 border border-rose-500/30 p-4 space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-bold text-rose-400">
+                    <XCircle className="w-4 h-4 shrink-0" />
+                    <span>Submission Rejected & Returned for Corrective Action</span>
+                  </div>
+                  <div className="p-3 rounded-xl bg-black/40 border border-rose-500/20 text-xs text-rose-200">
+                    <strong>Mandatory Rejection Reason:</strong> "{selectedSubmission.rejectionReason}"
+                  </div>
+                  <div className="text-[11px] text-zinc-400 pt-1">
+                    Reviewed by {selectedSubmission.reviewedBy?.name || "Shift Supervisor"} on{" "}
+                    {new Date(selectedSubmission.reviewedAt || Date.now()).toLocaleString()}
+                  </div>
+                </div>
+              )}
+
               {selectedSubmission.digitalSignature?.hash && (
-                <div className="rounded-xl bg-[#CDFE02]/5 border border-[#CDFE02]/30 p-4 space-y-2">
+                <div className="rounded-2xl bg-[#CDFE02]/5 border border-[#CDFE02]/30 p-4 space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#CDFE02]">
-                      <ShieldCheck className="w-4 h-4" /> Digitally Signed & Sealed
+                    <span className="inline-flex items-center gap-2 text-xs font-bold text-[#CDFE02]">
+                      <ShieldCheck className="w-4 h-4" /> Tamper-Proof Digital Signature Applied
                     </span>
-                    <span className="text-[10px] text-zinc-400 font-mono">SHA-256 Validated</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-black/60 text-[#CDFE02] border border-[#CDFE02]/30">
+                      SHA-256 Validated
+                    </span>
                   </div>
                   <div className="text-xs text-zinc-300">
-                    Verified by <strong className="text-white">{selectedSubmission.digitalSignature.signedBy}</strong> on{" "}
+                    Digitally signed and sealed by{" "}
+                    <strong className="text-white">{selectedSubmission.digitalSignature.signedBy}</strong> on{" "}
                     {new Date(selectedSubmission.digitalSignature.timestamp).toLocaleString()}
                   </div>
-                  <div className="text-[10px] font-mono text-zinc-500 break-all bg-black/40 p-2 rounded-lg border border-white/5">
+                  <div className="text-[10px] font-mono text-zinc-400 bg-black/50 p-2.5 rounded-xl border border-white/10 break-all select-all">
                     Hash: {selectedSubmission.digitalSignature.hash}
                   </div>
-                  {selectedSubmission.supervisorRemarks && (
-                    <div className="text-xs text-zinc-300 pt-2 border-t border-white/5">
-                      Remarks: "{selectedSubmission.supervisorRemarks}"
+                </div>
+              )}
+
+              {/* 2-Column Inspection Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* Left Column: Checklist Inspection Items Table (7 cols) */}
+                <div className="lg:col-span-7 space-y-3">
+                  <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center justify-between">
+                    <span>Checklist Readings & Parameters</span>
+                    <span className="text-[10px] font-normal text-zinc-400 font-mono">
+                      {selectedSubmission.responses?.length || 0} Items Checked
+                    </span>
+                  </h3>
+
+                  <div className="rounded-2xl bg-white/[0.02] border border-white/5 overflow-hidden">
+                    <table className="w-full text-left text-xs">
+                      <thead>
+                        <tr className="border-b border-white/10 bg-white/[0.02] text-zinc-400">
+                          <th className="py-2.5 px-3 font-semibold">Parameter</th>
+                          <th className="py-2.5 px-3 font-semibold text-right">Value</th>
+                          <th className="py-2.5 px-3 font-semibold text-right">Outcome</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-white/5">
+                        {selectedSubmission.responses?.map((r, idx) => (
+                          <tr key={idx} className="hover:bg-white/[0.01]">
+                            <td className="py-2.5 px-3 font-medium text-white">{r.label}</td>
+                            <td className="py-2.5 px-3 text-right font-mono text-zinc-200">
+                              {typeof r.value === "boolean"
+                                ? r.value
+                                  ? "Yes / Pass"
+                                  : "No / Fail"
+                                : `${r.value} ${r.unit || ""}`}
+                            </td>
+                            <td className="py-2.5 px-3 text-right">
+                              {r.isConforming ? (
+                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#CDFE02]">
+                                  <CheckCircle2 className="w-3 h-3" /> Pass
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-rose-400">
+                                  <XCircle className="w-3 h-3" /> Non-Conforming
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Operator Notes */}
+                  {selectedSubmission.notes && (
+                    <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1">
+                      <span className="text-[11px] font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-1.5">
+                        <MessageSquare className="w-3 h-3 text-[#5733F0]" />
+                        Operator Shift Notes
+                      </span>
+                      <p className="text-xs text-zinc-300 italic">"{selectedSubmission.notes}"</p>
                     </div>
                   )}
                 </div>
-              )}
 
-              {/* Rejection Notice if Rejected */}
-              {selectedSubmission.status === "REJECTED" && (
-                <div className="rounded-xl bg-rose-500/10 border border-rose-500/30 p-4 space-y-2">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-rose-400">
-                    <XCircle className="w-4 h-4" /> Submission Rejected
+                {/* Right Column: Photo Evidence Gallery (5 cols) */}
+                <div className="lg:col-span-5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                      <Camera className="w-3.5 h-3.5 text-[#CDFE02]" />
+                      Evidence Photograph
+                    </h3>
+                    <span className="text-[10px] text-zinc-500 font-mono">Click to zoom</span>
                   </div>
-                  <p className="text-xs text-rose-200">
-                    Reason: <em>"{selectedSubmission.rejectionReason}"</em>
-                  </p>
-                  <p className="text-[11px] text-zinc-400">
-                    Reviewed by {selectedSubmission.reviewedBy?.name} on{" "}
-                    {new Date(selectedSubmission.reviewedAt).toLocaleString()}
-                  </p>
-                </div>
-              )}
 
-              {/* Checklist Field Responses Table */}
-              <div className="space-y-3">
-                <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-                  Checklist Inspection Items & Measurements
-                </h3>
-
-                <div className="rounded-xl bg-white/[0.02] border border-white/5 overflow-hidden">
-                  <table className="w-full text-left text-xs">
-                    <thead>
-                      <tr className="border-b border-white/5 bg-white/[0.02] text-zinc-400">
-                        <th className="py-2.5 px-3 font-semibold">Inspection Parameter</th>
-                        <th className="py-2.5 px-3 font-semibold text-right">Recorded Value</th>
-                        <th className="py-2.5 px-3 font-semibold text-right">Outcome</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/5">
-                      {selectedSubmission.responses?.map((r, idx) => (
-                        <tr key={idx} className="hover:bg-white/[0.01]">
-                          <td className="py-2.5 px-3 font-medium text-white">{r.label}</td>
-                          <td className="py-2.5 px-3 text-right font-mono text-zinc-200">
-                            {typeof r.value === "boolean"
-                              ? r.value
-                                ? "Yes / Pass"
-                                : "No / Fail"
-                              : `${r.value} ${r.unit || ""}`}
-                          </td>
-                          <td className="py-2.5 px-3 text-right">
-                            {r.isConforming ? (
-                              <span className="text-[10px] font-bold text-[#CDFE02]">Pass</span>
-                            ) : (
-                              <span className="text-[10px] font-bold text-rose-400">Non-Conforming</span>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              {/* Photo Evidence Section */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                    <Camera className="w-3.5 h-3.5 text-[#CDFE02]" />
-                    Photo Evidence Lightbox ({selectedSubmission.photos?.length || 0})
-                  </h3>
-                  <span className="text-[10px] text-zinc-500 font-mono">Tamper-Proof Storage</span>
-                </div>
-
-                {selectedSubmission.photos?.length > 0 ? (
-                  <div className="grid grid-cols-2 gap-3">
-                    {selectedSubmission.photos.map((photo, pIdx) => (
-                      <div
-                        key={pIdx}
-                        onClick={() => setZoomPhoto(photo.url)}
-                        className="group relative rounded-xl overflow-hidden border border-white/10 bg-black aspect-video cursor-pointer hover:border-[#5733F0] transition-all"
-                      >
-                        <img
-                          src={photo.url}
-                          alt={photo.caption || "Evidence photograph"}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-2 flex items-end justify-between">
-                          <span className="text-[10px] text-white font-medium truncate">
-                            {photo.caption || "Click to zoom"}
-                          </span>
-                          <ExternalLink className="w-3 h-3 text-[#CDFE02]" />
+                  {selectedSubmission.photos?.length > 0 ? (
+                    <div className="space-y-3">
+                      {selectedSubmission.photos.map((photo, pIdx) => (
+                        <div
+                          key={pIdx}
+                          onClick={() => setZoomPhoto(photo.url)}
+                          className="group relative rounded-2xl overflow-hidden border border-white/10 bg-black aspect-video cursor-pointer hover:border-[#5733F0] transition-all shadow-lg"
+                        >
+                          <img
+                            src={photo.url}
+                            alt={photo.caption || "Evidence Photograph"}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-3 flex flex-col justify-end">
+                            <div className="flex items-center justify-between text-white text-xs">
+                              <span className="font-semibold truncate">
+                                {photo.caption || "Inspection snapshot"}
+                              </span>
+                              <span className="px-2 py-0.5 rounded-full bg-[#5733F0] text-white text-[10px] font-bold flex items-center gap-1">
+                                <ZoomIn className="w-2.5 h-2.5" /> Zoom
+                              </span>
+                            </div>
+                            <span className="text-[10px] text-zinc-400 mt-0.5">
+                              Uploaded at {new Date(photo.uploadedAt || selectedSubmission.submissionDate).toLocaleTimeString()}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="rounded-xl border border-dashed border-white/10 p-6 text-center text-zinc-500 text-xs">
-                    No photo evidence attached to this submission.
-                  </div>
-                )}
-              </div>
-
-              {/* Operator Notes */}
-              {selectedSubmission.notes && (
-                <div className="space-y-1.5">
-                  <span className="text-xs font-bold text-white uppercase tracking-wider">Operator Notes</span>
-                  <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 text-xs text-zinc-300">
-                    "{selectedSubmission.notes}"
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="rounded-2xl border border-dashed border-white/10 p-8 text-center text-zinc-500 text-xs">
+                      No photographic proof attached.
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
 
-            {/* Drawer Footer Actions (Supervisor Sign-off) */}
-            <div className="p-4 border-t border-white/10 bg-[#101014] shrink-0 flex items-center justify-between gap-3">
+            {/* Modal Sticky Footer Actions */}
+            <div className="p-5 border-t border-white/10 bg-[#101014] shrink-0 flex items-center justify-between gap-4">
               <button
                 type="button"
                 onClick={() => setSelectedSubmission(null)}
-                className="px-4 py-2.5 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white hover:bg-white/5 transition-all"
+                className="px-5 py-2.5 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
               >
-                Close
+                Close Dialog (Esc)
               </button>
 
-              {selectedSubmission.status === "PENDING_APPROVAL" && (
-                <div className="flex items-center gap-2">
+              {selectedSubmission.status === "PENDING_APPROVAL" ? (
+                <div className="flex items-center gap-3">
                   <button
                     type="button"
                     onClick={() => setRejectModalOpen(true)}
                     disabled={actionLoading}
-                    className="px-4 py-2.5 rounded-xl font-semibold text-xs text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 transition-all flex items-center gap-1.5"
+                    className="px-4 py-2.5 rounded-xl font-semibold text-xs text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 transition-all flex items-center gap-1.5 cursor-pointer"
                   >
                     <XCircle className="w-3.5 h-3.5" />
                     <span>Reject & Return</span>
@@ -545,11 +617,23 @@ export default function SubmissionsPage() {
                     type="button"
                     onClick={() => handleReviewAction("APPROVE")}
                     disabled={actionLoading}
-                    className="px-5 py-2.5 rounded-xl font-semibold text-xs text-white bg-[#5733F0] hover:bg-[#5733F0]/90 transition-all flex items-center gap-1.5 shadow-lg shadow-[#5733F0]/30"
+                    className="px-6 py-2.5 rounded-xl font-semibold text-xs text-white bg-[#5733F0] hover:bg-[#5733F0]/90 active:scale-[0.99] transition-all flex items-center gap-2 shadow-lg shadow-[#5733F0]/30 cursor-pointer"
                   >
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#CDFE02]" />
+                    <CheckCircle2 className="w-4 h-4 text-[#CDFE02]" />
                     <span>Approve & Sign</span>
                   </button>
+                </div>
+              ) : (
+                <div className="text-xs text-zinc-400">
+                  {selectedSubmission.status === "APPROVED" ? (
+                    <span className="text-[#CDFE02] font-semibold flex items-center gap-1.5">
+                      <ShieldCheck className="w-4 h-4" /> Sign-off Complete
+                    </span>
+                  ) : (
+                    <span className="text-rose-400 font-semibold flex items-center gap-1.5">
+                      <XCircle className="w-4 h-4" /> Marked for Rectification
+                    </span>
+                  )}
                 </div>
               )}
             </div>
@@ -557,10 +641,15 @@ export default function SubmissionsPage() {
         </div>
       )}
 
-      {/* Rejection Modal */}
+      {/* Rejection Prompt Modal */}
       {rejectModalOpen && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-[#18181D] border border-white/10 rounded-2xl p-6 space-y-4 shadow-2xl">
+        <div
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setRejectModalOpen(false);
+          }}
+          className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+        >
+          <div className="w-full max-w-md bg-[#18181D] border border-white/15 rounded-3xl p-6 space-y-4 shadow-2xl animate-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-rose-400" />
@@ -568,31 +657,31 @@ export default function SubmissionsPage() {
               </h3>
               <button
                 onClick={() => setRejectModalOpen(false)}
-                className="text-zinc-500 hover:text-white"
+                className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-zinc-400 hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <p className="text-xs text-zinc-400">
-              Provide a clear reason for rejecting this submission. The operator will be notified to rectify the non-conformance.
+              Provide a specific reason for rejecting this submission. The operator will receive this exact note for corrective re-inspection.
             </p>
 
             <div className="space-y-1.5">
               <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider block">
-                Mandatory Rejection Reason *
+                Mandatory Rejection Note *
               </label>
               <textarea
                 value={rejectionReason}
                 onChange={(e) => setRejectionReason(e.target.value)}
-                placeholder="e.g. Deep fryer TPM exceeds 25% safety limit. Oil must be completely discarded and fryer sanitized."
+                placeholder="e.g. Total Polar Material (TPM) was recorded at 26%, which breaches the 25% FSSAI food safety limit. Discard oil and sanitize fryer."
                 rows={3}
                 required
                 className="w-full bg-white/[0.03] border border-white/10 rounded-xl p-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-rose-500"
               />
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2">
+            <div className="flex items-center justify-end gap-2.5 pt-2">
               <button
                 type="button"
                 onClick={() => setRejectModalOpen(false)}
@@ -604,7 +693,7 @@ export default function SubmissionsPage() {
                 type="button"
                 onClick={() => handleReviewAction("REJECT")}
                 disabled={actionLoading || !rejectionReason.trim()}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 disabled:opacity-50 transition-all flex items-center gap-1.5"
+                className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 disabled:opacity-50 transition-all flex items-center gap-1.5 cursor-pointer shadow-lg shadow-rose-600/30"
               >
                 <XCircle className="w-3.5 h-3.5" />
                 <span>Confirm Rejection</span>
@@ -620,11 +709,11 @@ export default function SubmissionsPage() {
           onClick={() => setZoomPhoto(null)}
           className="fixed inset-0 z-70 flex items-center justify-center p-6 bg-black/90 backdrop-blur-md cursor-zoom-out"
         >
-          <div className="relative max-w-4xl max-h-[90vh] rounded-2xl overflow-hidden border border-white/20">
+          <div className="relative max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden border border-white/20 shadow-2xl">
             <img src={zoomPhoto} alt="Evidence Full Zoom" className="w-full h-full object-contain" />
             <button
               onClick={() => setZoomPhoto(null)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-black/60 text-white hover:bg-black transition-colors"
+              className="absolute top-4 right-4 p-2.5 rounded-full bg-black/70 text-white hover:bg-black transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
