@@ -260,7 +260,7 @@ export default function CheckSheetExecutionWizard({ params }) {
 
   if (submittedSuccess) {
     return (
-      <div className="max-w-2xl mx-auto py-12 px-4 text-center space-y-6">
+      <div className="w-full max-w-3xl mx-auto py-12 px-4 text-center space-y-6 animate-fadeIn font-sans">
         <div className="w-16 h-16 rounded-full bg-[#CDFE02]/20 border border-[#CDFE02]/40 flex items-center justify-center text-[#CDFE02] mx-auto animate-bounce">
           <CheckCircle2 className="w-8 h-8" />
         </div>
@@ -307,10 +307,10 @@ export default function CheckSheetExecutionWizard({ params }) {
             Back to Shift Taskboard
           </Link>
           <Link
-            href="/admin/submissions"
+            href="/operator/history"
             className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#141418] hover:bg-white/5 border border-white/10 text-zinc-300 text-xs font-bold transition-all"
           >
-            View in Supervisor Console
+            View Submissions Log
           </Link>
         </div>
       </div>
@@ -335,243 +335,302 @@ export default function CheckSheetExecutionWizard({ params }) {
   }
 
   return (
-    <div className="space-y-6 pb-16 max-w-3xl mx-auto">
-      {/* Top Header & Navigation */}
-      <div className="flex items-center justify-between gap-4 pb-2 border-b border-white/5">
-        <Link
-          href="/operator"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-400 hover:text-white transition-all"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Tasks</span>
-        </Link>
-
-        {/* Live Score Indicator */}
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#141418] border border-white/10 text-xs">
-          <span className="text-zinc-400">Compliance:</span>
-          <span
-            className={`font-mono font-bold ${
-              currentCompliance < 100 ? "text-amber-400" : "text-[#CDFE02]"
-            }`}
+    <div className="space-y-5 pb-12 w-full font-sans">
+      {/* Top Header & Breadcrumb Bar (Spans 100% full width) */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/5">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/operator"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-400 hover:text-white transition-all p-1.5 rounded-lg hover:bg-white/5"
+            title="Return to Shift Taskboard"
           >
-            {currentCompliance}%
-          </span>
-          {defectCount > 0 && (
-            <span className="text-[10px] text-rose-400 font-semibold">({defectCount} defect)</span>
-          )}
-        </div>
-      </div>
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Tasks</span>
+          </Link>
 
-      {/* Check Sheet Banner */}
-      <div className="p-5 rounded-2xl bg-[#141418] border border-white/10 space-y-3">
-        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="h-4 w-px bg-white/10" />
+
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono font-bold text-[#CDFE02] bg-[#CDFE02]/10 border border-[#CDFE02]/20 px-2.5 py-0.5 rounded-lg">
               {checkSheet.code}
             </span>
-            <span className="text-xs text-zinc-400 uppercase tracking-wider font-semibold">
+            <span className="text-xs text-zinc-400 uppercase tracking-wider font-semibold hidden md:inline">
               {checkSheet.category}
             </span>
           </div>
+        </div>
 
-          <div className="flex items-center gap-2 text-xs text-zinc-400">
+        {/* Quick Metadata & Live Compliance Pill */}
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-1.5 text-xs text-zinc-400">
             <Building2 className="w-3.5 h-3.5 text-zinc-500" />
             <span>{checkSheet.department?.name || "Kitchen Operations"}</span>
           </div>
+
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#141418] border border-white/10 text-xs">
+            <span className="text-zinc-400">Live Score:</span>
+            <span
+              className={`font-mono font-bold ${
+                currentCompliance < 100 ? "text-amber-400" : "text-[#CDFE02]"
+              }`}
+            >
+              {currentCompliance}%
+            </span>
+            {defectCount > 0 && (
+              <span className="text-[10px] text-rose-400 font-semibold">({defectCount} defect)</span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Check Sheet Banner (Compact Full-Width Card) */}
+      <div className="p-4 sm:p-5 rounded-2xl bg-[#141418] border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <h1 className="text-lg sm:text-2xl font-bold text-white tracking-tight">
+            {checkSheet.title}
+          </h1>
+          <p className="text-xs text-zinc-400">
+            Akurdi Canteen Plant Facility &bull; Shift A Morning Run &bull; Record all operational telemetry before handover.
+          </p>
         </div>
 
-        <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-          {checkSheet.title}
-        </h1>
-
-        <div className="flex items-center gap-4 text-[11px] text-zinc-400 pt-1">
-          <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-3 shrink-0 text-xs text-zinc-400">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#101014] border border-white/5">
             <Clock className="w-3.5 h-3.5 text-zinc-500" />
-            <span>SLA: {checkSheet.slaHours} hours response</span>
+            <span>Target SLA: {checkSheet.slaHours}h</span>
           </div>
           {checkSheet.mandatoryPhotoCount > 0 && (
-            <div className="flex items-center gap-1.5 text-sky-400 font-semibold">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 font-semibold">
               <Camera className="w-3.5 h-3.5" />
-              <span>{checkSheet.mandatoryPhotoCount} Mandatory Photo Evidence</span>
+              <span>{checkSheet.mandatoryPhotoCount} Mandatory Photo</span>
             </div>
           )}
         </div>
       </div>
 
-      {/* Error Banner */}
+      {/* Error Alert Banner */}
       {errorMessage && (
-        <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+        <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2 animate-fadeIn">
           <AlertTriangle className="w-4 h-4 shrink-0" />
           <span>{errorMessage}</span>
         </div>
       )}
 
-      {/* Execution Form */}
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Dynamic Fields Section */}
-        <div className="space-y-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 px-1">
-            Inspection Parameters & Readings ({checkSheet.fields?.length || 0})
-          </h3>
+      {/* ========================================================================= */}
+      {/* 2-COLUMN BALANCED INDUSTRIAL WORKBENCH (FULL WIDTH, PROPER SPACING)       */}
+      {/* ========================================================================= */}
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-5 w-full items-start">
+        {/* LEFT COLUMN: Inspection Parameters & Remarks (Spans 7 of 12 columns) */}
+        <div className="lg:col-span-7 xl:col-span-8 space-y-4">
+          <div className="p-5 rounded-2xl bg-[#141418] border border-white/10 space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-white/5">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
+                <span>Inspection Parameters & Readings</span>
+                <span className="px-1.5 py-0.2 rounded bg-white/10 text-zinc-300 font-mono text-[10px]">
+                  {checkSheet.fields?.length || 0}
+                </span>
+              </h3>
+              <span className="text-[11px] text-zinc-500 font-mono">Real-time CCP Guardrails</span>
+            </div>
 
-          <div className="space-y-3">
-            {(checkSheet.fields || []).map((field, idx) => {
-              const currentResp = responses[field.fieldId] || {};
-              const isNonConforming = currentResp.isConforming === false;
+            <div className="space-y-3">
+              {(checkSheet.fields || []).map((field, idx) => {
+                const currentResp = responses[field.fieldId] || {};
+                const isNonConforming = currentResp.isConforming === false;
 
-              return (
-                <div
-                  key={field.fieldId || idx}
-                  className={`p-4 rounded-xl border transition-all ${
-                    isNonConforming
-                      ? "bg-rose-500/[0.04] border-rose-500/30"
-                      : "bg-[#141418] border-white/10"
-                  }`}
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    {/* Label & Description */}
-                    <div className="space-y-1 max-w-md">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-white">{field.label}</span>
-                        {field.isRequired && (
-                          <span className="text-[10px] text-rose-400 font-bold">*</span>
-                        )}
-                        {field.requiresPhoto && (
-                          <span className="text-[10px] text-sky-400 bg-sky-500/10 px-1.5 py-0.2 rounded border border-sky-500/20">
-                            Photo Required
-                          </span>
-                        )}
-                      </div>
-                      {/* Min/Max Guardrail hints */}
-                      {field.fieldType === "number" &&
-                        (field.minValue !== null || field.maxValue !== null) && (
-                          <p className="text-[11px] text-zinc-400 font-mono">
-                            Tolerance:{" "}
-                            {field.minValue !== null ? `Min: ${field.minValue}${field.unit} ` : ""}
-                            {field.maxValue !== null ? `Max: ${field.maxValue}${field.unit}` : ""}
-                          </p>
-                        )}
-                    </div>
-
-                    {/* Input Controls */}
-                    <div className="flex items-center gap-2 shrink-0">
-                      {/* 1. Boolean Toggle */}
-                      {field.fieldType === "boolean" && (
-                        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[#101014] border border-white/5">
-                          <button
-                            type="button"
-                            onClick={() => handleValueChange(field, true)}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                              currentResp.value === true
-                                ? "bg-emerald-500 text-black shadow-md shadow-emerald-500/20"
-                                : "text-zinc-400 hover:text-white"
-                            }`}
-                          >
-                            Pass / Conforming
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleValueChange(field, false)}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                              currentResp.value === false
-                                ? "bg-rose-500 text-white shadow-md shadow-rose-500/20"
-                                : "text-zinc-400 hover:text-white"
-                            }`}
-                          >
-                            Fail / Defect
-                          </button>
-                        </div>
-                      )}
-
-                      {/* 2. Number Input */}
-                      {field.fieldType === "number" && (
+                return (
+                  <div
+                    key={field.fieldId || idx}
+                    className={`p-3.5 sm:p-4 rounded-xl border transition-all ${
+                      isNonConforming
+                        ? "bg-rose-500/[0.04] border-rose-500/30"
+                        : "bg-[#101014] border-white/5 hover:border-white/10"
+                    }`}
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      {/* Label & Description */}
+                      <div className="space-y-0.5 max-w-md">
                         <div className="flex items-center gap-2">
-                          <input
-                            type="number"
-                            step="any"
-                            value={currentResp.value ?? ""}
-                            onChange={(e) => handleValueChange(field, e.target.value)}
-                            placeholder="0.0"
-                            className={`w-28 bg-[#101014] border rounded-xl px-3 py-2 text-xs font-mono text-white text-right focus:outline-none ${
-                              isNonConforming
-                                ? "border-rose-500 focus:border-rose-400"
-                                : "border-white/10 focus:border-[#5733F0]"
-                            }`}
-                          />
-                          {field.unit && (
-                            <span className="text-xs text-zinc-400 font-mono min-w-[24px]">
-                              {field.unit}
+                          <span className="text-xs font-bold text-white">{field.label}</span>
+                          {field.isRequired && (
+                            <span className="text-[10px] text-rose-400 font-bold">*</span>
+                          )}
+                          {field.requiresPhoto && (
+                            <span className="text-[9px] text-sky-400 bg-sky-500/10 px-1.5 py-0.2 rounded border border-sky-500/20">
+                              Photo
                             </span>
                           )}
                         </div>
-                      )}
+                        {field.fieldType === "number" &&
+                          (field.minValue !== null || field.maxValue !== null) && (
+                            <p className="text-[10px] text-zinc-400 font-mono">
+                              Tolerance:{" "}
+                              {field.minValue !== null ? `Min: ${field.minValue}${field.unit} ` : ""}
+                              {field.maxValue !== null ? `Max: ${field.maxValue}${field.unit}` : ""}
+                            </p>
+                          )}
+                      </div>
 
-                      {/* 3. Select Dropdown */}
-                      {field.fieldType === "select" && (
-                        <select
-                          value={currentResp.value || ""}
-                          onChange={(e) => handleValueChange(field, e.target.value)}
-                          className="bg-[#101014] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#5733F0]"
-                        >
-                          {(field.options || []).map((opt, oIdx) => (
-                            <option key={oIdx} value={opt}>
-                              {opt}
-                            </option>
-                          ))}
-                        </select>
-                      )}
+                      {/* Controls */}
+                      <div className="flex items-center gap-2 shrink-0">
+                        {/* 1. Boolean Toggle */}
+                        {field.fieldType === "boolean" && (
+                          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[#141418] border border-white/5">
+                            <button
+                              type="button"
+                              onClick={() => handleValueChange(field, true)}
+                              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                                currentResp.value === true
+                                  ? "bg-emerald-500 text-black shadow-md shadow-emerald-500/20"
+                                  : "text-zinc-400 hover:text-white"
+                              }`}
+                            >
+                              Pass
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleValueChange(field, false)}
+                              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                                currentResp.value === false
+                                  ? "bg-rose-500 text-white shadow-md shadow-rose-500/20"
+                                  : "text-zinc-400 hover:text-white"
+                              }`}
+                            >
+                              Defect
+                            </button>
+                          </div>
+                        )}
 
-                      {/* 4. Text / General */}
-                      {(field.fieldType === "text" || field.fieldType === "remarks") && (
+                        {/* 2. Number Input */}
+                        {field.fieldType === "number" && (
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="number"
+                              step="any"
+                              value={currentResp.value ?? ""}
+                              onChange={(e) => handleValueChange(field, e.target.value)}
+                              placeholder="0.0"
+                              className={`w-28 bg-[#141418] border rounded-xl px-3 py-2 text-xs font-mono text-white text-right focus:outline-none ${
+                                isNonConforming
+                                  ? "border-rose-500 focus:border-rose-400"
+                                  : "border-white/10 focus:border-[#5733F0]"
+                              }`}
+                            />
+                            {field.unit && (
+                              <span className="text-xs text-zinc-400 font-mono min-w-[20px]">
+                                {field.unit}
+                              </span>
+                            )}
+                          </div>
+                        )}
+
+                        {/* 3. Select Dropdown */}
+                        {field.fieldType === "select" && (
+                          <select
+                            value={currentResp.value || ""}
+                            onChange={(e) => handleValueChange(field, e.target.value)}
+                            className="bg-[#141418] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#5733F0]"
+                          >
+                            {(field.options || []).map((opt, oIdx) => (
+                              <option key={oIdx} value={opt}>
+                                {opt}
+                              </option>
+                            ))}
+                          </select>
+                        )}
+
+                        {/* 4. Text / General */}
+                        {(field.fieldType === "text" || field.fieldType === "remarks") && (
+                          <input
+                            type="text"
+                            value={currentResp.value || ""}
+                            onChange={(e) => handleValueChange(field, e.target.value)}
+                            placeholder="Record observation..."
+                            className="w-44 bg-[#141418] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#5733F0]"
+                          />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Non-conformance breach alert & defect explanation */}
+                    {isNonConforming && (
+                      <div className="mt-2.5 pt-2.5 border-t border-rose-500/20 space-y-1.5 animate-fadeIn">
+                        <div className="flex items-center gap-1.5 text-xs font-semibold text-rose-400">
+                          <AlertTriangle className="w-3.5 h-3.5" />
+                          <span>Critical Parameter Breach Detected!</span>
+                        </div>
                         <input
                           type="text"
-                          value={currentResp.value || ""}
-                          onChange={(e) => handleValueChange(field, e.target.value)}
-                          placeholder="Record reading or status..."
-                          className="w-48 bg-[#101014] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#5733F0]"
+                          placeholder="Provide mandatory defect details and immediate corrective action..."
+                          value={currentResp.remarks || ""}
+                          onChange={(e) => handleRemarksChange(field.fieldId, e.target.value)}
+                          className="w-full bg-[#141418] border border-rose-500/30 rounded-lg px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-rose-400"
                         />
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Non-conformance breach alert & defect explanation */}
-                  {isNonConforming && (
-                    <div className="mt-3 pt-3 border-t border-rose-500/20 space-y-2 animate-fadeIn">
-                      <div className="flex items-center gap-1.5 text-xs font-semibold text-rose-400">
-                        <AlertTriangle className="w-3.5 h-3.5" />
-                        <span>Critical Parameter Breach Detected!</span>
                       </div>
-                      <input
-                        type="text"
-                        placeholder="Provide mandatory defect details and immediate corrective action taken..."
-                        value={currentResp.remarks || ""}
-                        onChange={(e) => handleRemarksChange(field.fieldId, e.target.value)}
-                        className="w-full bg-[#101014] border border-rose-500/30 rounded-lg px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-rose-400"
-                      />
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Operator Remarks / Observations */}
+          <div className="p-5 rounded-2xl bg-[#141418] border border-white/10 space-y-2">
+            <label className="text-xs font-bold uppercase tracking-wider text-white block">
+              Shift Observations & Handover Remarks
+            </label>
+            <textarea
+              rows={3}
+              value={operatorNotes}
+              onChange={(e) => setOperatorNotes(e.target.value)}
+              placeholder="Record any equipment noises, calibration notes, or specific handover instructions for Shift B..."
+              className="w-full bg-[#101014] border border-white/10 rounded-xl p-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#5733F0]"
+            />
           </div>
         </div>
 
-        {/* Section: Live Photo Evidence Lightbox & Camera Capture */}
-        <div className="p-5 rounded-2xl bg-[#141418] border border-white/10 space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
-                <Camera className="w-4 h-4 text-[#CDFE02]" />
-                <span>Photo Evidence & Visual Verification</span>
-              </h3>
-              <p className="text-[11px] text-zinc-400">
-                Capture live images of the kitchen station, temperature gauge, or equipment condition.
-              </p>
+        {/* RIGHT COLUMN: Evidence, Verification & Dispatch Cockpit (Spans 5 of 12 columns) */}
+        <div className="lg:col-span-5 xl:col-span-4 space-y-4 lg:sticky lg:top-4">
+          {/* 1. Quality & Compliance Scorecard */}
+          <div className="p-5 rounded-2xl bg-[#141418] border border-white/10 space-y-3">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-bold uppercase tracking-wider text-zinc-400">Quality Index</span>
+              <span className="text-[10px] text-zinc-500 font-mono">Real-Time Evaluation</span>
             </div>
 
-            <div className="text-xs">
+            <div className="flex items-baseline justify-between pt-1">
+              <div className="text-3xl font-extrabold font-mono text-[#CDFE02]">
+                {currentCompliance}%
+              </div>
+              <div className="text-right">
+                <div className="text-xs font-semibold text-white">
+                  {totalCount - defectCount} / {totalCount} Conforming
+                </div>
+                <div className={`text-[10px] font-bold ${defectCount > 0 ? "text-rose-400" : "text-emerald-400"}`}>
+                  {defectCount > 0 ? `${defectCount} Defect Flagged` : "Zero Defects"}
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full bg-zinc-800 h-2 rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all duration-300 ${
+                  currentCompliance < 100 ? "bg-amber-400" : "bg-[#CDFE02]"
+                }`}
+                style={{ width: `${currentCompliance}%` }}
+              />
+            </div>
+          </div>
+
+          {/* 2. Photo Evidence & Camera Capture Card */}
+          <div className="p-5 rounded-2xl bg-[#141418] border border-white/10 space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
+                <Camera className="w-4 h-4 text-[#CDFE02]" />
+                <span>Photo Evidence</span>
+              </h3>
               <span
-                className={`font-bold font-mono ${
+                className={`text-[10px] font-mono font-bold ${
                   photos.length >= (checkSheet.mandatoryPhotoCount || 0)
                     ? "text-[#CDFE02]"
                     : "text-amber-400"
@@ -580,11 +639,9 @@ export default function CheckSheetExecutionWizard({ params }) {
                 {photos.length} / {checkSheet.mandatoryPhotoCount || 0} Attached
               </span>
             </div>
-          </div>
 
-          {/* Upload Button / Dropzone */}
-          <div>
-            <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-white/10 hover:border-[#5733F0] rounded-xl bg-[#101014] cursor-pointer transition-all group">
+            {/* Dropzone Button */}
+            <label className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-white/10 hover:border-[#5733F0] rounded-xl bg-[#101014] cursor-pointer transition-all group text-center">
               <input
                 type="file"
                 accept="image/*"
@@ -593,119 +650,101 @@ export default function CheckSheetExecutionWizard({ params }) {
                 disabled={uploadingPhoto}
                 className="hidden"
               />
-              <div className="flex flex-col items-center gap-2 text-center">
-                <div className="w-10 h-10 rounded-full bg-[#5733F0]/20 flex items-center justify-center text-[#CDFE02] group-hover:scale-110 transition-all">
-                  <Upload className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className="text-xs font-bold text-white">
-                    {uploadingPhoto ? "Uploading photograph..." : "Tap to Snap Photo or Upload"}
-                  </span>
-                  <p className="text-[10px] text-zinc-500">Supports direct mobile camera capture (Max 8MB)</p>
-                </div>
+              <div className="w-9 h-9 rounded-full bg-[#5733F0]/20 flex items-center justify-center text-[#CDFE02] group-hover:scale-105 transition-all mb-1.5">
+                <Upload className="w-4 h-4" />
               </div>
+              <span className="text-xs font-bold text-white">
+                {uploadingPhoto ? "Uploading photograph..." : "Snap Photo or Upload"}
+              </span>
+              <p className="text-[10px] text-zinc-500 mt-0.5">Mobile camera / gallery (Max 8MB)</p>
             </label>
-          </div>
 
-          {/* Photo Gallery Grid */}
-          {photos.length > 0 && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
-              {photos.map((photo, pIdx) => (
-                <div
-                  key={pIdx}
-                  className="relative group rounded-xl overflow-hidden border border-white/10 bg-black aspect-video flex items-center justify-center"
-                >
-                  <img
-                    src={photo.url}
-                    alt={photo.caption || "Evidence"}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-all"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removePhoto(pIdx)}
-                    className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/70 hover:bg-rose-500 text-white transition-all opacity-0 group-hover:opacity-100"
-                    title="Remove Photo"
+            {/* Photo Thumbnails */}
+            {photos.length > 0 && (
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                {photos.map((photo, pIdx) => (
+                  <div
+                    key={pIdx}
+                    className="relative group rounded-xl overflow-hidden border border-white/10 bg-black aspect-video flex items-center justify-center"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                  <div className="absolute bottom-0 inset-x-0 p-1.5 bg-black/80 backdrop-blur-xs text-[10px] text-zinc-300 truncate">
-                    {photo.caption || "Inspection Evidence"}
+                    <img
+                      src={photo.url}
+                      alt={photo.caption || "Evidence"}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-all"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removePhoto(pIdx)}
+                      className="absolute top-1.5 right-1.5 p-1 rounded-md bg-black/80 hover:bg-rose-500 text-white transition-all opacity-0 group-hover:opacity-100"
+                      title="Remove Photo"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                    <div className="absolute bottom-0 inset-x-0 p-1 bg-black/80 backdrop-blur-xs text-[9px] text-zinc-300 truncate">
+                      {photo.caption || "Inspection Evidence"}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Section: Operator Observations & Notes */}
-        <div className="p-5 rounded-2xl bg-[#141418] border border-white/10 space-y-2">
-          <label className="text-xs font-bold uppercase tracking-wider text-white block">
-            Operator Observations / Shift Remarks
-          </label>
-          <textarea
-            rows={3}
-            value={operatorNotes}
-            onChange={(e) => setOperatorNotes(e.target.value)}
-            placeholder="Add any specific observations, machine noises, or handover notes for the incoming shift supervisor..."
-            className="w-full bg-[#101014] border border-white/10 rounded-xl p-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#5733F0]"
-          />
-        </div>
-
-        {/* Section: Digital Operator Verification & Sign-off */}
-        <div className="p-5 rounded-2xl bg-[#141418] border border-white/10 space-y-4">
-          <div className="flex items-start gap-3">
-            <div className="p-2 rounded-xl bg-[#5733F0]/20 text-[#CDFE02] border border-[#5733F0]/30 shrink-0 mt-0.5">
-              <Fingerprint className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">
-                Operator Attestation & Digital Verification
-              </h4>
-              <p className="text-[11px] text-zinc-400 mt-0.5">
-                By ticking below, you certify under penalty of internal audit policy that you have physically inspected all parameters and recorded true telemetry.
-              </p>
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          <label className="flex items-center gap-3 p-3 rounded-xl bg-[#101014] border border-white/5 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={digitalSignChecked}
-              onChange={(e) => setDigitalSignChecked(e.target.checked)}
-              className="w-4 h-4 rounded accent-[#5733F0]"
-            />
-            <span className="text-xs font-semibold text-zinc-300">
-              I, <strong className="text-white">{currentUser?.name || "Ramesh Pawar"}</strong> ({currentUser?.employeeId || "BAJAJ-OP-01"}), hereby verify and submit these readings.
-            </span>
-          </label>
-        </div>
+          {/* 3. Operator Attestation & Submit CTA */}
+          <div className="p-5 rounded-2xl bg-[#141418] border border-white/10 space-y-4">
+            <div className="flex items-start gap-2.5">
+              <div className="p-1.5 rounded-lg bg-[#5733F0]/20 text-[#CDFE02] border border-[#5733F0]/30 shrink-0 mt-0.5">
+                <Fingerprint className="w-4 h-4" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+                  Digital Verification
+                </h4>
+                <p className="text-[10px] text-zinc-400 mt-0.5">
+                  I certify that all readings reflect true physical measurements on the floor.
+                </p>
+              </div>
+            </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center justify-between gap-4 pt-2">
-          <Link
-            href="/operator"
-            className="px-5 py-2.5 rounded-xl bg-[#141418] hover:bg-white/5 border border-white/10 text-xs font-semibold text-zinc-400 hover:text-white transition-all"
-          >
-            Cancel
-          </Link>
+            <label className="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#101014] border border-white/5 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={digitalSignChecked}
+                onChange={(e) => setDigitalSignChecked(e.target.checked)}
+                className="w-4 h-4 rounded accent-[#5733F0] mt-0.5"
+              />
+              <span className="text-[11px] font-semibold text-zinc-300 leading-snug">
+                I, <strong className="text-white">{currentUser?.name || "Ramesh Pawar"}</strong> ({currentUser?.employeeId || "BAJAJ-OP-01"}), confirm and submit this checksheet.
+              </span>
+            </label>
 
-          <button
-            type="submit"
-            disabled={submitting}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#CDFE02] hover:bg-[#b8e602] text-[#101010] text-xs font-bold transition-all shadow-lg shadow-[#CDFE02]/20 active:scale-95 disabled:opacity-50"
-          >
-            {submitting ? (
-              <>
-                <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                <span>Dispatching Submission...</span>
-              </>
-            ) : (
-              <>
-                <Send className="w-4 h-4" />
-                <span>Submit for Supervisor Approval</span>
-              </>
-            )}
-          </button>
+            {/* Submit Action */}
+            <div className="space-y-2 pt-1">
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#CDFE02] hover:bg-[#b8e602] text-[#101010] text-xs font-bold transition-all shadow-lg shadow-[#CDFE02]/20 active:scale-95 disabled:opacity-50 cursor-pointer"
+              >
+                {submitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                    <span>Dispatching Submission...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    <span>Submit for Supervisor Approval</span>
+                  </>
+                )}
+              </button>
+
+              <Link
+                href="/operator"
+                className="w-full block text-center py-2 text-xs font-semibold text-zinc-500 hover:text-zinc-300 transition-colors"
+              >
+                Cancel & Return to Tasks
+              </Link>
+            </div>
+          </div>
         </div>
       </form>
     </div>
