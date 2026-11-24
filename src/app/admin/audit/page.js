@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Pagination from "@/components/Pagination";
 import {
   History,
   ShieldAlert,
@@ -23,17 +24,25 @@ export default function AuditPage() {
   const [actionFilter, setActionFilter] = useState("ALL");
   const [selectedLog, setSelectedLog] = useState(null);
 
-  const fetchLogs = async () => {
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
+
+  const fetchLogs = async (page = currentPage, limit = pageSize) => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
       if (actionFilter !== "ALL") params.set("action", actionFilter);
       if (search.trim()) params.set("search", search.trim());
+      params.set("page", page);
+      params.set("limit", limit);
 
       const res = await fetch(`/api/audit?${params.toString()}`);
       const data = await res.json();
       if (data.success) {
         setLogs(data.logs || []);
+        if (data.pagination) setPagination(data.pagination);
       }
     } catch (err) {
       console.error("Failed to load audit trail:", err);
@@ -43,12 +52,25 @@ export default function AuditPage() {
   };
 
   useEffect(() => {
-    fetchLogs();
+    setCurrentPage(1);
+    fetchLogs(1, pageSize);
   }, [actionFilter]);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    fetchLogs(newPage, pageSize);
+  };
+
+  const handlePageSizeChange = (newSize) => {
+    setPageSize(newSize);
+    setCurrentPage(1);
+    fetchLogs(1, newSize);
+  };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    fetchLogs();
+    setCurrentPage(1);
+    fetchLogs(1, pageSize);
   };
 
   const getActionBadge = (action) => {
@@ -219,6 +241,19 @@ export default function AuditPage() {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Dynamic Pagination Controls */}
+        <div className="p-4 border-t border-white/5">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={pagination.totalPages || 1}
+            totalItems={pagination.total || logs.length}
+            pageSize={pageSize}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+            pageSizeOptions={[10, 20, 50]}
+          />
         </div>
       </div>
 

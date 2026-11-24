@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Pagination from "@/components/Pagination";
 import {
   FileSpreadsheet,
   Plus,
@@ -27,6 +28,11 @@ export default function CheckSheetsPage() {
   const [selectedDept, setSelectedDept] = useState("");
   const [selectedFrequency, setSelectedFrequency] = useState("");
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
+
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -41,13 +47,15 @@ export default function CheckSheetsPage() {
     slaHours: 4,
   });
 
-  const fetchData = async () => {
+  const fetchData = async (page = currentPage, limit = pageSize) => {
     setLoading(true);
     try {
       const query = new URLSearchParams();
       if (search) query.set("search", search);
       if (selectedDept) query.set("department", selectedDept);
       if (selectedFrequency) query.set("frequency", selectedFrequency);
+      query.set("page", page);
+      query.set("limit", limit);
 
       const [csRes, deptRes, shiftRes] = await Promise.all([
         fetch(`/api/checksheets?${query.toString()}`).then((r) => r.json()),
@@ -55,7 +63,10 @@ export default function CheckSheetsPage() {
         fetch("/api/shifts").then((r) => r.json()),
       ]);
 
-      if (csRes.success) setCheckSheets(csRes.checkSheets || []);
+      if (csRes.success) {
+        setCheckSheets(csRes.checkSheets || []);
+        if (csRes.pagination) setPagination(csRes.pagination);
+      }
       if (deptRes.success) {
         setDepartments(deptRes.departments || []);
         if (deptRes.departments?.length > 0 && !formData.department) {
@@ -71,12 +82,25 @@ export default function CheckSheetsPage() {
   };
 
   useEffect(() => {
-    fetchData();
+    setCurrentPage(1);
+    fetchData(1, pageSize);
   }, [selectedDept, selectedFrequency]);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    fetchData(newPage, pageSize);
+  };
+
+  const handlePageSizeChange = (newSize) => {
+    setPageSize(newSize);
+    setCurrentPage(1);
+    fetchData(1, newSize);
+  };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    fetchData();
+    setCurrentPage(1);
+    fetchData(1, pageSize);
   };
 
   const handleCreateCheckSheet = async (e) => {
@@ -264,6 +288,19 @@ export default function CheckSheetsPage() {
             </table>
           </div>
         )}
+
+        {/* Dynamic Pagination Controls */}
+        <div className="p-4 border-t border-white/5">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={pagination.totalPages || 1}
+            totalItems={pagination.total || checkSheets.length}
+            pageSize={pageSize}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+            pageSizeOptions={[10, 20, 50]}
+          />
+        </div>
       </div>
 
       {/* Create Check Sheet Modal */}

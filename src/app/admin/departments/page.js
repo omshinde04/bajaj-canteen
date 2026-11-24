@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Pagination from "@/components/Pagination";
 import {
   Building2,
   Plus,
@@ -128,6 +129,20 @@ export default function DepartmentsPage() {
       (d.plantLocation && d.plantLocation.toLowerCase().includes(search.toLowerCase()))
   );
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
+  const totalPages = Math.ceil(filteredDepts.length / pageSize) || 1;
+  const paginatedDepts = filteredDepts.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
   return (
     <div className="space-y-6 pb-12">
       {/* Header */}
@@ -224,7 +239,7 @@ export default function DepartmentsPage() {
                   </td>
                 </tr>
               ) : (
-                filteredDepts.map((dept) => (
+                paginatedDepts.map((dept) => (
                   <tr key={dept._id} className="hover:bg-white/[0.02] transition-colors">
                     <td className="py-3.5 px-4">
                       <div className="font-semibold text-white text-xs">{dept.name}</div>
@@ -277,6 +292,22 @@ export default function DepartmentsPage() {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Dynamic Pagination Controls */}
+        <div className="p-4 border-t border-white/5">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={filteredDepts.length}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={(newSize) => {
+              setPageSize(newSize);
+              setCurrentPage(1);
+            }}
+            pageSizeOptions={[5, 10, 20]}
+          />
         </div>
       </div>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Pagination from "@/components/Pagination";
 import {
   CheckSquare,
   Search,
@@ -42,6 +43,11 @@ export default function SubmissionsPage() {
   const [shiftFilter, setShiftFilter] = useState("ALL");
   const [loading, setLoading] = useState(true);
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
+
   // Centered Inspection Modal State
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
@@ -67,7 +73,7 @@ export default function SubmissionsPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedSubmission, rejectModalOpen, zoomPhoto]);
 
-  const fetchSubmissions = async () => {
+  const fetchSubmissions = async (page = currentPage, limit = pageSize) => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -75,12 +81,15 @@ export default function SubmissionsPage() {
       if (deptFilter !== "ALL") params.set("department", deptFilter);
       if (shiftFilter !== "ALL") params.set("shift", shiftFilter);
       if (search.trim()) params.set("search", search.trim());
+      params.set("page", page);
+      params.set("limit", limit);
 
       const res = await fetch(`/api/submissions?${params.toString()}`);
       const data = await res.json();
       if (data.success) {
         setSubmissions(data.submissions || []);
         if (data.counts) setCounts(data.counts);
+        if (data.pagination) setPagination(data.pagination);
       }
     } catch (err) {
       console.error("Failed to load submissions:", err);
@@ -90,12 +99,25 @@ export default function SubmissionsPage() {
   };
 
   useEffect(() => {
-    fetchSubmissions();
+    setCurrentPage(1);
+    fetchSubmissions(1, pageSize);
   }, [activeTab, deptFilter, shiftFilter]);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    fetchSubmissions(newPage, pageSize);
+  };
+
+  const handlePageSizeChange = (newSize) => {
+    setPageSize(newSize);
+    setCurrentPage(1);
+    fetchSubmissions(1, newSize);
+  };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    fetchSubmissions();
+    setCurrentPage(1);
+    fetchSubmissions(1, pageSize);
   };
 
   const handleReviewAction = async (action) => {
@@ -351,6 +373,19 @@ export default function SubmissionsPage() {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Dynamic Pagination Controls */}
+        <div className="p-4 border-t border-white/5">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={pagination.totalPages || 1}
+            totalItems={pagination.total || submissions.length}
+            pageSize={pageSize}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+            pageSizeOptions={[10, 20, 50]}
+          />
         </div>
       </div>
 

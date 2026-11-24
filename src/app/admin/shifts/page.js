@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Pagination from "@/components/Pagination";
 import {
   CalendarDays,
   Clock,
@@ -25,6 +26,10 @@ export default function ShiftsPage() {
   const [editingShift, setEditingShift] = useState(null);
   const [formLoading, setFormLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -239,8 +244,10 @@ export default function ShiftsPage() {
                   </td>
                 </tr>
               ) : (
-                shifts.map((s) => (
-                  <tr key={s._id} className="hover:bg-white/[0.02] transition-colors">
+                shifts
+                  .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+                  .map((s) => (
+                    <tr key={s._id} className="hover:bg-white/[0.02] transition-colors">
                     <td className="py-3.5 px-4">
                       <div className="font-semibold text-white">{s.name}</div>
                       <div className="text-[10px] font-mono text-[#D2EFF7] mt-0.5">{s.code}</div>
@@ -285,6 +292,22 @@ export default function ShiftsPage() {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Dynamic Pagination Controls */}
+        <div className="p-4 border-t border-white/5">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(shifts.length / pageSize) || 1}
+            totalItems={shifts.length}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={(newSize) => {
+              setPageSize(newSize);
+              setCurrentPage(1);
+            }}
+            pageSizeOptions={[3, 5, 10]}
+          />
         </div>
       </div>
 

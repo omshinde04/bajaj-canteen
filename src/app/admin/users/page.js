@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Pagination from "@/components/Pagination";
 import {
   Users,
   Shield,
@@ -32,6 +33,10 @@ export default function UsersPage() {
 
   const [activeRoleFilter, setActiveRoleFilter] = useState("ALL");
   const [search, setSearch] = useState("");
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   // Modal State
   const [modalOpen, setModalOpen] = useState(false);
@@ -170,6 +175,16 @@ export default function UsersPage() {
 
     return matchesSearch && matchesRole;
   });
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeRoleFilter, search]);
+
+  const totalPages = Math.ceil(filteredUsers.length / pageSize) || 1;
+  const paginatedUsers = filteredUsers.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   const getRoleBadge = (code, name) => {
     switch (code) {
@@ -318,7 +333,7 @@ export default function UsersPage() {
                   </td>
                 </tr>
               ) : (
-                filteredUsers.map((u) => (
+                paginatedUsers.map((u) => (
                   <tr key={u._id} className="hover:bg-white/[0.02] transition-colors">
                     <td className="py-3.5 px-4">
                       <div className="font-semibold text-white">{u.name}</div>
@@ -373,6 +388,22 @@ export default function UsersPage() {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Dynamic Pagination Controls */}
+        <div className="p-4 border-t border-white/5">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={filteredUsers.length}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={(newSize) => {
+              setPageSize(newSize);
+              setCurrentPage(1);
+            }}
+            pageSizeOptions={[10, 20, 50]}
+          />
         </div>
       </div>
 

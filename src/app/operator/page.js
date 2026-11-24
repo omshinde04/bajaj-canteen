@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Pagination from "@/components/Pagination";
 import {
   ClipboardCheck,
   Clock,
@@ -95,6 +96,20 @@ export default function OperatorTaskboard() {
       return t.taskStatus === "COMPLETED" || t.taskStatus === "PENDING_REVIEW";
     return true; // ALL
   });
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(6);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, search]);
+
+  const totalPages = Math.ceil(filteredTasks.length / pageSize) || 1;
+  const paginatedTasks = filteredTasks.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   const dueCount = mappedTasks.filter((t) => t.taskStatus === "DUE" || t.taskStatus === "REJECTED").length;
   const completedCount = mappedTasks.filter(
@@ -236,94 +251,110 @@ export default function OperatorTaskboard() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {filteredTasks.map((task) => {
-            const isCompleted = task.taskStatus === "COMPLETED";
-            const isPendingReview = task.taskStatus === "PENDING_REVIEW";
-            const isRejected = task.taskStatus === "REJECTED";
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {paginatedTasks.map((task) => {
+              const isCompleted = task.taskStatus === "COMPLETED";
+              const isPendingReview = task.taskStatus === "PENDING_REVIEW";
+              const isRejected = task.taskStatus === "REJECTED";
 
-            return (
-              <div
-                key={task._id}
-                className="bg-[#141418] border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-white/20 transition-all group"
-              >
-                <div className="space-y-3">
-                  {/* Top Bar with Category and Status Pill */}
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-white/5 text-zinc-300 border border-white/10">
-                      {task.category}
-                    </span>
-                    <span
-                      className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${task.statusColor}`}
-                    >
-                      {task.statusLabel}
-                    </span>
-                  </div>
-
-                  {/* Code & Title */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-mono font-bold text-[#CDFE02]">{task.code}</span>
-                      <span className="text-zinc-600">•</span>
-                      <span className="text-xs text-zinc-400 capitalize">
-                        {task.frequency.replace("_", " ")}
+              return (
+                <div
+                  key={task._id}
+                  className="bg-[#141418] border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-white/20 transition-all group"
+                >
+                  <div className="space-y-3">
+                    {/* Top Bar with Category and Status Pill */}
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-white/5 text-zinc-300 border border-white/10">
+                        {task.category}
+                      </span>
+                      <span
+                        className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${task.statusColor}`}
+                      >
+                        {task.statusLabel}
                       </span>
                     </div>
-                    <h3 className="text-base font-bold text-white group-hover:text-[#D2EFF7] transition-all">
-                      {task.title}
-                    </h3>
+
+                    {/* Code & Title */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-mono font-bold text-[#CDFE02]">{task.code}</span>
+                        <span className="text-zinc-600">•</span>
+                        <span className="text-xs text-zinc-400 capitalize">
+                          {task.frequency.replace("_", " ")}
+                        </span>
+                      </div>
+                      <h3 className="text-base font-bold text-white group-hover:text-[#D2EFF7] transition-all">
+                        {task.title}
+                      </h3>
+                    </div>
+
+                    {/* Metadata Chips */}
+                    <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] text-zinc-400">
+                      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#101014] border border-white/5">
+                        <Building2 className="w-3.5 h-3.5 text-zinc-500" />
+                        <span>{task.department?.name || "Main Kitchen"}</span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#101014] border border-white/5">
+                        <Clock className="w-3.5 h-3.5 text-zinc-500" />
+                        <span>SLA: {task.slaHours}h target</span>
+                      </div>
+
+                      {task.mandatoryPhotoCount > 0 && (
+                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-400">
+                          <Camera className="w-3.5 h-3.5" />
+                          <span>{task.mandatoryPhotoCount} Photo Required</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
-                  {/* Metadata Chips */}
-                  <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] text-zinc-400">
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#101014] border border-white/5">
-                      <Building2 className="w-3.5 h-3.5 text-zinc-500" />
-                      <span>{task.department?.name || "Main Kitchen"}</span>
+                  {/* Bottom Action Area */}
+                  <div className="pt-5 mt-4 border-t border-white/5 flex items-center justify-between">
+                    <div className="text-[11px] text-zinc-500">
+                      {task.fields?.length || 0} parameter checks
                     </div>
 
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#101014] border border-white/5">
-                      <Clock className="w-3.5 h-3.5 text-zinc-500" />
-                      <span>SLA: {task.slaHours}h target</span>
-                    </div>
-
-                    {task.mandatoryPhotoCount > 0 && (
-                      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-400">
-                        <Camera className="w-3.5 h-3.5" />
-                        <span>{task.mandatoryPhotoCount} Photo Required</span>
+                    {isCompleted ? (
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-[#CDFE02]">
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>Score: {task.submission?.complianceScore || 100}%</span>
                       </div>
+                    ) : isPendingReview ? (
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-sky-400">
+                        <Clock className="w-4 h-4" />
+                        <span>In Supervisor Review</span>
+                      </div>
+                    ) : (
+                      <Link
+                        href={`/operator/execute/${task._id}`}
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#5733F0] hover:bg-[#6c4cf5] text-white text-xs font-bold transition-all shadow-md shadow-[#5733F0]/25 group-hover:scale-102 active:scale-95"
+                      >
+                        <span>{isRejected ? "Rework & Resubmit" : "Execute Checksheet"}</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
                     )}
                   </div>
                 </div>
+              );
+            })}
+          </div>
 
-                {/* Bottom Action Area */}
-                <div className="pt-5 mt-4 border-t border-white/5 flex items-center justify-between">
-                  <div className="text-[11px] text-zinc-500">
-                    {task.fields?.length || 0} parameter checks
-                  </div>
-
-                  {isCompleted ? (
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-[#CDFE02]">
-                      <CheckCircle2 className="w-4 h-4" />
-                      <span>Score: {task.submission?.complianceScore || 100}%</span>
-                    </div>
-                  ) : isPendingReview ? (
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-sky-400">
-                      <Clock className="w-4 h-4" />
-                      <span>In Supervisor Review</span>
-                    </div>
-                  ) : (
-                    <Link
-                      href={`/operator/execute/${task._id}`}
-                      className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#5733F0] hover:bg-[#6c4cf5] text-white text-xs font-bold transition-all shadow-md shadow-[#5733F0]/25 group-hover:scale-102 active:scale-95"
-                    >
-                      <span>{isRejected ? "Rework & Resubmit" : "Execute Checksheet"}</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+          {/* Dynamic Pagination Controls */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={filteredTasks.length}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={(newSize) => {
+              setPageSize(newSize);
+              setCurrentPage(1);
+            }}
+            pageSizeOptions={[4, 6, 12]}
+          />
         </div>
       )}
     </div>
