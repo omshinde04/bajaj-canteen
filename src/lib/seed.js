@@ -171,26 +171,67 @@ export async function seedDatabase() {
   }
   console.log("✓ Departments seeded:", Object.keys(deptMap));
 
-  // 4. Default Super Admin User
-  const adminEmail = "admin@bajaj.com";
-  const existingAdmin = await User.findOne({ email: adminEmail });
-
-  if (!existingAdmin) {
-    const hashedPassword = await hashPassword("AdminPassword@2026");
-    const superAdminUser = await User.create({
+  // 4. Default Super Admin User & Plant Personnel
+  const staffMembers = [
+    {
       employeeId: "BAJAJ-001",
       name: "Super Administrator",
-      email: adminEmail,
-      password: hashedPassword,
-      role: roleMap["SUPER_ADMIN"],
-      department: deptMap["DEPT_KITCHEN"],
-      assignedShift: shiftMap["SHIFT_A"],
-      phoneNumber: "+91 98000 00000",
-      isActive: true,
-    });
-    console.log("✓ Super Admin user created:", superAdminUser.email);
-  } else {
-    console.log("✓ Super Admin user already exists:", existingAdmin.email);
+      email: "admin@bajaj.com",
+      passwordRaw: "AdminPassword@2026",
+      roleCode: "SUPER_ADMIN",
+      deptCode: "DEPT_KITCHEN",
+      shiftCode: "SHIFT_A",
+      phoneNumber: "+91 98000 00001",
+    },
+    {
+      employeeId: "BAJAJ-SUP-01",
+      name: "Rajesh Sharma",
+      email: "supervisor@bajaj.com",
+      passwordRaw: "Supervisor@2026",
+      roleCode: "SUPERVISOR",
+      deptCode: "DEPT_KITCHEN",
+      shiftCode: "SHIFT_A",
+      phoneNumber: "+91 98000 00002",
+    },
+    {
+      employeeId: "BAJAJ-PLANT-01",
+      name: "Amit Deshmukh",
+      email: "plantlead@bajaj.com",
+      passwordRaw: "PlantLead@2026",
+      roleCode: "PLANT_ADMIN",
+      deptCode: "DEPT_STORAGE",
+      shiftCode: "SHIFT_B",
+      phoneNumber: "+91 98000 00003",
+    },
+    {
+      employeeId: "BAJAJ-OP-01",
+      name: "Ramesh Pawar",
+      email: "operator@bajaj.com",
+      passwordRaw: "Operator@2026",
+      roleCode: "OPERATOR",
+      deptCode: "DEPT_KITCHEN",
+      shiftCode: "SHIFT_A",
+      phoneNumber: "+91 98000 00004",
+    },
+  ];
+
+  for (const s of staffMembers) {
+    const existing = await User.findOne({ email: s.email });
+    if (!existing) {
+      const hashedPassword = await hashPassword(s.passwordRaw);
+      await User.create({
+        employeeId: s.employeeId,
+        name: s.name,
+        email: s.email,
+        password: hashedPassword,
+        role: roleMap[s.roleCode],
+        department: deptMap[s.deptCode],
+        assignedShift: shiftMap[s.shiftCode],
+        phoneNumber: s.phoneNumber,
+        isActive: true,
+      });
+      console.log(`✓ Staff user created: ${s.name} (${s.email}) - ${s.roleCode}`);
+    }
   }
 
   // 5. Seed Master Operational Check Sheets
@@ -293,7 +334,7 @@ export async function seedDatabase() {
   console.log("✓ Master Operational Check Sheets seeded:", Object.keys(checkSheetMap));
 
   // 6. Seed Operational Submissions
-  const adminUser = await User.findOne({ email: adminEmail });
+  const adminUser = await User.findOne({ email: "admin@bajaj.com" });
 
   const existingSubmissionsCount = await Submission.countDocuments();
   if (existingSubmissionsCount === 0) {
