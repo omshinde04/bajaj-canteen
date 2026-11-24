@@ -54,8 +54,8 @@ export default function AdminSidebar() {
   ];
 
   return (
-    <aside className="w-64 bg-[#141414] border-r border-white/10 flex flex-col justify-between shrink-0 min-h-screen">
-      <div className="p-4 space-y-6">
+    <aside className="w-64 bg-[#141414] border-r border-white/10 flex flex-col justify-between shrink-0 h-screen sticky top-0 overflow-hidden z-30">
+      <div className="p-4 space-y-6 overflow-y-auto flex-1 min-h-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {/* Brand Header */}
         <div className="flex items-center gap-3 px-2">
           <div className="w-9 h-9 rounded-xl bg-[#5733F0] flex items-center justify-center font-bold text-white shadow-md shadow-[#5733F0]/30">
@@ -119,7 +119,7 @@ export default function AdminSidebar() {
       </div>
 
       {/* Facility & Shard Footer */}
-      <div className="p-4 border-t border-white/10 space-y-2">
+      <div className="p-4 border-t border-white/10 space-y-2 shrink-0 bg-[#141414]">
         <div className="rounded-xl bg-white/[0.03] border border-white/5 p-2.5 space-y-1 text-xs">
           <div className="flex items-center justify-between">
             <span className="text-zinc-400 text-[11px]">Active Facility</span>

@@ -9,12 +9,12 @@ export const metadata = {
 
 export default function AdminLayout({ children }) {
   return (
-    <div className="min-h-screen bg-[#101010] text-white flex font-sans selection:bg-[#CDFE02] selection:text-[#101010]">
-      {/* Sidebar */}
+    <div className="h-screen w-full bg-[#101010] text-white flex font-sans overflow-hidden selection:bg-[#CDFE02] selection:text-[#101010]">
+      {/* Permanent Fixed / Sticky Sidebar */}
       <AdminSidebar />
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0">
+      {/* Main Application Shell */}
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
         <AdminHeader />
         <main className="flex-1 p-6 overflow-y-auto">
           {children}
