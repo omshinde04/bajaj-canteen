@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
+import cache from "@/lib/cache";
 
 export async function GET() {
   try {
     const conn = await connectDB();
     const isDbConnected = conn.connection.readyState === 1;
+    const cacheTelemetry = cache.health();
 
     return NextResponse.json({
       status: "operational",
@@ -15,6 +17,7 @@ export async function GET() {
         name: conn.connection.name,
         host: conn.connection.host,
       },
+      cache: cacheTelemetry,
       environment: process.env.NODE_ENV || "development",
       version: "2.0.0",
     });

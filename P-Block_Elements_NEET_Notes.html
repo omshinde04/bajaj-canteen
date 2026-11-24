@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>P-Block Elements — Complete Revised Notes (NEET Preparation)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  @page {
+    size: A4;
+    margin: 16mm 14mm 18mm 14mm;
+    @top-left {
+      content: "NEET CHEMISTRY • P-BLOCK ELEMENTS (GROUPS 13–18)";
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      font-size: 7.5pt;
+      font-weight: 600;
+      color: #64748b;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border-bottom: 0.5pt solid #e2e8f0;
+      padding-bottom: 4px;
+    }
+    @top-right {
+      content: "MASTER HIGH-YIELD REVISION NOTES";
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      font-size: 7.5pt;
+      font-weight: 600;
+      color: #64748b;
+      border-bottom: 0.5pt solid #e2e8f0;
+      padding-bottom: 4px;
+    }
+    @bottom-left {
+      content: "NEET Top Ranker Prep Series • Inorganic Chemistry";
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      font-size: 7pt;
+      color: #94a3b8;
+      border-top: 0.5pt solid #e2e8f0;
+      padding-top: 4px;
+    }
+    @bottom-right {
+      content: "Page " counter(page);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      font-size: 7.5pt;
+      font-weight: 700;
+      color: #1e293b;
+      border-top: 0.5pt solid #e2e8f0;
+      padding-top: 4px;
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 9.2pt;
+    line-height: 1.52;
+    color: #1e293b;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Headings & Hierarchy */
+  h1, h2, h3, h4 {
+    color: #0f172a;
+    font-weight: 700;
+    margin-top: 0;
+  }
+
+  .cover-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #31104b 100%);
+    color: #ffffff;
+    padding: 24px 28px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+    border-left: 6px solid #818cf8;
+  }
+
+  .badge-tag {
+    display: inline-block;
+    padding: 3px 9px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e7ff;
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    border-radius: 9999px;
+    margin-bottom: 8px;
+  }
+
+  .cover-title {
+    font-size: 20pt;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin: 0 0 6px 0;
+    color: #ffffff;
+  }
+
+  .cover-subtitle {
+    font-size: 10pt;
+    font-weight: 400;
+    color: #cbd5e1;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .meta-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .meta-pill {
+    background: rgba(255, 255, 255, 0.12);
+    color: #f8fafc;
+    font-size: 7.5pt;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  /* Section Card Styling */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-left: 5px solid #2563eb;
+    padding: 9px 14px;
+    border-radius: 8px;
+    margin-top: 22px;
+    margin-bottom: 12px;
+    break-after: avoid;
+  }
+
+  .section-title {
+    font-size: 12pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-tag {
+    font-size: 7.5pt;
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 9999px;
+  }
+
+  .sub-heading {
+    font-size: 10.2pt;
+    font-weight: 700;
+    color: #1e3a8a;
+    border-bottom: 1.5px solid #dbeafe;
+    padding-bottom: 3px;
+    margin-top: 14px;
+    margin-bottom: 8px;
+    break-after: avoid;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .sub-heading-accent {
+    color: #6b21a8;
+    border-bottom-color: #f3e8ff;
+  }
+
+  .item-title {
+    font-size: 9.3pt;
+    font-weight: 700;
+    color: #0f172a;
+    margin-top: 8px;
+    margin-bottom: 3px;
+    break-after: avoid;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 14px 0;
+    font-size: 8.5pt;
+    break-inside: avoid;
+  }
+
+  table th {
+    background: #1e293b;
+    color: #ffffff;
+    font-weight: 700;
+    text-align: left;
+    padding: 6px 10px;
+    border: 1px solid #1e293b;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  table td {
+    padding: 5px 10px;
+    border: 1px solid #cbd5e1;
+    color: #334155;
+    vertical-align: top;
+  }
+
+  table tr:nth-child(even) td {
+    background-color: #f8fafc;
+  }
+
+  table tr:hover td {
+    background-color: #f1f5f9;
+  }
+
+  .table-center th, .table-center td {
+    text-align: center;
+  }
+
+  .table-highlight {
+    background-color: #fef3c7 !important;
+    font-weight: 600;
+    color: #92400e;
+  }
+
+  /* Callout Boxes */
+  .callout {
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin: 10px 0;
+    font-size: 8.8pt;
+    break-inside: avoid;
+    border-left: 4px solid;
+  }
+
+  .callout-neet {
+    background-color: #fffbeb;
+    border-color: #f59e0b;
+    color: #78350f;
+  }
+
+  .callout-neet strong {
+    color: #b45309;
+  }
+
+  .callout-trap {
+    background-color: #fef2f2;
+    border-color: #ef4444;
+    color: #7f1d1d;
+  }
+
+  .callout-trap strong {
+    color: #b91c1c;
+  }
+
+  .callout-concept {
+    background-color: #f0fdf4;
+    border-color: #10b981;
+    color: #064e3b;
+  }
+
+  .callout-concept strong {
+    color: #047857;
+  }
+
+  .callout-rule {
+    background-color: #eff6ff;
+    border-color: #3b82f6;
+    color: #1e3a8a;
+  }
+
+  /* Reaction Block */
+  .rxn-box {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    font-size: 8.5pt;
+    margin: 5px 0 8px 0;
+    display: block;
+    border-left: 3px solid #38bdf8;
+    overflow-x: auto;
+    break-inside: avoid;
+  }
+
+  .rxn-box .cond {
+    color: #94a3b8;
+    font-size: 7.5pt;
+    font-style: italic;
+    float: right;
+  }
+
+  /* Grid Layouts for comparisons */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 8px 0;
+    break-inside: avoid;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin: 8px 0;
+    break-inside: avoid;
+  }
+
+  .card-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 9px 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    break-inside: avoid;
+  }
+
+  .card-box-header {
+    font-weight: 700;
+    font-size: 8.8pt;
+    margin-bottom: 5px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  /* Formula & Symbol Helpers */
+  .chem {
+    font-weight: 600;
+    color: #0f172a;
+  }
+  
+  .pill-shape {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 12px;
+    font-size: 7.5pt;
+    font-weight: 600;
+    background: #e2e8f0;
+    color: #334155;
+  }
+
+  .pill-linear { background: #dbeafe; color: #1e40af; }
+  .pill-planar { background: #dcfce7; color: #166534; }
+  .pill-pyramid { background: #fef3c7; color: #92400e; }
+  .pill-octa { background: #f3e8ff; color: #6b21a8; }
+  .pill-danger { background: #fee2e2; color: #991b1b; }
+
+  ul, ol {
+    margin: 4px 0 8px 0;
+    padding-left: 18px;
+  }
+
+  li {
+    margin-bottom: 3px;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+
+  .order-list {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 6px 12px;
+    margin: 4px 0;
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    font-size: 8.5pt;
+    color: #0f172a;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+  <!-- COVER BANNER -->
+  <div class="cover-header">
+    <div class="badge-tag">NEET Chemistry • Complete Inorganic Study Pack</div>
+    <h1 class="cover-title">P-BLOCK ELEMENTS (GROUPS 13–18)</h1>
+    <p class="cover-subtitle">Complete Rapid-Revision Study Guide with High-Yield NEET Traps, Industrial Processes, Reaction Mechanisms & Master Summary Tables</p>
+    <div class="meta-pills">
+      <span class="meta-pill">🎯 Target: NEET / JEE / CUET</span>
+      <span class="meta-pill">⚡ 100% NCERT Chemistry Aligned</span>
+      <span class="meta-pill">🧪 Comprehensive Formulae & Shapes</span>
+      <span class="meta-pill">📊 Master Quick-Revision Tables</span>
+    </div>
+  </div>
+
+  <!-- SECTION 1: GENERAL INTRODUCTION -->
+  <div class="section-header">
+    <div class="section-title">1. General Introduction & Periodic Trends</div>
+    <span class="section-tag">Groups 13 to 18</span>
+  </div>
+
+  <p><strong>Position:</strong> Groups 13–18 in the p-block of the modern periodic table. The p-subshell is progressively filled with electrons from 1 to 6.</p>
+  
+  <div class="card-box" style="margin-bottom: 8px; border-left: 4px solid #2563eb;">
+    <strong>General Valence-Shell Electronic Configuration:</strong> &nbsp;
+    <span style="font-family:'JetBrains Mono', monospace; font-size:10pt; font-weight:700; color:#2563eb;">ns<sup>2</sup> np<sup>1–6</sup></span>
+    <span style="margin-left: 14px; font-size:8pt; color:#64748b;">(Exception: Helium is 1s<sup>2</sup>, placed in Group 18 due to closed-shell noble gas characteristics)</span>
+  </div>
+
+  <div class="sub-heading">A. General Periodic Trends Summary</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Property</th>
+        <th style="width: 35%;">Across a Period (&rarr;)</th>
+        <th style="width: 40%;">Down a Group (&darr;)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Atomic & Ionic Radius</strong></td>
+        <td>Generally decreases (effective nuclear charge <em>Z<sub>eff</sub></em> increases)</td>
+        <td>Increases (additional electron shells added)</td>
+      </tr>
+      <tr>
+        <td><strong>Ionisation Enthalpy</strong></td>
+        <td>Generally increases (smaller size, higher pull on valence e<sup>&minus;</sup>)</td>
+        <td>Generally decreases (shielding effect dominates)</td>
+      </tr>
+      <tr>
+        <td><strong>Electronegativity</strong></td>
+        <td>Generally increases across period</td>
+        <td>Generally decreases down group</td>
+      </tr>
+      <tr>
+        <td><strong>Metallic Character</strong></td>
+        <td>Decreases (elements transition to non-metals)</td>
+        <td>Increases (easier loss of valence electrons)</td>
+      </tr>
+      <tr>
+        <td><strong>Non-Metallic Character</strong></td>
+        <td>Increases across the period</td>
+        <td>Decreases down the group</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sub-heading">B. Oxidation States & Inert Pair Effect</div>
+  <p>p-Block elements exhibit <strong>variable oxidation states</strong> because both outermost <em>ns</em> and <em>np</em> electrons participate in chemical bonding. The maximum oxidation state equals the total number of valence electrons (Group number &minus; 10).</p>
+
+  <div class="callout callout-concept">
+    <strong>💡 The Inert Pair Effect:</strong> As we descend the group, the intervening <em>d</em> and <em>f</em> orbitals shield the nuclear charge very poorly. Consequently, the outermost <strong>ns<sup>2</sup> electron pair is held strongly by the nucleus</strong> and shows reluctance to unpair and participate in bonding.
+    <ul style="margin: 4px 0 0 0; padding-left: 16px;">
+      <li><strong>Group 13:</strong> +1 state stability increases down group (Tl<sup>+</sup> &gt; Tl<sup>3+</sup>).</li>
+      <li><strong>Group 14:</strong> +2 state stability increases down group (Pb<sup>2+</sup> &gt; Pb<sup>4+</sup>).</li>
+      <li><strong>Group 15:</strong> +3 state stability increases down group (Bi<sup>3+</sup> &gt; Bi<sup>5+</sup>).</li>
+      <li><strong>Group 16:</strong> +4 state stability increases down group (Te<sup>4+</sup>, Po<sup>4+</sup> &gt; +6).</li>
+    </ul>
+  </div>
+
+  <div class="sub-heading">C. Anomalous Behaviour of First Member of Each Group</div>
+  <p>The first element of each group (<strong>B, C, N, O, F</strong>) differs significantly from its heavier congeners due to five primary factors:</p>
+  <div class="grid-2">
+    <div class="card-box">
+      <div class="card-box-header" style="color: #1e3a8a;">Fundamental Structural Reasons</div>
+      <ol style="margin:0; padding-left: 16px; font-size: 8.5pt;">
+        <li><strong>Extremely small atomic & ionic radius.</strong></li>
+        <li><strong>High electronegativity & high ionisation enthalpy.</strong></li>
+        <li><strong>Absence of vacant d-orbitals</strong> in valence shell (maximum covalency strictly restricted to 4).</li>
+      </ol>
+    </div>
+    <div class="card-box">
+      <div class="card-box-header" style="color: #1e3a8a;">Chemical Consequences</div>
+      <ol style="margin:0; padding-left: 16px; font-size: 8.5pt;" start="4">
+        <li><strong>High tendency for p&pi;–p&pi; multiple bonding</strong> with itself (C=C, C&equiv;C, N&equiv;N) and with other small atoms (C=O, C=N, N=O).</li>
+        <li>Heavier elements can expand their octet using vacant <em>d</em>-orbitals (e.g., [AlF<sub>6</sub>]<sup>3&minus;</sup>, SF<sub>6</sub>, PCl<sub>5</sub> exist, while BF<sub>6</sub><sup>3&minus;</sup>, OF<sub>6</sub> do not).</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- SECTION 2: GROUP 13 -->
+  <div class="section-header">
+    <div class="section-title">2. Group 13 — Boron Family (Icosagens)</div>
+    <span class="section-tag">ns<sup>2</sup> np<sup>1</sup></span>
+  </div>
+
+  <p><strong>Elements:</strong> Boron (B), Aluminium (Al), Gallium (Ga), Indium (In), Thallium (Tl). &nbsp;|&nbsp; <strong>Oxidation States:</strong> +3 and +1.</p>
+
+  <div class="sub-heading">A. Critical Trends & Anomalies</div>
+  <ul>
+    <li><strong>Metallic character:</strong> Boron is a typical non-metal/metalloid; Al, Ga, In, Tl are true metals.</li>
+    <li><strong>Oxidation state stability:</strong> +3 stability decreases down group; +1 increases down group (<strong>Tl<sup>+</sup> is highly stable</strong>, while Tl<sup>3+</sup> acts as a strong oxidising agent).</li>
+  </ul>
+
+  <div class="callout callout-trap">
+    <strong>⚠️ NEET CRITICAL EXCEPTION — Atomic Radius of Gallium vs Aluminium:</strong><br>
+    Atomic radius of <strong>Gallium (135 pm) is slightly SMALLER than Aluminium (143 pm)</strong>.<br>
+    <em>Reason:</em> Gallium is preceded by ten 3d-transition elements. The 10 <em>d</em>-electrons exert <strong>very poor shielding effect</strong> on the outer valence electrons, increasing the effective nuclear charge (<em>Z<sub>eff</sub></em>) and pulling the valence shell inward.
+  </div>
+
+  <div class="sub-heading">B. Chemical Properties & Important Reactions</div>
+  
+  <p><strong>1. Reaction with Oxygen:</strong> Forms sesquioxides (M<sub>2</sub>O<sub>3</sub>).</p>
+  <div class="rxn-box">4B + 3O<sub>2</sub> &rarr; 2B<sub>2</sub>O<sub>3</sub> &nbsp;&nbsp;|&nbsp;&nbsp; 4Al + 3O<sub>2</sub> &rarr; 2Al<sub>2</sub>O<sub>3</sub></div>
+  <table style="margin-top: 4px;">
+    <thead>
+      <tr>
+        <th>Oxide</th>
+        <th>B<sub>2</sub>O<sub>3</sub></th>
+        <th>Al<sub>2</sub>O<sub>3</sub></th>
+        <th>Ga<sub>2</sub>O<sub>3</sub></th>
+        <th>In<sub>2</sub>O<sub>3</sub></th>
+        <th>Tl<sub>2</sub>O</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Nature</strong></td>
+        <td><span class="pill-shape pill-danger">Acidic</span></td>
+        <td><span class="pill-shape pill-planar">Amphoteric</span></td>
+        <td><span class="pill-shape pill-planar">Amphoteric</span></td>
+        <td><span class="pill-shape pill-linear">Basic</span></td>
+        <td><span class="pill-shape pill-linear">Strongly Basic</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><strong>2. Reaction with Acids & Alkalis (Amphoteric Al):</strong></p>
+  <div class="rxn-box">2Al + 6HCl &rarr; 2AlCl<sub>3</sub> + 3H<sub>2</sub>&uarr; <span class="cond">Reaction with dilute acid</span></div>
+  <div class="rxn-box">2Al + 2NaOH + 2H<sub>2</sub>O &rarr; 2NaAlO<sub>2</sub> (Sodium meta-aluminate) + 3H<sub>2</sub>&uarr; <span class="cond">Amphoteric nature with alkali</span></div>
+  <p style="font-size:8pt; color:#64748b; margin-top: -4px;"><em>Note: Concentrated HNO<sub>3</sub> makes Al passive due to the formation of an unreactive protective oxide layer (Al<sub>2</sub>O<sub>3</sub>) on its surface.</em></p>
+
+  <div class="sub-heading">C. Key Compounds of Group 13</div>
+
+  <div class="grid-2">
+    <!-- Borax & Boric Acid -->
+    <div class="card-box">
+      <div class="card-box-header" style="color: #0f172a;">1. Borax — Na<sub>2</sub>B<sub>4</sub>O<sub>7</sub>&middot;10H<sub>2</sub>O</div>
+      <ul style="font-size: 8.5pt; padding-left: 14px; margin: 0;">
+        <li>White crystalline solid; formula contains [B<sub>4</sub>O<sub>5</sub>(OH)<sub>4</sub>]<sup>2&minus;</sup> units.</li>
+        <li><strong>Aqueous solution is alkaline</strong> due to hydrolysis of the weak acid:
+          <div class="rxn-box" style="font-size:7.5pt; padding:3px 6px;">Na<sub>2</sub>B<sub>4</sub>O<sub>7</sub> + 7H<sub>2</sub>O &rarr; 2NaOH + 4H<sub>3</sub>BO<sub>3</sub></div>
+        </li>
+        <li><strong>Borax Bead Test:</strong> On strong heating, swells, loses water, and forms a transparent glassy bead of sodium metaborate + B<sub>2</sub>O<sub>3</sub>:
+          <div class="rxn-box" style="font-size:7.5pt; padding:3px 6px;">Na<sub>2</sub>B<sub>4</sub>O<sub>7</sub>&middot;10H<sub>2</sub>O &rarr;&Delta; Na<sub>2</sub>B<sub>4</sub>O<sub>7</sub> &rarr;&Delta; 2NaBO<sub>2</sub> + B<sub>2</sub>O<sub>3</sub> (glassy bead)</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card-box">
+      <div class="card-box-header" style="color: #0f172a;">2. Orthoboric Acid — H<sub>3</sub>BO<sub>3</sub> / B(OH)<sub>3</sub></div>
+      <ul style="font-size: 8.5pt; padding-left: 14px; margin: 0;">
+        <li>Layered planar structure with [BO<sub>3</sub>] units linked by hydrogen bonds.</li>
+        <li><strong>NEET Highlight: Weak Monobasic Lewis Acid!</strong> It does not donate H<sup>+</sup> directly; instead, it accepts OH<sup>&minus;</sup> from water:
+          <div class="rxn-box" style="font-size:7.5pt; padding:3px 6px;">B(OH)<sub>3</sub> + 2H<sub>2</sub>O &hArr; [B(OH)<sub>4</sub>]<sup>&minus;</sup> + H<sub>3</sub>O<sup>+</sup></div>
+        </li>
+        <li><strong>Thermal Dehydration:</strong>
+          <div class="rxn-box" style="font-size:7.5pt; padding:3px 6px;">H<sub>3</sub>BO<sub>3</sub> &rarr;100&deg;C HBO<sub>2</sub> (Metaboric) &rarr;&Delta; B<sub>2</sub>O<sub>3</sub> (Boron trioxide)</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Diborane & AlCl3 -->
+  <div class="grid-2" style="margin-top: 8px;">
+    <div class="card-box">
+      <div class="card-box-header" style="color: #0f172a;">3. Diborane — B<sub>2</sub>H<sub>6</sub></div>
+      <ul style="font-size: 8.5pt; padding-left: 14px; margin: 0;">
+        <li>Electron-deficient hydride; each B is <strong>sp<sup>3</sup>-hybridised</strong>.</li>
+        <li><strong>Bonding:</strong> 4 terminal 2-centre 2-electron (2c–2e) B–H bonds + <strong>2 bridging 3-centre 2-electron (3c–2e) "banana bonds"</strong>.</li>
+        <li>Combustion is highly exothermic (rocket fuel potential):
+          <div class="rxn-box" style="font-size:7.5pt; padding:3px 6px;">B<sub>2</sub>H<sub>6</sub> + 3O<sub>2</sub> &rarr; B<sub>2</sub>O<sub>3</sub> + 3H<sub>2</sub>O &nbsp;&Delta;H = &minus;1976 kJ/mol</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card-box">
+      <div class="card-box-header" style="color: #0f172a;">4. Aluminium Chloride — AlCl<sub>3</sub></div>
+      <ul style="font-size: 8.5pt; padding-left: 14px; margin: 0;">
+        <li>Electron-deficient Lewis acid; acts as catalyst in Friedel-Crafts reaction.</li>
+        <li>Anhydrous AlCl<sub>3</sub> achieves stability by forming a <strong>dimer Al<sub>2</sub>Cl<sub>6</sub></strong> in vapour/solid state via dative coordinate bonds.</li>
+        <li>In aqueous solution, it forms hydrated ions: [Al(H<sub>2</sub>O)<sub>6</sub>]<sup>3+</sup> + 3Cl<sup>&minus;</sup>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout-neet">
+    <strong>💡 NEET High-Yield: Lewis Acidity Order of Boron Trihalides:</strong><br>
+    <div class="order-list">BF<sub>3</sub> &lt; BCl<sub>3</sub> &lt; BBr<sub>3</sub> &lt; BI<sub>3</sub> &nbsp;&nbsp;(BI<sub>3</sub> is the STRONGEST Lewis acid)</div>
+    <em>Mechanism:</em> In BF<sub>3</sub>, effective <strong>2p&pi;–2p&pi; back-bonding</strong> occurs between filled 2p of Fluorine and vacant 2p of Boron, significantly reducing electron deficiency. As halogen size increases (3p in Cl, 4p in Br, 5p in I), orbital overlap becomes ineffective, so back-bonding diminishes and Lewis acidity sharply increases.
+  </div>
+
+  <!-- SECTION 3: GROUP 14 -->
+  <div class="section-header">
+    <div class="section-title">3. Group 14 — Carbon Family (Crystallogens)</div>
+    <span class="section-tag">ns<sup>2</sup> np<sup>2</sup></span>
+  </div>
+
+  <p><strong>Elements:</strong> Carbon (C), Silicon (Si), Germanium (Ge), Tin (Sn), Lead (Pb). &nbsp;|&nbsp; <strong>Oxidation States:</strong> +4, +2 (and &minus;4 for C).</p>
+
+  <div class="sub-heading">A. Catenation & Allotropy</div>
+  <p><strong>Catenation:</strong> The unique ability of an atom to link with other atoms of the same element through strong covalent bonds.</p>
+  <div class="order-list">Catenation Order: &nbsp; C &gt;&gt; Si &gt; Ge &approx; Sn &gt; Pb</div>
+  <p style="font-size:8.5pt; margin-top:2px;">Carbon exhibits exceptionally high catenation due to its small size and high C–C bond dissociation enthalpy (348 kJ/mol).</p>
+
+  <div class="sub-heading">B. Allotropes of Carbon — Structural Comparison</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 20%;">Property</th>
+        <th style="width: 28%;">Diamond</th>
+        <th style="width: 28%;">Graphite</th>
+        <th style="width: 24%;">Fullerenes (C<sub>60</sub>)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Hybridisation</strong></td>
+        <td><strong>sp<sup>3</sup></strong></td>
+        <td><strong>sp<sup>2</sup></strong></td>
+        <td><strong>sp<sup>2</sup></strong> (curved surface)</td>
+      </tr>
+      <tr>
+        <td><strong>Structure</strong></td>
+        <td>Rigid 3D tetrahedral network</td>
+        <td>2D planar hexagonal layers</td>
+        <td>Soccer ball cage (Buckminster)</td>
+      </tr>
+      <tr>
+        <td><strong>Electrical Conductivity</strong></td>
+        <td>Insulator (no free e<sup>&minus;</sup>)</td>
+        <td><strong>Good conductor</strong> (delocalised &pi; e<sup>&minus;</sup>)</td>
+        <td>Semiconductor</td>
+      </tr>
+      <tr>
+        <td><strong>Hardness & Feel</strong></td>
+        <td>Extremely hard; abrasive</td>
+        <td>Soft, slippery (layers slide)</td>
+        <td>Dark solid at room temp</td>
+      </tr>
+      <tr>
+        <td><strong>Geometry Features</strong></td>
+        <td>C–C bond length = 154 pm</td>
+        <td>Interlayer distance = 340 pm</td>
+        <td><strong>12 pentagons + 20 hexagons</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sub-heading">C. Carbon Oxides: CO vs CO<sub>2</sub></div>
+  <div class="grid-2">
+    <div class="card-box">
+      <div class="card-box-header" style="color: #991b1b;">Carbon Monoxide (CO) — Neutral Oxide</div>
+      <ul style="font-size:8.5pt; padding-left:14px; margin:0;">
+        <li>Colourless, odourless, <strong>highly poisonous gas</strong>.</li>
+        <li>Binds to haemoglobin forming <em>carboxyhaemoglobin</em> (~300&times; more stable than oxyhaemoglobin), blocking O<sub>2</sub> transport.</li>
+        <li>Powerful reducing agent in metallurgy:
+          <div class="rxn-box" style="font-size:7.5pt; padding:3px 6px;">Fe<sub>2</sub>O<sub>3</sub> + 3CO &rarr; 2Fe + 3CO<sub>2</sub></div>
+        </li>
+      </ul>
+    </div>
+    <div class="card-box">
+      <div class="card-box-header" style="color: #1e40af;">Carbon Dioxide (CO<sub>2</sub>) — Acidic Oxide</div>
+      <ul style="font-size:8.5pt; padding-left:14px; margin:0;">
+        <li>Linear molecule; carbon is <strong>sp-hybridised</strong> (&mu; = 0).</li>
+        <li>Forms carbonic acid (H<sub>2</sub>CO<sub>3</sub>) with water.</li>
+        <li>Lime water test & excess bicarbonate reaction:
+          <div class="rxn-box" style="font-size:7.5pt; padding:3px 6px;">Ca(OH)<sub>2</sub> + CO<sub>2</sub> &rarr; CaCO<sub>3</sub>&darr; (milky) + H<sub>2</sub>O<br>CaCO<sub>3</sub> + H<sub>2</sub>O + CO<sub>2</sub> (excess) &rarr; Ca(HCO<sub>3</sub>)<sub>2</sub> (clear)</div>
+        </li>
+        <li>Solid CO<sub>2</sub> is called <strong>Dry Ice</strong> (sublimes at &minus;78&deg;C).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-heading">D. Silicon Compounds: Silicates, Zeolites & Silicones</div>
+  
+  <p><strong>1. Silicon Dioxide (SiO<sub>2</sub>):</strong> Giant covalent 3D network solid. Each Si atom is tetrahedrally bonded to four Oxygen atoms, and each Oxygen atom is shared between two Si atoms. (High melting point ~1700&deg;C, chemically very inert).</p>
+
+  <p><strong>2. Silicates Classification:</strong> Basic structural building block is the tetrahedral <strong>[SiO<sub>4</sub>]<sup>4&minus;</sup></strong> ion.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Silicate Type</th>
+        <th>Shared Corners / Oxygen</th>
+        <th>Basic Formula Unit</th>
+        <th>Mineral Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Orthosilicates</strong></td>
+        <td>0 (isolated tetrahedra)</td>
+        <td>[SiO<sub>4</sub>]<sup>4&minus;</sup></td>
+        <td>Phenacite (Be<sub>2</sub>SiO<sub>4</sub>), Zircon</td>
+      </tr>
+      <tr>
+        <td><strong>Pyrosilicates (Island)</strong></td>
+        <td>1 oxygen shared between 2 units</td>
+        <td>[Si<sub>2</sub>O<sub>7</sub>]<sup>6&minus;</sup></td>
+        <td>Thortveitite (Sc<sub>2</sub>Si<sub>2</sub>O<sub>7</sub>)</td>
+      </tr>
+      <tr>
+        <td><strong>Cyclic (Ring) Silicates</strong></td>
+        <td>2 oxygen atoms per tetrahedron</td>
+        <td>(SiO<sub>3</sub>)<sub>n</sub><sup>2n&minus;</sup> e.g. [Si<sub>3</sub>O<sub>9</sub>]<sup>6&minus;</sup></td>
+        <td>Beryl (Be<sub>3</sub>Al<sub>2</sub>Si<sub>6</sub>O<sub>18</sub>)</td>
+      </tr>
+      <tr>
+        <td><strong>Chain Silicates (Pyroxenes)</strong></td>
+        <td>2 oxygen atoms shared in linear chain</td>
+        <td>(SiO<sub>3</sub>)<sub>n</sub><sup>2n&minus;</sup></td>
+        <td>Diopside (CaMg(SiO<sub>3</sub>)<sub>2</sub>)</td>
+      </tr>
+      <tr>
+        <td><strong>Sheet Silicates (Phyllosilicates)</strong></td>
+        <td>3 oxygen atoms shared (2D layers)</td>
+        <td>(Si<sub>2</sub>O<sub>5</sub>)<sub>n</sub><sup>2n&minus;</sup></td>
+        <td>Talc, Mica, Clay, Kaolinite</td>
+      </tr>
+      <tr>
+        <td><strong>3D Framework Silicates</strong></td>
+        <td>All 4 oxygen atoms shared</td>
+        <td>(SiO<sub>2</sub>)<sub>n</sub> (neutral framework)</td>
+        <td>Quartz, Feldspar, Zeolites</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-concept">
+    <strong>💡 Zeolites & ZSM-5 (High-Yield NEET Fact):</strong><br>
+    Zeolites are <strong>microporous crystalline hydrated aluminosilicates</strong>. In the 3D-SiO<sub>2</sub> network, some Si<sup>4+</sup> atoms are replaced by Al<sup>3+</sup>, generating a net negative framework charge balanced by cations like Na<sup>+</sup>, K<sup>+</sup>, Ca<sup>2+</sup>.
+    <ul style="margin:2px 0 0 0; padding-left:16px;">
+      <li><strong>Water Softening:</strong> Cations exchange with hard water Ca<sup>2+</sup> and Mg<sup>2+</sup> ions.</li>
+      <li><strong>Shape-Selective Catalysis:</strong> Pores and channels trap specific size reactant molecules.</li>
+      <li><strong>ZSM-5:</strong> A specialised zeolite catalyst used to convert alcohols directly into gasoline (petrol) via dehydration.</li>
+    </ul>
+  </div>
+
+  <p><strong>3. Silicones:</strong> Synthetic organosilicon polymers with repeating <strong>&minus;R<sub>2</sub>Si&minus;O&minus;SiR<sub>2</sub>&minus;</strong> linkages. Prepared by hydrolysis of alkyl/aryl chlorosilanes (R<sub>2</sub>SiCl<sub>2</sub>) followed by condensation polymerisation. <em>Properties:</em> Water-repellent, high thermal stability, electrical insulators, used as lubricants and surgical implants.</p>
+
+  <!-- SECTION 4: GROUP 15 -->
+  <div class="section-header">
+    <div class="section-title">4. Group 15 — Nitrogen Family (Pnictogens)</div>
+    <span class="section-tag">ns<sup>2</sup> np<sup>3</sup></span>
+  </div>
+
+  <p><strong>Elements:</strong> Nitrogen (N), Phosphorus (P), Arsenic (As), Antimony (Sb), Bismuth (Bi). &nbsp;|&nbsp; <strong>Oxidation States:</strong> &minus;3, +3, +5.</p>
+
+  <div class="sub-heading">A. Hydrides of Group 15 (EH<sub>3</sub>) — Master Trends</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Trend Down the Group</th>
+        <th>Strict Trend Order</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Thermal Stability</strong></td>
+        <td>Decreases (&darr;) due to increasing E–H bond length</td>
+        <td>NH<sub>3</sub> &gt; PH<sub>3</sub> &gt; AsH<sub>3</sub> &gt; SbH<sub>3</sub> &gt; BiH<sub>3</sub></td>
+      </tr>
+      <tr>
+        <td><strong>Reducing Character</strong></td>
+        <td>Increases (&uarr;) as E–H bond strength weakens</td>
+        <td>NH<sub>3</sub> &lt; PH<sub>3</sub> &lt; AsH<sub>3</sub> &lt; SbH<sub>3</sub> &lt; BiH<sub>3</sub> (BiH<sub>3</sub> is strongest)</td>
+      </tr>
+      <tr>
+        <td><strong>Basicity (Lewis Base)</strong></td>
+        <td>Decreases (&darr;) as lone-pair density disperses over larger orbital</td>
+        <td>NH<sub>3</sub> &gt; PH<sub>3</sub> &gt; AsH<sub>3</sub> &gt; SbH<sub>3</sub> &gt; BiH<sub>3</sub></td>
+      </tr>
+      <tr>
+        <td><strong>Bond Angle</strong></td>
+        <td>Decreases (&darr;) due to decreasing EN of central atom</td>
+        <td>NH<sub>3</sub> (107.8&deg;) &gt; PH<sub>3</sub> (93.6&deg;) &gt; AsH<sub>3</sub> (91.8&deg;) &gt; SbH<sub>3</sub> (91.3&deg;)</td>
+      </tr>
+      <tr>
+        <td><strong>Boiling Point</strong></td>
+        <td>Anomalous due to H-bonding in NH<sub>3</sub></td>
+        <td>PH<sub>3</sub> &lt; AsH<sub>3</sub> &lt; <strong>NH<sub>3</sub></strong> &lt; SbH<sub>3</sub> &lt; BiH<sub>3</sub></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sub-heading">B. Industrial Processes: Haber Process & Ostwald Process</div>
+  <div class="grid-2">
+    <div class="card-box">
+      <div class="card-box-header" style="color: #1e3a8a;">Haber Process (Ammonia — NH<sub>3</sub>)</div>
+      <div class="rxn-box">N<sub>2</sub>(g) + 3H<sub>2</sub>(g) &hArr; 2NH<sub>3</sub>(g) <span class="cond">&Delta;H = &minus;92.4 kJ</span></div>
+      <ul style="font-size:8.2pt; padding-left:14px; margin:4px 0 0 0;">
+        <li><strong>Optimum Conditions:</strong> High pressure (~200 atm), temperature (~700 K).</li>
+        <li><strong>Catalyst:</strong> Finely divided Iron with promoter Molybdenum (or K<sub>2</sub>O + Al<sub>2</sub>O<sub>3</sub>).</li>
+      </ul>
+    </div>
+    <div class="card-box">
+      <div class="card-box-header" style="color: #6b21a8;">Ostwald Process (Nitric Acid — HNO<sub>3</sub>)</div>
+      <ul style="font-size:8.2pt; padding-left:14px; margin:0;">
+        <li><strong>Step 1:</strong> 4NH<sub>3</sub> + 5O<sub>2</sub> &rarr;[Pt-Rh, 500K] 4NO + 6H<sub>2</sub>O</li>
+        <li><strong>Step 2:</strong> 2NO + O<sub>2</sub> &hArr; 2NO<sub>2</sub></li>
+        <li><strong>Step 3:</strong> 3NO<sub>2</sub> + H<sub>2</sub>O &rarr; 2HNO<sub>3</sub> + NO</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout-trap">
+    <strong>⚠️ NEET TRAP — Reactions of Copper with Nitric Acid:</strong>
+    <div class="rxn-box" style="margin-top:3px;">
+      3Cu + 8HNO<sub>3</sub> (dilute) &rarr; 3Cu(NO<sub>3</sub>)<sub>2</sub> + 2NO&uarr; (Nitric Oxide) + 4H<sub>2</sub>O<br>
+      Cu + 4HNO<sub>3</sub> (concentrated) &rarr; Cu(NO<sub>3</sub>)<sub>2</sub> + 2NO<sub>2</sub>&uarr; (Nitrogen Dioxide) + 2H<sub>2</sub>O
+    </div>
+    <em>Crucial:</em> HNO<sub>3</sub> is a strong oxidising agent and <strong>never liberates H<sub>2</sub> gas with metals</strong> (except very dilute acid with Mg and Mn).
+  </div>
+
+  <div class="sub-heading">C. Allotropes of Phosphorus: White vs Red vs Black</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>White Phosphorus</th>
+        <th>Red Phosphorus</th>
+        <th>Black Phosphorus</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Physical Nature</strong></td>
+        <td>Translucent white, waxy solid</td>
+        <td>Iron-grey lustrous solid</td>
+        <td>Layered crystalline solid</td>
+      </tr>
+      <tr>
+        <td><strong>Molecular Structure</strong></td>
+        <td>Discrete P<sub>4</sub> tetrahedra (angle strain = 60&deg;)</td>
+        <td>Polymeric chain of P<sub>4</sub> tetrahedra</td>
+        <td>Thermodynamically most stable</td>
+      </tr>
+      <tr>
+        <td><strong>Reactivity & Toxicity</strong></td>
+        <td><strong>Extremely reactive & poisonous</strong></td>
+        <td>Non-poisonous, less reactive</td>
+        <td>Least reactive</td>
+      </tr>
+      <tr>
+        <td><strong>Chemiluminescence</strong></td>
+        <td>Glows in dark (oxidises in air)</td>
+        <td>Does not glow in dark</td>
+        <td>Does not glow</td>
+      </tr>
+      <tr>
+        <td><strong>Storage</strong></td>
+        <td>Stored under water (ignites in air at 30&deg;C)</td>
+        <td>Stable at room temperature</td>
+        <td>High pressure product</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sub-heading">D. Phosphorus Halides & Oxoacids (PCl<sub>3</sub>, PCl<sub>5</sub> & Acids)</div>
+  <p><strong>Phosphorus Pentachloride (PCl<sub>5</sub>):</strong> In the gaseous and liquid phase, it has a <strong>trigonal bipyramidal</strong> structure.
+  <br><em>NEET Point:</em> The <strong>two axial P–Cl bonds are longer and weaker</strong> (240 pm) than the three equatorial P–Cl bonds (202 pm) due to greater bond-pair repulsive strain. Hence, on heating, PCl<sub>5</sub> decomposes into PCl<sub>3</sub> and Cl<sub>2</sub>.
+  <br>In solid state, PCl<sub>5</sub> exists as an ionic solid: <strong>[PCl<sub>4</sub>]<sup>+</sup>[PCl<sub>6</sub>]<sup>&minus;</sup></strong> (cation is tetrahedral, anion is octahedral).</p>
+
+  <div class="sub-heading">E. Master Table: Oxoacids of Phosphorus & Basicity Rule</div>
+  <div class="callout callout-rule" style="margin-top:2px; margin-bottom:6px;">
+    <strong>Golden Rule for Phosphorus Oxoacids:</strong>
+    <strong>Basicity = Number of P–OH bonds</strong> (only OH hydrogens ionise as H<sup>+</sup>).<br>
+    <strong>Reducing power = Proportional to the number of direct P–H bonds</strong> (P–H acts as strong reducing agent).
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Formula</th>
+        <th>Oxidation State</th>
+        <th>P–OH Bonds (Basicity)</th>
+        <th>P–H Bonds</th>
+        <th>Reducing Character</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Hypophosphorous Acid</strong></td>
+        <td>H<sub>3</sub>PO<sub>2</sub></td>
+        <td>+1</td>
+        <td>1 (<span class="pill-shape pill-danger">Monobasic</span>)</td>
+        <td>2 P–H bonds</td>
+        <td><strong>Very Strong Reducing Agent</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Orthophosphorous Acid</strong></td>
+        <td>H<sub>3</sub>PO<sub>3</sub></td>
+        <td>+3</td>
+        <td>2 (<span class="pill-shape pill-pyramid">Dibasic</span>)</td>
+        <td>1 P–H bond</td>
+        <td>Strong Reducing Agent</td>
+      </tr>
+      <tr>
+        <td><strong>Orthophosphoric Acid</strong></td>
+        <td>H<sub>3</sub>PO<sub>4</sub></td>
+        <td>+5</td>
+        <td>3 (<span class="pill-shape pill-planar">Tribasic</span>)</td>
+        <td>0 P–H bonds</td>
+        <td>Not a reducing agent</td>
+      </tr>
+      <tr>
+        <td><strong>Pyrophosphoric Acid</strong></td>
+        <td>H<sub>4</sub>P<sub>2</sub>O<sub>7</sub></td>
+        <td>+5</td>
+        <td>4 (Tetrabasic)</td>
+        <td>0 P–H bonds</td>
+        <td>Non-reducing</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECTION 5: GROUP 16 -->
+  <div class="section-header">
+    <div class="section-title">5. Group 16 — Oxygen Family (Chalcogens)</div>
+    <span class="section-tag">ns<sup>2</sup> np<sup>4</sup></span>
+  </div>
+
+  <p><strong>Elements:</strong> Oxygen (O), Sulphur (S), Selenium (Se), Tellurium (Te), Polonium (Po). &nbsp;|&nbsp; <strong>Oxidation States:</strong> &minus;2, +2, +4, +6.</p>
+
+  <div class="sub-heading">A. Hydrides of Group 16 (H<sub>2</sub>E) Trends</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Observed Order</th>
+        <th>Reasoning</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Acidic Strength</strong></td>
+        <td><strong>H<sub>2</sub>O &lt; H<sub>2</sub>S &lt; H<sub>2</sub>Se &lt; H<sub>2</sub>Te</strong></td>
+        <td>E–H bond dissociation enthalpy decreases as size increases; H<sup>+</sup> release becomes easier.</td>
+      </tr>
+      <tr>
+        <td><strong>Thermal Stability</strong></td>
+        <td>H<sub>2</sub>O &gt; H<sub>2</sub>S &gt; H<sub>2</sub>Se &gt; H<sub>2</sub>Te</td>
+        <td>H–E bond strength decreases down the group.</td>
+      </tr>
+      <tr>
+        <td><strong>Reducing Power</strong></td>
+        <td>H<sub>2</sub>O (none) &lt; H<sub>2</sub>S &lt; H<sub>2</sub>Se &lt; H<sub>2</sub>Te</td>
+        <td>Ease of liberation of hydrogen increases down group.</td>
+      </tr>
+      <tr>
+        <td><strong>Boiling Point</strong></td>
+        <td>H<sub>2</sub>S &lt; H<sub>2</sub>Se &lt; H<sub>2</sub>Te &lt; <strong>H<sub>2</sub>O</strong></td>
+        <td><strong>H<sub>2</sub>O has abnormally high b.p. due to extensive intermolecular hydrogen bonding.</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sub-heading">B. Oxygen (O<sub>2</sub>) vs Ozone (O<sub>3</sub>) & Magnetism</div>
+  <div class="grid-2">
+    <div class="card-box">
+      <div class="card-box-header" style="color: #b91c1c;">Dioxygen (O<sub>2</sub>) — Paramagnetic Gas</div>
+      <ul style="font-size:8.5pt; padding-left:14px; margin:0;">
+        <li>Molecular Orbital Configuration shows <strong>two unpaired electrons</strong> in anti-bonding &pi;*2p<sub>x</sub> and &pi;*2p<sub>y</sub> orbitals.</li>
+        <li><strong>NEET Trap:</strong> O<sub>2</sub> is <em>paramagnetic</em> despite having an even number (16) of electrons!</li>
+      </ul>
+    </div>
+    <div class="card-box">
+      <div class="card-box-header" style="color: #1e40af;">Ozone (O<sub>3</sub>) — Powerful Oxidant</div>
+      <ul style="font-size:8.5pt; padding-left:14px; margin:0;">
+        <li>Pale blue gas with angular bent geometry (O–O–O angle = 117&deg;).</li>
+        <li>Thermodynamically unstable; readily decomposes into O<sub>2</sub> and nascent oxygen [O]:
+          <div class="rxn-box" style="font-size:7.5pt; padding:3px 6px;">O<sub>3</sub> &rarr; O<sub>2</sub> + [O] &nbsp;&nbsp;(acts as powerful oxidiser)</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-heading">C. Allotropes of Sulphur & The Contact Process</div>
+  <p><strong>Sulphur Allotropes:</strong> Two major crystalline forms, both consisting of puckered <strong>S<sub>8</sub> rings</strong> (crown shape):
+  <br>&bull; <em>Rhombic Sulphur (&alpha;-sulphur):</em> Yellow crystals, stable below 369 K.
+  <br>&bull; <em>Monoclinic Sulphur (&beta;-sulphur):</em> Needle-shaped crystals, stable above 369 K.
+  <br><strong>Transition Temperature = 369 K:</strong> Both forms coexist in equilibrium at this temperature.</p>
+
+  <p><strong>Industrial Manufacture of Sulphuric Acid (Contact Process):</strong></p>
+  <div class="rxn-box">
+    Step 1: S + O<sub>2</sub> &rarr; SO<sub>2</sub><br>
+    Step 2 (Key): 2SO<sub>2</sub> + O<sub>2</sub> &hArr; 2SO<sub>3</sub> <span class="cond">Catalyst: V<sub>2</sub>O<sub>5</sub>, Temp: 673–720 K, Pressure: 2 bar</span><br>
+    Step 3: SO<sub>3</sub> + H<sub>2</sub>SO<sub>4</sub> (conc) &rarr; H<sub>2</sub>S<sub>2</sub>O<sub>7</sub> (Oleum / Pyrosulphuric acid)<br>
+    Step 4: H<sub>2</sub>S<sub>2</sub>O<sub>7</sub> + H<sub>2</sub>O &rarr; 2H<sub>2</sub>SO<sub>4</sub> (Pure 96–98% concentration)
+  </div>
+
+  <!-- SECTION 6: GROUP 17 -->
+  <div class="section-header">
+    <div class="section-title">6. Group 17 — Halogens (Salt Formers)</div>
+    <span class="section-tag">ns<sup>2</sup> np<sup>5</sup></span>
+  </div>
+
+  <p><strong>Elements:</strong> Fluorine (F), Chlorine (Cl), Bromine (Br), Iodine (I), Astatine (At). &nbsp;|&nbsp; <strong>Oxidation States:</strong> &minus;1 (F only &minus;1; Cl, Br, I show &minus;1, +1, +3, +5, +7).</p>
+
+  <div class="sub-heading">A. Critical Halogen Trends</div>
+  <div class="grid-2">
+    <div class="card-box">
+      <div class="card-box-header">Oxidising & Reducing Orders</div>
+      <div class="order-list" style="font-size:7.8pt;">Oxidising Power: &nbsp; F<sub>2</sub> &gt; Cl<sub>2</sub> &gt; Br<sub>2</sub> &gt; I<sub>2</sub></div>
+      <div class="order-list" style="font-size:7.8pt; margin-top:4px;">Halide Reducing: &nbsp; I<sup>&minus;</sup> &gt; Br<sup>&minus;</sup> &gt; Cl<sup>&minus;</sup> &gt; F<sup>&minus;</sup></div>
+      <p style="font-size:8pt; margin:4px 0 0 0;">F<sub>2</sub> is the strongest chemical oxidising agent known due to high hydration enthalpy and low F–F bond dissociation energy.</p>
+    </div>
+    <div class="card-box">
+      <div class="card-box-header">Anomalous Bond Dissociation Enthalpy</div>
+      <div class="order-list" style="font-size:7.8pt;">Bond Enthalpy: Cl<sub>2</sub> &gt; Br<sub>2</sub> &gt; F<sub>2</sub> &gt; I<sub>2</sub></div>
+      <p style="font-size:8pt; margin:4px 0 0 0;"><strong>NEET Exception:</strong> F–F bond enthalpy is unusually lower than Cl–Cl and Br–Br due to strong inter-electronic repulsions between non-bonding lone pairs in small F atom.</p>
+    </div>
+  </div>
+
+  <div class="sub-heading">B. Hydrogen Halides (HX) Trends</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Observed Order</th>
+        <th>NEET Key Concept</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Acidic Strength</strong></td>
+        <td><strong>HF &lt; HCl &lt; HBr &lt; HI</strong></td>
+        <td>H–X bond dissociation energy decreases sharply from HF to HI. <strong>HI is strongest acid.</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Thermal Stability</strong></td>
+        <td>HF &gt; HCl &gt; HBr &gt; HI</td>
+        <td>H–X bond strength decreases down the group.</td>
+      </tr>
+      <tr>
+        <td><strong>Reducing Nature</strong></td>
+        <td>HF &lt; HCl &lt; HBr &lt; HI</td>
+        <td>HI readily donates hydrogen; strong reducing agent.</td>
+      </tr>
+      <tr>
+        <td><strong>Boiling Point</strong></td>
+        <td>HCl &lt; HBr &lt; HI &lt; <strong>HF</strong></td>
+        <td><strong>HF has highest b.p. due to strong intermolecular hydrogen bonding.</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sub-heading">C. Oxoacids of Chlorine & Acidity Order</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Oxoacid Name</th>
+        <th>Formula</th>
+        <th>Oxidation State of Cl</th>
+        <th>Conjugate Base & Stability</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Hypochlorous Acid</td>
+        <td>HClO</td>
+        <td>+1</td>
+        <td>ClO<sup>&minus;</sup> (least resonance stabilised)</td>
+      </tr>
+      <tr>
+        <td>Chlorous Acid</td>
+        <td>HClO<sub>2</sub></td>
+        <td>+3</td>
+        <td>ClO<sub>2</sub><sup>&minus;</sup> (stabilised by 2 oxygen atoms)</td>
+      </tr>
+      <tr>
+        <td>Chloric Acid</td>
+        <td>HClO<sub>3</sub></td>
+        <td>+5</td>
+        <td>ClO<sub>3</sub><sup>&minus;</sup> (stabilised by 3 oxygen atoms)</td>
+      </tr>
+      <tr>
+        <td>Perchloric Acid</td>
+        <td>HClO<sub>4</sub></td>
+        <td>+7</td>
+        <td>ClO<sub>4</sub><sup>&minus;</sup> (maximally resonance stabilised)</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="order-list" style="margin-top:2px;">Acid Strength: &nbsp; HClO &lt; HClO<sub>2</sub> &lt; HClO<sub>3</sub> &lt; HClO<sub>4</sub> &nbsp;&nbsp;(HClO<sub>4</sub> is the strongest acid)</div>
+
+  <div class="sub-heading">D. Interhalogen Compounds & Geometries</div>
+  <p>Formed between two distinct halogens (general formula: <em>XY, XY<sub>3</sub>, XY<sub>5</sub>, XY<sub>7</sub></em> where X is the larger halogen).</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Examples</th>
+        <th>Hybridisation</th>
+        <th>Molecular Geometry / Shape</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>XY</strong></td>
+        <td>ClF, BrF, ICl</td>
+        <td>sp<sup>3</sup></td>
+        <td><span class="pill-shape pill-linear">Linear</span></td>
+      </tr>
+      <tr>
+        <td><strong>XY<sub>3</sub></strong></td>
+        <td>ClF<sub>3</sub>, BrF<sub>3</sub>, ICl<sub>3</sub></td>
+        <td>sp<sup>3</sup>d (2 lone pairs)</td>
+        <td><span class="pill-shape pill-pyramid">T-Shaped</span> (bent T)</td>
+      </tr>
+      <tr>
+        <td><strong>XY<sub>5</sub></strong></td>
+        <td>BrF<sub>5</sub>, IF<sub>5</sub></td>
+        <td>sp<sup>3</sup>d<sup>2</sup> (1 lone pair)</td>
+        <td><span class="pill-shape pill-octa">Square Pyramidal</span></td>
+      </tr>
+      <tr>
+        <td><strong>XY<sub>7</sub></strong></td>
+        <td>IF<sub>7</sub></td>
+        <td>sp<sup>3</sup>d<sup>3</sup> (0 lone pairs)</td>
+        <td><span class="pill-shape pill-planar">Pentagonal Bipyramidal</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECTION 7: GROUP 18 -->
+  <div class="section-header">
+    <div class="section-title">7. Group 18 — Noble Gases (Aerogens)</div>
+    <span class="section-tag">ns<sup>2</sup> np<sup>6</sup> (He: 1s<sup>2</sup>)</span>
+  </div>
+
+  <p><strong>Elements:</strong> Helium (He), Neon (Ne), Argon (Ar), Krypton (Kr), Xenon (Xe), Radon (Rn).
+  <br><strong>Chemical Inertness Reasons:</strong> Closed-shell valence electronic configurations, exceptionally high ionisation enthalpies, and large positive electron gain enthalpies.</p>
+
+  <div class="sub-heading">A. Xenon Fluorides & Oxides: Preparation, Structures & Shapes</div>
+  <p>Neil Bartlett prepared the first noble gas compound (Xe<sup>+</sup>[PtF<sub>6</sub>]<sup>&minus;</sup>) inspired by O<sub>2</sub><sup>+</sup>[PtF<sub>6</sub>]<sup>&minus;</sup>.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Compound</th>
+        <th>Preparation Ratio</th>
+        <th>Hybridisation</th>
+        <th>Lone Pairs</th>
+        <th>Molecular Shape</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>XeF<sub>2</sub></strong></td>
+        <td>Xe : F<sub>2</sub> = 2 : 1 (673 K, 1 bar)</td>
+        <td>sp<sup>3</sup>d</td>
+        <td>3 equatorial</td>
+        <td><span class="pill-shape pill-linear">Linear</span></td>
+      </tr>
+      <tr>
+        <td><strong>XeF<sub>4</sub></strong></td>
+        <td>Xe : F<sub>2</sub> = 1 : 5 (873 K, 7 bar)</td>
+        <td>sp<sup>3</sup>d<sup>2</sup></td>
+        <td>2 axial</td>
+        <td><span class="pill-shape pill-planar">Square Planar</span></td>
+      </tr>
+      <tr>
+        <td><strong>XeF<sub>6</sub></strong></td>
+        <td>Xe : F<sub>2</sub> = 1 : 20 (573 K, 60–70 bar)</td>
+        <td>sp<sup>3</sup>d<sup>3</sup></td>
+        <td>1 lone pair</td>
+        <td><span class="pill-shape pill-octa">Distorted Octahedral</span></td>
+      </tr>
+      <tr>
+        <td><strong>XeO<sub>3</sub></strong></td>
+        <td>Complete hydrolysis of XeF<sub>4</sub> / XeF<sub>6</sub></td>
+        <td>sp<sup>3</sup></td>
+        <td>1 lone pair</td>
+        <td><span class="pill-shape pill-pyramid">Pyramidal</span> (explosive solid)</td>
+      </tr>
+      <tr>
+        <td><strong>XeOF<sub>4</sub></strong></td>
+        <td>Partial hydrolysis of XeF<sub>6</sub></td>
+        <td>sp<sup>3</sup>d<sup>2</sup></td>
+        <td>1 lone pair</td>
+        <td><span class="pill-shape pill-octa">Square Pyramidal</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sub-heading">B. Hydrolysis Reactions of Xenon Fluorides</div>
+  <div class="rxn-box">
+    2XeF<sub>2</sub> + 2H<sub>2</sub>O &rarr; 2Xe + 4HF + O<sub>2</sub> <span class="cond">Redox hydrolysis (Xe reduced, O oxidised)</span><br>
+    6XeF<sub>4</sub> + 12H<sub>2</sub>O &rarr; 4Xe + 2XeO<sub>3</sub> + 24HF + 3O<sub>2</sub> <span class="cond">Disproportionation of Xe(+4) to Xe(0) and Xe(+6)</span><br>
+    XeF<sub>6</sub> + 3H<sub>2</sub>O &rarr; XeO<sub>3</sub> + 6HF <span class="cond">Complete non-redox hydrolysis</span><br>
+    XeF<sub>6</sub> + H<sub>2</sub>O &rarr; XeOF<sub>4</sub> + 2HF &nbsp;|&nbsp; XeF<sub>6</sub> + 2H<sub>2</sub>O &rarr; XeO<sub>2</sub>F<sub>2</sub> + 4HF <span class="cond">Partial hydrolysis</span>
+  </div>
+
+  <div class="sub-heading">C. Applications of Noble Gases</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 20%;">Gas</th>
+        <th style="width: 80%;">Crucial Applications</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Helium (He)</strong></td>
+        <td>Filling weather observation balloons (non-flammable, light); cryogenic agent for MRI superconducting magnets; diluent for oxygen in deep-sea diving (low blood solubility).</td>
+      </tr>
+      <tr>
+        <td><strong>Neon (Ne)</strong></td>
+        <td>Discharge tubes and glow signs (beacon lights) for botanical gardens and airport runway signals.</td>
+      </tr>
+      <tr>
+        <td><strong>Argon (Ar)</strong></td>
+        <td>Inert atmosphere in high-temperature metallurgical arc welding and filling electric incandescent light bulbs.</td>
+      </tr>
+      <tr>
+        <td><strong>Krypton / Xenon</strong></td>
+        <td>High-intensity photographic flash tubes, lasers, and specialized surgical equipment.</td>
+      </tr>
+      <tr>
+        <td><strong>Radon (Rn)</strong></td>
+        <td>Radioactive tracer and radiotherapy treatment of malignant tumours (cancer).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECTION 8: MASTER REVISION TABLES -->
+  <div class="section-header page-break">
+    <div class="section-title">8. Master High-Yield Revision Tables</div>
+    <span class="section-tag">Quick Recap</span>
+  </div>
+
+  <div class="sub-heading">Table A. Hydride Trends Across Groups 13–17</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Group</th>
+        <th>Hydride Family</th>
+        <th>Crucial NEET Trend</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Group 13</strong></td>
+        <td>BH<sub>3</sub>, B<sub>2</sub>H<sub>6</sub></td>
+        <td>Electron-deficient; 3c–2e banana bonds; powerful Lewis acids.</td>
+      </tr>
+      <tr>
+        <td><strong>Group 14</strong></td>
+        <td>CH<sub>4</sub>, SiH<sub>4</sub>, GeH<sub>4</sub>, SnH<sub>4</sub></td>
+        <td>Electron-precise tetrahedral hydrides; thermal stability decreases down group.</td>
+      </tr>
+      <tr>
+        <td><strong>Group 15</strong></td>
+        <td>NH<sub>3</sub>, PH<sub>3</sub>, AsH<sub>3</sub>, SbH<sub>3</sub>, BiH<sub>3</sub></td>
+        <td>Basicity & stability decrease (&darr;); reducing power increases (&uarr;); BiH<sub>3</sub> is strongest reducer.</td>
+      </tr>
+      <tr>
+        <td><strong>Group 16</strong></td>
+        <td>H<sub>2</sub>O, H<sub>2</sub>S, H<sub>2</sub>Se, H<sub>2</sub>Te</td>
+        <td>Acidic strength & reducing nature increase (&uarr;); H<sub>2</sub>O has anomalous high b.p. due to H-bonding.</td>
+      </tr>
+      <tr>
+        <td><strong>Group 17</strong></td>
+        <td>HF, HCl, HBr, HI</td>
+        <td>Acidic strength increases: HF &lt; HCl &lt; HBr &lt; HI; thermal stability decreases.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sub-heading">Table B. Oxidation States & Inert Pair Effect Summary</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Group</th>
+        <th>Group (Higher) State</th>
+        <th>Inert Pair (Lower) State</th>
+        <th>Most Stable Down the Group</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>13 (Boron family)</strong></td>
+        <td>+3</td>
+        <td>+1</td>
+        <td><strong>Tl<sup>+</sup> &gt; Tl<sup>3+</sup></strong> (Tl<sup>3+</sup> is strong oxidiser)</td>
+      </tr>
+      <tr>
+        <td><strong>14 (Carbon family)</strong></td>
+        <td>+4</td>
+        <td>+2</td>
+        <td><strong>Pb<sup>2+</sup> &gt; Pb<sup>4+</sup></strong> (Pb<sup>4+</sup> is strong oxidiser)</td>
+      </tr>
+      <tr>
+        <td><strong>15 (Nitrogen family)</strong></td>
+        <td>+5</td>
+        <td>+3</td>
+        <td><strong>Bi<sup>3+</sup> &gt; Bi<sup>5+</sup></strong> (Bi<sup>5+</sup> is strong oxidiser)</td>
+      </tr>
+      <tr>
+        <td><strong>16 (Oxygen family)</strong></td>
+        <td>+6</td>
+        <td>+4</td>
+        <td><strong>Te<sup>4+</sup>, Po<sup>4+</sup> &gt; +6</strong></td>
+      </tr>
+      <tr>
+        <td><strong>17 (Halogens)</strong></td>
+        <td>+7</td>
+        <td>+1, +3, +5</td>
+        <td>Lower states gain stability down group</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sub-heading">Table C. Master Molecular Shapes & Hybridisation Reference</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Molecule</th>
+        <th>Central Atom Hybridisation</th>
+        <th>Bond Pairs</th>
+        <th>Lone Pairs</th>
+        <th>Molecular Geometry / Shape</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>BF<sub>3</sub></strong></td>
+        <td>sp<sup>2</sup></td>
+        <td>3</td>
+        <td>0</td>
+        <td><span class="pill-shape pill-planar">Trigonal Planar</span></td>
+      </tr>
+      <tr>
+        <td><strong>NH<sub>3</sub> / PH<sub>3</sub> / PCl<sub>3</sub></strong></td>
+        <td>sp<sup>3</sup></td>
+        <td>3</td>
+        <td>1</td>
+        <td><span class="pill-shape pill-pyramid">Trigonal Pyramidal</span></td>
+      </tr>
+      <tr>
+        <td><strong>PCl<sub>5</sub> (gas)</strong></td>
+        <td>sp<sup>3</sup>d</td>
+        <td>5</td>
+        <td>0</td>
+        <td><span class="pill-shape pill-planar">Trigonal Bipyramidal</span> (axial &gt; eq)</td>
+      </tr>
+      <tr>
+        <td><strong>SF<sub>4</sub></strong></td>
+        <td>sp<sup>3</sup>d</td>
+        <td>4</td>
+        <td>1</td>
+        <td><span class="pill-shape pill-pyramid">See-Saw</span></td>
+      </tr>
+      <tr>
+        <td><strong>SF<sub>6</sub></strong></td>
+        <td>sp<sup>3</sup>d<sup>2</sup></td>
+        <td>6</td>
+        <td>0</td>
+        <td><span class="pill-shape pill-octa">Octahedral</span></td>
+      </tr>
+      <tr>
+        <td><strong>ClF<sub>3</sub></strong></td>
+        <td>sp<sup>3</sup>d</td>
+        <td>3</td>
+        <td>2</td>
+        <td><span class="pill-shape pill-danger">T-Shaped</span> (bent T)</td>
+      </tr>
+      <tr>
+        <td><strong>BrF<sub>5</sub> / IF<sub>5</sub></strong></td>
+        <td>sp<sup>3</sup>d<sup>2</sup></td>
+        <td>5</td>
+        <td>1</td>
+        <td><span class="pill-shape pill-octa">Square Pyramidal</span></td>
+      </tr>
+      <tr>
+        <td><strong>IF<sub>7</sub></strong></td>
+        <td>sp<sup>3</sup>d<sup>3</sup></td>
+        <td>7</td>
+        <td>0</td>
+        <td><span class="pill-shape pill-planar">Pentagonal Bipyramidal</span></td>
+      </tr>
+      <tr>
+        <td><strong>XeF<sub>2</sub></strong></td>
+        <td>sp<sup>3</sup>d</td>
+        <td>2</td>
+        <td>3</td>
+        <td><span class="pill-shape pill-linear">Linear</span></td>
+      </tr>
+      <tr>
+        <td><strong>XeF<sub>4</sub></strong></td>
+        <td>sp<sup>3</sup>d<sup>2</sup></td>
+        <td>4</td>
+        <td>2</td>
+        <td><span class="pill-shape pill-planar">Square Planar</span></td>
+      </tr>
+      <tr>
+        <td><strong>XeF<sub>6</sub></strong></td>
+        <td>sp<sup>3</sup>d<sup>3</sup></td>
+        <td>6</td>
+        <td>1</td>
+        <td><span class="pill-shape pill-octa">Distorted Octahedral</span></td>
+      </tr>
+      <tr>
+        <td><strong>XeO<sub>3</sub></strong></td>
+        <td>sp<sup>3</sup></td>
+        <td>3</td>
+        <td>1</td>
+        <td><span class="pill-shape pill-pyramid">Pyramidal</span></td>
+      </tr>
+      <tr>
+        <td><strong>XeOF<sub>4</sub></strong></td>
+        <td>sp<sup>3</sup>d<sup>2</sup></td>
+        <td>5</td>
+        <td>1</td>
+        <td><span class="pill-shape pill-octa">Square Pyramidal</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sub-heading">Table D. Important Acids & Basicity (Crucial NEET Traps)</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Acid Name</th>
+        <th>Chemical Formula</th>
+        <th>Basicity</th>
+        <th>Key Structural Feature</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Orthoboric Acid</strong></td>
+        <td>H<sub>3</sub>BO<sub>3</sub></td>
+        <td><span class="pill-shape pill-danger">1 (Monobasic)</span></td>
+        <td>Acts as Lewis acid by accepting OH<sup>&minus;</sup> from water. Not a proton donor!</td>
+      </tr>
+      <tr>
+        <td><strong>Hypophosphorous Acid</strong></td>
+        <td>H<sub>3</sub>PO<sub>2</sub></td>
+        <td><span class="pill-shape pill-danger">1 (Monobasic)</span></td>
+        <td>Contains 1 P–OH bond and 2 P–H bonds (powerful reducing agent).</td>
+      </tr>
+      <tr>
+        <td><strong>Phosphorous Acid</strong></td>
+        <td>H<sub>3</sub>PO<sub>3</sub></td>
+        <td><span class="pill-shape pill-pyramid">2 (Dibasic)</span></td>
+        <td>Contains 2 P–OH bonds and 1 P–H bond (reducing agent).</td>
+      </tr>
+      <tr>
+        <td><strong>Orthophosphoric Acid</strong></td>
+        <td>H<sub>3</sub>PO<sub>4</sub></td>
+        <td><span class="pill-shape pill-planar">3 (Tribasic)</span></td>
+        <td>Contains 3 P–OH bonds and 0 P–H bonds (non-reducing).</td>
+      </tr>
+      <tr>
+        <td><strong>Sulphuric Acid</strong></td>
+        <td>H<sub>2</sub>SO<sub>4</sub></td>
+        <td><span class="pill-shape pill-pyramid">2 (Dibasic)</span></td>
+        <td>Two ionisable –OH groups; strong dehydrating and oxidising agent.</td>
+      </tr>
+      <tr>
+        <td><strong>Nitric Acid</strong></td>
+        <td>HNO<sub>3</sub></td>
+        <td><span class="pill-shape pill-danger">1 (Monobasic)</span></td>
+        <td>One ionisable –OH group; powerful oxidising acid.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sub-heading">Table E. Top NEET Recurring Chemical & Periodic Orders</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Chemical Property</th>
+        <th>Exact Decreasing / Increasing Order</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Catenation Ability</strong></td>
+        <td>C &gt;&gt; Si &gt; Ge &approx; Sn &gt; Pb</td>
+      </tr>
+      <tr>
+        <td><strong>Oxidising Power of Halogens</strong></td>
+        <td>F<sub>2</sub> &gt; Cl<sub>2</sub> &gt; Br<sub>2</sub> &gt; I<sub>2</sub></td>
+      </tr>
+      <tr>
+        <td><strong>Acid Strength of Hydrogen Halides</strong></td>
+        <td>HF &lt; HCl &lt; HBr &lt; HI &nbsp;(HI is strongest acid)</td>
+      </tr>
+      <tr>
+        <td><strong>Thermal Stability of Hydrogen Halides</strong></td>
+        <td>HF &gt; HCl &gt; HBr &gt; HI &nbsp;(HF is most stable)</td>
+      </tr>
+      <tr>
+        <td><strong>Basicity of Group 15 Hydrides</strong></td>
+        <td>NH<sub>3</sub> &gt; PH<sub>3</sub> &gt; AsH<sub>3</sub> &gt; SbH<sub>3</sub> &gt; BiH<sub>3</sub></td>
+      </tr>
+      <tr>
+        <td><strong>Acid Strength of Group 16 Hydrides</strong></td>
+        <td>H<sub>2</sub>O &lt; H<sub>2</sub>S &lt; H<sub>2</sub>Se &lt; H<sub>2</sub>Te &nbsp;(H<sub>2</sub>Te is most acidic)</td>
+      </tr>
+      <tr>
+        <td><strong>Lewis Acidity of Boron Trihalides</strong></td>
+        <td>BF<sub>3</sub> &lt; BCl<sub>3</sub> &lt; BBr<sub>3</sub> &lt; BI<sub>3</sub> &nbsp;(due to 2p&pi;–2p&pi; back-bonding in BF<sub>3</sub>)</td>
+      </tr>
+      <tr>
+        <td><strong>Acid Strength of Chlorine Oxoacids</strong></td>
+        <td>HClO &lt; HClO<sub>2</sub> &lt; HClO<sub>3</sub> &lt; HClO<sub>4</sub> &nbsp;(HClO<sub>4</sub> is strongest)</td>
+      </tr>
+      <tr>
+        <td><strong>Bond Dissociation Enthalpy of Halogens</strong></td>
+        <td>Cl<sub>2</sub> &gt; Br<sub>2</sub> &gt; F<sub>2</sub> &gt; I<sub>2</sub> &nbsp;(F<sub>2</sub> lower due to lone-pair repulsions)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top: 20px; padding: 12px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; text-align: center; font-size: 8pt; color: #64748b;">
+    <strong>P-Block Elements Master Notes</strong> • Compiled for Rapid NEET Chemistry Revision • All Rights Reserved
+  </div>
+
+</body>
+</html>
