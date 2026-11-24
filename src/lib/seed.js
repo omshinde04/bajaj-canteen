@@ -5,6 +5,7 @@ import Department from "../models/Department.js";
 import Shift from "../models/Shift.js";
 import User from "../models/User.js";
 import CheckSheet from "../models/CheckSheet.js";
+import Submission from "../models/Submission.js";
 import { hashPassword } from "./auth.js";
 
 const ALL_PERMISSIONS = [
@@ -280,14 +281,130 @@ export async function seedDatabase() {
     },
   ];
 
+  const checkSheetMap = {};
   for (const cs of masterCheckSheets) {
-    await CheckSheet.findOneAndUpdate({ code: cs.code }, cs, {
+    const upserted = await CheckSheet.findOneAndUpdate({ code: cs.code }, cs, {
       upsert: true,
       returnDocument: "after",
       setDefaultsOnInsert: true,
     });
+    checkSheetMap[cs.code] = upserted._id;
   }
-  console.log("✓ Master Operational Check Sheets seeded:", masterCheckSheets.map((c) => c.code));
+  console.log("✓ Master Operational Check Sheets seeded:", Object.keys(checkSheetMap));
+
+  // 6. Seed Operational Submissions
+  const adminUser = await User.findOne({ email: adminEmail });
+
+  const existingSubmissionsCount = await Submission.countDocuments();
+  if (existingSubmissionsCount === 0) {
+    const sampleSubmissions = [
+      {
+        checkSheet: checkSheetMap["CS-KTCH-01"],
+        department: deptMap["DEPT_KITCHEN"],
+        shift: shiftMap["SHIFT_A"],
+        submittedBy: adminUser._id,
+        status: "PENDING_APPROVAL",
+        complianceScore: 100,
+        hasDefects: false,
+        notes: "Morning batch deep fryer testing completed at 07:15 AM.",
+        responses: [
+          { fieldId: "f_tpm", label: "Total Polar Material (TPM %)", fieldType: "number", value: 14.5, unit: "%", isConforming: true },
+          { fieldId: "f_oil_temp", label: "Cooking Oil Temperature (°C)", fieldType: "number", value: 175, unit: "°C", isConforming: true },
+          { fieldId: "f_clarity", label: "Oil Color & Clarity Test", fieldType: "select", value: "Pass (Clear Golden)", isConforming: true },
+        ],
+        photos: [
+          {
+            url: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=600&q=80",
+            caption: "Digital TPM meter showing 14.5% reading",
+            fieldId: "f_photo",
+          },
+        ],
+        submissionDate: new Date(Date.now() - 15 * 60 * 1000), // 15m ago
+      },
+      {
+        checkSheet: checkSheetMap["CS-COLD-02"],
+        department: deptMap["DEPT_STORAGE"],
+        shift: shiftMap["SHIFT_A"],
+        submittedBy: adminUser._id,
+        status: "PENDING_APPROVAL",
+        complianceScore: 100,
+        hasDefects: false,
+        notes: "Chiller and deep freezer within nominal ISO range.",
+        responses: [
+          { fieldId: "f_chiller", label: "Walk-in Chiller Temperature (°C)", fieldType: "number", value: 2.8, unit: "°C", isConforming: true },
+          { fieldId: "f_freezer", label: "Walk-in Deep Freezer Temp (°C)", fieldType: "number", value: -20.5, unit: "°C", isConforming: true },
+          { fieldId: "f_door_seal", label: "Door Gaskets & Air Curtain Integrity", fieldType: "boolean", value: true, isConforming: true },
+        ],
+        photos: [
+          {
+            url: "https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&w=600&q=80",
+            caption: "Deep freezer thermostat digital reading display",
+            fieldId: "f_photo",
+          },
+        ],
+        submissionDate: new Date(Date.now() - 35 * 60 * 1000), // 35m ago
+      },
+      {
+        checkSheet: checkSheetMap["CS-DINE-03"],
+        department: deptMap["DEPT_DINING"],
+        shift: shiftMap["SHIFT_A"],
+        submittedBy: adminUser._id,
+        status: "APPROVED",
+        complianceScore: 100,
+        hasDefects: false,
+        reviewedBy: adminUser._id,
+        reviewedAt: new Date(Date.now() - 20 * 60 * 1000),
+        supervisorRemarks: "All dining hall tables sanitized and UV sterilization chamber verified.",
+        digitalSignature: {
+          signedBy: "Super Administrator (BAJAJ-001)",
+          timestamp: new Date(Date.now() - 20 * 60 * 1000),
+          hash: "a4f8902c3b5d8e71fa9900223bc789e023154876aefbc901235678cdfa1902bb",
+        },
+        responses: [
+          { fieldId: "f_tables", label: "Tabletop 200ppm Chlorine Disinfection", fieldType: "boolean", value: true, isConforming: true },
+          { fieldId: "f_uv", label: "Cutlery UV Sterilization Chamber Timer", fieldType: "select", value: "Active (15 Min Cycle)", isConforming: true },
+          { fieldId: "f_floor", label: "Floor Auto-Scrubber Cleaning Complete", fieldType: "boolean", value: true, isConforming: true },
+          { fieldId: "f_bin", label: "Wet & Dry Waste Segregation Bins Cleared", fieldType: "boolean", value: true, isConforming: true },
+        ],
+        photos: [
+          {
+            url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80",
+            caption: "Sanitized dining hall seating area view",
+          },
+        ],
+        submissionDate: new Date(Date.now() - 60 * 60 * 1000), // 1h ago
+      },
+      {
+        checkSheet: checkSheetMap["CS-HYGN-05"],
+        department: deptMap["DEPT_KITCHEN"],
+        shift: shiftMap["SHIFT_A"],
+        submittedBy: adminUser._id,
+        status: "REJECTED",
+        complianceScore: 66,
+        hasDefects: true,
+        reviewedBy: adminUser._id,
+        reviewedAt: new Date(Date.now() - 45 * 60 * 1000),
+        rejectionReason: "Kitchen prep assistant #3 was wearing wrist jewelry and apron was stained. Must re-inspect after full attire replacement.",
+        responses: [
+          { fieldId: "f_nails", label: "Finger Nails Clipped & No Jewelry", fieldType: "boolean", value: false, isConforming: false },
+          { fieldId: "f_ppe", label: "Clean Apron, Hair Net & Beard Cover", fieldType: "boolean", value: false, isConforming: false },
+          { fieldId: "f_health", label: "Zero Symptoms of Cough, Fever, or Lesions", fieldType: "boolean", value: true, isConforming: true },
+        ],
+        photos: [
+          {
+            url: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=600&q=80",
+            caption: "Food handler personal hygiene station audit",
+          },
+        ],
+        submissionDate: new Date(Date.now() - 90 * 60 * 1000),
+      },
+    ];
+
+    await Submission.insertMany(sampleSubmissions);
+    console.log("✓ Operational Submissions seeded:", sampleSubmissions.length);
+  } else {
+    console.log("✓ Submissions already present in database:", existingSubmissionsCount);
+  }
 
   console.log("Master database seeding complete!");
 }
