@@ -3,6 +3,8 @@ import { z } from "zod";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 import Role from "@/models/Role";
+import Department from "@/models/Department";
+import Shift from "@/models/Shift";
 import { verifyPassword, signToken } from "@/lib/auth";
 import { recordAuditLog } from "@/lib/audit";
 import cache from "@/lib/cache";

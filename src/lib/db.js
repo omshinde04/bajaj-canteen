@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import "../models/index.js";
 
 /**
  * Global cached Mongoose connection to prevent multiple connections

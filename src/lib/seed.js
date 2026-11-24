@@ -4,6 +4,7 @@ import Role from "../models/Role.js";
 import Department from "../models/Department.js";
 import Shift from "../models/Shift.js";
 import User from "../models/User.js";
+import CheckSheet from "../models/CheckSheet.js";
 import { hashPassword } from "./auth.js";
 
 const ALL_PERMISSIONS = [
@@ -190,6 +191,103 @@ export async function seedDatabase() {
   } else {
     console.log("✓ Super Admin user already exists:", existingAdmin.email);
   }
+
+  // 5. Seed Master Operational Check Sheets
+  const masterCheckSheets = [
+    {
+      title: "Deep Fryer TPM & Cooking Oil Quality Log",
+      code: "CS-KTCH-01",
+      category: "Food Safety & Quality",
+      department: deptMap["DEPT_KITCHEN"],
+      allowedShifts: [shiftMap["SHIFT_A"], shiftMap["SHIFT_B"]],
+      frequency: "daily",
+      mandatoryPhotoCount: 1,
+      slaHours: 2,
+      isActive: true,
+      fields: [
+        { fieldId: "f_tpm", label: "Total Polar Material (TPM %)", fieldType: "number", isRequired: true, unit: "%", minValue: 0, maxValue: 25, order: 1 },
+        { fieldId: "f_oil_temp", label: "Cooking Oil Temperature (°C)", fieldType: "number", isRequired: true, unit: "°C", minValue: 150, maxValue: 190, order: 2 },
+        { fieldId: "f_clarity", label: "Oil Color & Clarity Test", fieldType: "select", options: ["Pass (Clear Golden)", "Warning (Amber)", "Fail (Dark/Foaming - Discard)"], isRequired: true, order: 3 },
+        { fieldId: "f_photo", label: "Digital TPM Meter Reading Photo", fieldType: "photo", requiresPhoto: true, isRequired: true, order: 4 },
+      ],
+    },
+    {
+      title: "Walk-in Freezer & Chiller Temp Monitor",
+      code: "CS-COLD-02",
+      category: "Cold Chain Monitoring",
+      department: deptMap["DEPT_STORAGE"],
+      allowedShifts: [shiftMap["SHIFT_A"], shiftMap["SHIFT_B"], shiftMap["SHIFT_C"]],
+      frequency: "per_shift",
+      mandatoryPhotoCount: 1,
+      slaHours: 1,
+      isActive: true,
+      fields: [
+        { fieldId: "f_chiller", label: "Walk-in Chiller Temperature (°C)", fieldType: "number", isRequired: true, unit: "°C", minValue: 0, maxValue: 4, order: 1 },
+        { fieldId: "f_freezer", label: "Walk-in Deep Freezer Temp (°C)", fieldType: "number", isRequired: true, unit: "°C", minValue: -25, maxValue: -18, order: 2 },
+        { fieldId: "f_door_seal", label: "Door Gaskets & Air Curtain Integrity", fieldType: "boolean", isRequired: true, order: 3 },
+        { fieldId: "f_photo", label: "Digital Thermometer Dial Photograph", fieldType: "photo", requiresPhoto: true, isRequired: true, order: 4 },
+      ],
+    },
+    {
+      title: "Dining Hall Sanitization & UV Inspection",
+      code: "CS-DINE-03",
+      category: "Hygiene & Sanitization",
+      department: deptMap["DEPT_DINING"],
+      allowedShifts: [shiftMap["SHIFT_A"], shiftMap["SHIFT_B"]],
+      frequency: "per_shift",
+      mandatoryPhotoCount: 2,
+      slaHours: 2,
+      isActive: true,
+      fields: [
+        { fieldId: "f_tables", label: "Tabletop 200ppm Chlorine Disinfection", fieldType: "boolean", isRequired: true, order: 1 },
+        { fieldId: "f_uv", label: "Cutlery UV Sterilization Chamber Timer", fieldType: "select", options: ["Active (15 Min Cycle)", "Maintenance Required"], isRequired: true, order: 2 },
+        { fieldId: "f_floor", label: "Floor Auto-Scrubber Cleaning Complete", fieldType: "boolean", isRequired: true, order: 3 },
+        { fieldId: "f_bin", label: "Wet & Dry Waste Segregation Bins Cleared", fieldType: "boolean", isRequired: true, order: 4 },
+      ],
+    },
+    {
+      title: "Bakery Oven Calibration & Proofing Log",
+      code: "CS-BAKE-04",
+      category: "Production Quality",
+      department: deptMap["DEPT_BAKERY"],
+      allowedShifts: [shiftMap["SHIFT_A"]],
+      frequency: "daily",
+      mandatoryPhotoCount: 0,
+      slaHours: 4,
+      isActive: true,
+      fields: [
+        { fieldId: "f_proof_temp", label: "Dough Proofing Room Temp (°C)", fieldType: "number", isRequired: true, unit: "°C", minValue: 28, maxValue: 38, order: 1 },
+        { fieldId: "f_oven_temp", label: "Deck Oven Core Temp (°C)", fieldType: "number", isRequired: true, unit: "°C", minValue: 180, maxValue: 240, order: 2 },
+        { fieldId: "f_batch_weight", label: "Sample Bun Weight Conformity (g)", fieldType: "number", isRequired: true, unit: "g", minValue: 65, maxValue: 75, order: 3 },
+      ],
+    },
+    {
+      title: "Food Handler Personal Hygiene Audit",
+      code: "CS-HYGN-05",
+      category: "Personal Hygiene & FSSAI",
+      department: deptMap["DEPT_KITCHEN"],
+      allowedShifts: [shiftMap["SHIFT_A"], shiftMap["SHIFT_B"], shiftMap["SHIFT_C"]],
+      frequency: "daily",
+      mandatoryPhotoCount: 1,
+      slaHours: 2,
+      isActive: true,
+      fields: [
+        { fieldId: "f_nails", label: "Finger Nails Clipped & No Jewelry", fieldType: "boolean", isRequired: true, order: 1 },
+        { fieldId: "f_ppe", label: "Clean Apron, Hair Net & Beard Cover", fieldType: "boolean", isRequired: true, order: 2 },
+        { fieldId: "f_health", label: "Zero Symptoms of Cough, Fever, or Lesions", fieldType: "boolean", isRequired: true, order: 3 },
+        { fieldId: "f_photo", label: "Line Hygiene Inspection Group Photo", fieldType: "photo", requiresPhoto: true, isRequired: true, order: 4 },
+      ],
+    },
+  ];
+
+  for (const cs of masterCheckSheets) {
+    await CheckSheet.findOneAndUpdate({ code: cs.code }, cs, {
+      upsert: true,
+      returnDocument: "after",
+      setDefaultsOnInsert: true,
+    });
+  }
+  console.log("✓ Master Operational Check Sheets seeded:", masterCheckSheets.map((c) => c.code));
 
   console.log("Master database seeding complete!");
 }

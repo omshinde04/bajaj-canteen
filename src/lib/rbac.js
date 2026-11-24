@@ -3,6 +3,8 @@ import { extractToken, verifyToken } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 import Role from "@/models/Role";
+import Department from "@/models/Department";
+import Shift from "@/models/Shift";
 import cache from "@/lib/cache";
 
 /**

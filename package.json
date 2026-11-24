@@ -17,6 +17,7 @@
     "lucide-react": "^1.78.0",
     "mongoose": "^9.12.3",
     "next": "16.4.6",
+    "puppeteer-core": "^24.43.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "tailwind-merge": "^3.7.1",
