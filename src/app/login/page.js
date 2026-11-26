@@ -92,26 +92,26 @@ function LoginForm() {
   return (
     <div className="w-full max-w-sm mx-auto my-auto space-y-6 relative z-10">
       <div className="space-y-1.5">
-        <h1 className="text-2xl font-bold tracking-tight text-white">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
           Sign in to console
         </h1>
-        <p className="text-xs text-zinc-400">
-          Enter your enterprise credentials to access your administrative dashboard and shift checklists.
+        <p className="text-xs text-slate-500">
+          Enter your enterprise credentials to access your administrative dashboard and checksheet system.
         </p>
       </div>
 
       {/* Error Banner */}
       {error && (
-        <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-3 flex items-start gap-2.5 text-xs text-red-300 animate-in fade-in">
-          <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+        <div className="rounded-xl bg-rose-50 border border-rose-200 p-3 flex items-start gap-2.5 text-xs text-rose-700 animate-in fade-in">
+          <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
           <span>{error}</span>
         </div>
       )}
 
       {/* Success Banner */}
       {success && (
-        <div className="rounded-xl bg-[#CDFE02]/10 border border-[#CDFE02]/30 p-3 flex items-center gap-2 text-xs text-[#CDFE02] animate-in fade-in">
-          <CheckCircle2 className="w-4 h-4 shrink-0" />
+        <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-3 flex items-center gap-2 text-xs text-emerald-700 animate-in fade-in">
+          <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
           <span className="font-semibold">Credentials verified. Loading console...</span>
         </div>
       )}
@@ -119,49 +119,49 @@ function LoginForm() {
       {/* Form */}
       <form onSubmit={handleLogin} className="space-y-4">
         <div className="space-y-1.5">
-          <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider block">
+          <label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider block">
             Work Email
           </label>
           <div className="relative">
-            <Mail className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="admin@bajaj.com"
-              className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2.5 pl-10 pr-3 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-[#5733F0] focus:ring-1 focus:ring-[#5733F0] transition-all"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-10 pr-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:bg-white transition-all shadow-xs"
             />
           </div>
         </div>
 
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider">
+            <label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
               Password
             </label>
             <button
               type="button"
-              className="text-[11px] text-[#D2EFF7] hover:underline"
+              className="text-[11px] text-indigo-600 hover:underline"
               tabIndex={-1}
             >
               Forgot password?
             </button>
           </div>
           <div className="relative">
-            <Lock className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="••••••••••••"
-              className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2.5 pl-10 pr-10 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-[#5733F0] focus:ring-1 focus:ring-[#5733F0] transition-all"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-10 pr-10 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:bg-white transition-all shadow-xs"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
@@ -172,53 +172,53 @@ function LoginForm() {
         <button
           type="submit"
           disabled={loading || success}
-          className="w-full mt-2 py-3 px-4 rounded-xl font-semibold text-sm text-white bg-[#5733F0] hover:bg-[#5733F0]/90 active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#5733F0]/25 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full mt-2 py-3 px-4 rounded-xl font-semibold text-sm text-white bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin text-[#CDFE02]" />
+              <Loader2 className="w-4 h-4 animate-spin text-white" />
               <span>Verifying credentials...</span>
             </>
           ) : (
             <>
               <span>Sign In</span>
-              <ArrowRight className="w-4 h-4 text-[#CDFE02]" />
+              <ArrowRight className="w-4 h-4 text-white" />
             </>
           )}
         </button>
       </form>
 
       {/* Refined Staging / Demo Instance Presets */}
-      <div className="pt-4 border-t border-white/5 space-y-2">
-        <div className="flex items-center justify-between text-[11px] text-zinc-400">
-          <span className="flex items-center gap-1.5">
-            <KeyRound className="w-3.5 h-3.5 text-[#5733F0]" />
+      <div className="pt-4 border-t border-slate-200 space-y-2">
+        <div className="flex items-center justify-between text-[11px] text-slate-500">
+          <span className="flex items-center gap-1.5 font-medium">
+            <KeyRound className="w-3.5 h-3.5 text-indigo-600" />
             <span>Authorized Logins (Admin & Operator)</span>
           </span>
-          <span className="text-[10px] text-zinc-500 font-mono">1-Click Fast Fill</span>
+          <span className="text-[10px] text-slate-400 font-mono">1-Click Fast Fill</span>
         </div>
         
         <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
             onClick={() => handleFillDemo("admin")}
-            className="p-2.5 rounded-xl bg-white/[0.02] hover:bg-[#5733F0]/10 border border-white/5 hover:border-[#5733F0]/40 text-left transition-all group"
+            className="p-2.5 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-left transition-all group shadow-xs cursor-pointer"
           >
-            <div className="text-white font-medium text-[11px] group-hover:text-[#CDFE02]">
+            <div className="text-slate-800 font-semibold text-[11px] group-hover:text-indigo-600">
               Admin
             </div>
-            <div className="text-zinc-500 text-[10px] font-mono truncate">admin@bajaj.com</div>
+            <div className="text-slate-500 text-[10px] font-mono truncate">admin@bajaj.com</div>
           </button>
 
           <button
             type="button"
             onClick={() => handleFillDemo("operator")}
-            className="p-2.5 rounded-xl bg-white/[0.02] hover:bg-[#CDFE02]/10 border border-white/5 hover:border-[#CDFE02]/40 text-left transition-all group"
+            className="p-2.5 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-left transition-all group shadow-xs cursor-pointer"
           >
-            <div className="text-white font-medium text-[11px] group-hover:text-[#CDFE02]">
+            <div className="text-slate-800 font-semibold text-[11px] group-hover:text-indigo-600">
               Operator
             </div>
-            <div className="text-zinc-500 text-[10px] font-mono truncate">operator@bajaj.com</div>
+            <div className="text-slate-500 text-[10px] font-mono truncate">operator@bajaj.com</div>
           </button>
         </div>
       </div>
@@ -228,121 +228,120 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen w-full bg-[#09090C] text-zinc-100 flex flex-col font-sans selection:bg-[#CDFE02] selection:text-[#09090C]">
+    <div className="min-h-screen w-full bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-indigo-100 selection:text-indigo-900">
       {/* PUBLIC CLIENT WALKTHROUGH PROMO BAR */}
-      <div className="bg-[#12121A] border-b border-white/10 px-4 py-2 text-xs flex items-center justify-between z-20">
+      <div className="bg-white border-b border-slate-200 px-4 py-2 text-xs flex items-center justify-between z-20 shadow-xs">
         <div className="flex items-center gap-2 max-w-4xl mx-auto sm:mx-0">
-          <span className="w-2 h-2 rounded-full bg-[#CDFE02] animate-pulse" />
-          <span className="text-zinc-300">
+          <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
+          <span className="text-slate-600">
             Testing Bajaj Operations OS 2.0? Read our complete client manual and walkthrough.
           </span>
         </div>
         <Link
           href="/guide"
-          className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#5733F0]/20 hover:bg-[#5733F0]/30 text-[#D2EFF7] font-semibold text-xs border border-[#5733F0]/40 transition"
+          className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-xs border border-indigo-200 transition"
         >
-          <BookOpen className="w-3.5 h-3.5 text-[#CDFE02]" />
+          <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
           <span>Client Testing Guide →</span>
         </Link>
       </div>
 
       <div className="flex-1 flex">
         {/* LEFT COLUMN: Industrial Operations Showcase (Desktop Only) */}
-        <div className="hidden lg:flex lg:w-[52%] xl:w-[55%] relative flex-col justify-between p-12 border-r border-white/5 bg-[#0D0D12] overflow-hidden">
-          {/* Ambient Radial Gradient Mesh */}
-          <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#5733F0]/20 rounded-full blur-[140px] pointer-events-none" />
-          <div className="absolute bottom-10 right-10 w-80 h-80 bg-[#CDFE02]/10 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute inset-0 bg-saas-grid opacity-60 pointer-events-none" />
+        <div className="hidden lg:flex lg:w-[52%] xl:w-[55%] relative flex-col justify-between p-12 border-r border-slate-200 bg-linear-to-b from-indigo-50/70 via-slate-50 to-white overflow-hidden">
+          {/* Ambient Subtle Highlights */}
+          <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-200/30 rounded-full blur-[140px] pointer-events-none" />
+          <div className="absolute bottom-10 right-10 w-80 h-80 bg-blue-100/50 rounded-full blur-[120px] pointer-events-none" />
 
           {/* Top Header on Left Panel */}
           <div className="relative z-10 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#5733F0] flex items-center justify-center font-bold text-white text-lg tracking-wider shadow-lg shadow-[#5733F0]/30 border border-white/10">
+              <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-bold text-white text-lg tracking-wider shadow-sm">
                 B
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-extrabold text-sm tracking-tight text-white">BAJAJ AUTO</span>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#5733F0]/20 border border-[#5733F0]/40 text-[#D2EFF7]">
+                  <span className="font-extrabold text-sm tracking-tight text-slate-900">BAJAJ AUTO</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 border border-indigo-200 text-indigo-700">
                     OPERATIONS OS
                   </span>
                 </div>
-                <p className="text-[11px] text-zinc-400">Akurdi Industrial Facility • Unit 04</p>
+                <p className="text-[11px] text-slate-500">Akurdi Industrial Facility • Unit 04</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-xs">
-              <span className="w-2 h-2 rounded-full bg-[#CDFE02] animate-pulse" />
-              <span className="text-zinc-300 text-[11px] font-mono">Shift A Active (06:00 – 14:00)</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200 text-xs shadow-xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-slate-700 text-[11px] font-mono font-medium">Shift A Active (06:00 – 14:00)</span>
             </div>
           </div>
 
           {/* Center Live Cockpit Preview Card */}
           <div className="relative z-10 my-auto py-8 max-w-lg">
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#CDFE02]/10 border border-[#CDFE02]/30 text-[#CDFE02] text-xs font-semibold">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Real-Time Quality & Food Safety Governance</span>
               </div>
 
-              <h2 className="text-3xl xl:text-4xl font-bold tracking-tight text-white leading-tight">
-                Standardized plant operations, shift handovers & digital audit trails.
+              <h2 className="text-3xl xl:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
+                Standardized plant operations, daily checksheets & digital reporting.
               </h2>
 
-              <p className="text-sm text-zinc-400 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Centralized platform connecting plant administrators, floor supervisors, and operators across all manufacturing shifts with tamper-proof digital evidence.
               </p>
             </div>
 
-            {/* High-End Glass Telemetry Widget */}
-            <div className="mt-8 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl p-5 space-y-4 shadow-2xl">
+            {/* High-End Clean Telemetry Widget */}
+            <div className="mt-8 rounded-2xl bg-white border border-slate-200 p-5 space-y-4 shadow-sm">
               {/* Shift Progress bar */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-zinc-300 flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-[#5733F0]" />
+                  <span className="font-semibold text-slate-700 flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-indigo-600" />
                     Shift A Operational Progress
                   </span>
-                  <span className="font-mono text-[#CDFE02] font-semibold">82% Completed</span>
+                  <span className="font-mono text-indigo-600 font-semibold">82% Completed</span>
                 </div>
-                <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-[#5733F0] to-[#CDFE02] rounded-full w-[82%]" />
+                <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+                  <div className="h-full bg-linear-to-r from-indigo-600 to-emerald-500 rounded-full w-[82%]" />
                 </div>
               </div>
 
               {/* Metrics Strip */}
-              <div className="grid grid-cols-3 gap-3 pt-2 border-t border-white/5">
+              <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-100">
                 <div className="space-y-0.5">
-                  <div className="text-xs text-zinc-400">Hygiene Score</div>
-                  <div className="text-lg font-bold text-white tracking-tight">99.8%</div>
-                  <div className="text-[10px] text-emerald-400 flex items-center gap-1">
+                  <div className="text-xs text-slate-500">Hygiene Score</div>
+                  <div className="text-lg font-bold text-slate-900 tracking-tight">99.8%</div>
+                  <div className="text-[10px] text-emerald-600 flex items-center gap-1 font-medium">
                     <CheckCircle2 className="w-3 h-3" /> Target met
                   </div>
                 </div>
                 <div className="space-y-0.5">
-                  <div className="text-xs text-zinc-400">Check Sheets</div>
-                  <div className="text-lg font-bold text-white tracking-tight">148 Active</div>
-                  <div className="text-[10px] text-zinc-400">4 Departments</div>
+                  <div className="text-xs text-slate-500">Check Sheets</div>
+                  <div className="text-lg font-bold text-slate-900 tracking-tight">148 Active</div>
+                  <div className="text-[10px] text-slate-500">4 Departments</div>
                 </div>
                 <div className="space-y-0.5">
-                  <div className="text-xs text-zinc-400">Audit Status</div>
-                  <div className="text-lg font-bold text-[#D2EFF7] tracking-tight">Verified</div>
-                  <div className="text-[10px] text-zinc-400">Immutable log</div>
+                  <div className="text-xs text-slate-500">Audit Status</div>
+                  <div className="text-lg font-bold text-indigo-600 tracking-tight">Verified</div>
+                  <div className="text-[10px] text-slate-500">Official log</div>
                 </div>
               </div>
 
               {/* Recent Live Feed Item */}
-              <div className="rounded-xl bg-black/40 border border-white/5 p-3 flex items-center justify-between text-xs">
+              <div className="rounded-xl bg-slate-50 border border-slate-200 p-3 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-[#5733F0]/20 flex items-center justify-center text-[#5733F0]">
+                  <div className="w-7 h-7 rounded-lg bg-indigo-100 flex items-center justify-center text-indigo-600">
                     <FileCheck2 className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="font-semibold text-white text-[11px]">Daily Cold Storage Log</div>
-                    <div className="text-[10px] text-zinc-400">Verified by Shift Supervisor • 12m ago</div>
+                    <div className="font-semibold text-slate-800 text-[11px]">Daily Cold Storage Log</div>
+                    <div className="text-[10px] text-slate-500">Verified by Shift Supervisor • 12m ago</div>
                   </div>
                 </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                   Approved
                 </span>
               </div>
@@ -350,36 +349,34 @@ export default function LoginPage() {
           </div>
 
           {/* Left Panel Footer / Compliance Badges */}
-          <div className="relative z-10 flex items-center gap-4 text-xs text-zinc-500 pt-6 border-t border-white/5">
+          <div className="relative z-10 flex items-center gap-4 text-xs text-slate-500 pt-6 border-t border-slate-200">
             <span className="flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#5733F0]" />
+              <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" />
               HACCP Compliant
             </span>
             <span>•</span>
             <span>ISO 22000 Quality Framework</span>
             <span>•</span>
-            <span>256-Bit TLS Encryption</span>
+            <span>256-Bit TLS Security</span>
           </div>
         </div>
 
         {/* RIGHT COLUMN: Ultra-Clean SaaS Login Experience */}
-        <div className="flex-1 flex flex-col justify-between p-6 sm:p-12 lg:p-16 relative">
-          <div className="absolute inset-0 bg-dot-pattern opacity-40 pointer-events-none" />
-
+        <div className="flex-1 flex flex-col justify-between p-6 sm:p-12 lg:p-16 relative bg-white">
           {/* Mobile Top Header (Hidden on Desktop) */}
           <div className="flex items-center justify-between lg:hidden mb-8 relative z-10">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-[#5733F0] flex items-center justify-center font-bold text-white text-sm">
+              <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-sm">
                 B
               </div>
               <div>
-                <span className="font-bold text-sm tracking-tight text-white">BAJAJ CANTEEN</span>
-                <p className="text-[10px] text-zinc-400">Operations Console</p>
+                <span className="font-bold text-sm tracking-tight text-slate-900">BAJAJ CANTEEN</span>
+                <p className="text-[10px] text-slate-500">Operations Console</p>
               </div>
             </div>
             <Link
               href="/guide"
-              className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#CDFE02] text-[#09090C]"
+              className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700"
             >
               CLIENT GUIDE
             </Link>
@@ -389,14 +386,14 @@ export default function LoginPage() {
           <div className="hidden lg:block h-6" />
 
           {/* Suspended Login Form */}
-          <Suspense fallback={<div className="text-zinc-500 text-xs text-center py-10">Loading login console...</div>}>
+          <Suspense fallback={<div className="text-slate-400 text-xs text-center py-10">Loading login console...</div>}>
             <LoginForm />
           </Suspense>
 
           {/* Footer */}
-          <div className="text-center text-xs text-zinc-500 pt-8 relative z-10 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <div className="text-center text-xs text-slate-500 pt-8 relative z-10 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-slate-100">
             <p>© 2026 Bajaj Auto Limited • Operations OS 2.0</p>
-            <Link href="/guide" className="text-zinc-400 hover:text-white underline transition">
+            <Link href="/guide" className="text-slate-600 hover:text-indigo-600 underline transition">
               View Public Testing Manual
             </Link>
           </div>

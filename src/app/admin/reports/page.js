@@ -100,19 +100,19 @@ export default function ReportsAndDownloadsPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-16 font-sans print:bg-white print:text-black">
       {/* HEADER */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5 print:hidden">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-5 print:hidden">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#CDFE02] animate-pulse" />
-            <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-[#CDFE02]">
+            <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
+            <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-indigo-600">
               Reports & Downloads (Point 4)
             </span>
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
-            <FileDown className="w-7 h-7 text-[#CDFE02]" />
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2.5">
+            <FileDown className="w-7 h-7 text-indigo-600" />
             <span>Reports & Downloads</span>
           </h1>
-          <p className="text-xs text-zinc-400 mt-0.5">
+          <p className="text-xs text-slate-500 mt-0.5">
             Check daily reports & monthly reports. Download every report in Excel / PDF.
           </p>
         </div>
@@ -120,11 +120,13 @@ export default function ReportsAndDownloadsPage() {
         {/* Action Controls */}
         <div className="flex items-center gap-2.5 flex-wrap">
           {/* Daily / Monthly Switcher */}
-          <div className="flex items-center gap-1 bg-[#141418] p-1 rounded-xl border border-white/10 text-xs">
+          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
             <button
               onClick={() => setReportType("daily")}
               className={`px-3 py-1.5 rounded-lg font-medium transition ${
-                reportType === "daily" ? "bg-[#5733F0] text-white font-semibold" : "text-zinc-400 hover:text-white"
+                reportType === "daily"
+                  ? "bg-white text-indigo-700 font-semibold shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               Daily Reports
@@ -132,7 +134,9 @@ export default function ReportsAndDownloadsPage() {
             <button
               onClick={() => setReportType("monthly")}
               className={`px-3 py-1.5 rounded-lg font-medium transition ${
-                reportType === "monthly" ? "bg-[#5733F0] text-white font-semibold" : "text-zinc-400 hover:text-white"
+                reportType === "monthly"
+                  ? "bg-white text-indigo-700 font-semibold shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               Monthly Reports
@@ -145,21 +149,21 @@ export default function ReportsAndDownloadsPage() {
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="bg-[#141418] border border-white/10 rounded-xl px-3 py-1.5 text-white font-mono text-xs focus:outline-none"
+              className="bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-slate-900 font-mono text-xs focus:outline-none focus:border-indigo-600 shadow-xs"
             />
           ) : (
             <input
               type="month"
               value={month}
               onChange={(e) => setMonth(e.target.value)}
-              className="bg-[#141418] border border-white/10 rounded-xl px-3 py-1.5 text-white font-mono text-xs focus:outline-none"
+              className="bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-slate-900 font-mono text-xs focus:outline-none focus:border-indigo-600 shadow-xs"
             />
           )}
 
           {/* Download Buttons */}
           <button
             onClick={handleDownloadExcel}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#CDFE02] hover:bg-[#b8e602] text-[#09090C] font-bold text-xs transition shadow-lg shadow-[#CDFE02]/20"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-xs"
           >
             <FileSpreadsheet className="w-4 h-4" />
             <span>Download Excel</span>
@@ -167,73 +171,73 @@ export default function ReportsAndDownloadsPage() {
 
           <button
             onClick={() => window.print()}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-200 hover:text-white font-medium text-xs transition border border-white/10"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-medium text-xs transition border border-slate-200 shadow-xs"
           >
-            <Printer className="w-4 h-4 text-emerald-400" />
+            <Printer className="w-4 h-4 text-slate-500" />
             <span>Print / PDF</span>
           </button>
 
           <button
             onClick={fetchReports}
-            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition border border-white/10"
+            className="p-2 rounded-xl bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition border border-slate-200 shadow-xs"
             title="Refresh"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-[#CDFE02]" : ""}`} />
+            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-indigo-600" : ""}`} />
           </button>
         </div>
       </div>
 
       {/* REPORT CONTENT (PRINTABLE) */}
-      <div className="space-y-6 bg-[#141418] border border-white/10 rounded-2xl p-6 print:border-none print:p-0 print:bg-white">
+      <div className="space-y-6 bg-white border border-slate-200 rounded-2xl p-6 shadow-xs print:border-none print:p-0 print:bg-white">
         {/* Printable Title Block */}
-        <div className="border-b border-white/10 pb-4 print:border-b-2 print:border-black flex items-center justify-between">
+        <div className="border-b border-slate-200 pb-4 print:border-b-2 print:border-black flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-white print:text-black">
+            <h2 className="text-xl font-bold text-slate-900 print:text-black">
               BAJAJ AUTO CANTEEN OPERATIONS {reportType.toUpperCase()} DOSSIER
             </h2>
-            <p className="text-xs text-zinc-400 print:text-zinc-600 font-mono">
+            <p className="text-xs text-slate-500 print:text-zinc-600 font-mono">
               Period: {data?.period} • Facility: Akurdi Industrial Complex
             </p>
           </div>
-          <span className="px-3 py-1 rounded bg-[#CDFE02]/10 text-[#CDFE02] border border-[#CDFE02]/20 text-xs font-mono font-bold print:hidden">
+          <span className="px-3 py-1 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-mono font-bold print:hidden">
             Official System Report
           </span>
         </div>
 
         {/* 1. EXECUTIVE SUMMARY NUMBERS */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="p-4 rounded-xl bg-[#09090C] border border-white/5 print:border print:border-zinc-300">
-            <span className="text-[10px] uppercase font-bold text-zinc-400 print:text-zinc-600 block">
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <span className="text-[10px] uppercase font-bold text-slate-500 block">
               Total Scheduled Checksheets
             </span>
-            <span className="text-2xl font-extrabold text-white print:text-black font-mono">
+            <span className="text-2xl font-extrabold text-slate-900 font-mono">
               {data?.summary?.totalChecksheets || 0}
             </span>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#09090C] border border-white/5 print:border print:border-zinc-300">
-            <span className="text-[10px] uppercase font-bold text-zinc-400 print:text-zinc-600 block">
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <span className="text-[10px] uppercase font-bold text-slate-500 block">
               Filled Up Checksheets
             </span>
-            <span className="text-2xl font-extrabold text-emerald-400 print:text-emerald-700 font-mono">
+            <span className="text-2xl font-extrabold text-emerald-600 font-mono">
               {data?.summary?.filledChecksheets || 0}
             </span>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#09090C] border border-white/5 print:border print:border-zinc-300">
-            <span className="text-[10px] uppercase font-bold text-zinc-400 print:text-zinc-600 block">
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <span className="text-[10px] uppercase font-bold text-slate-500 block">
               Pending Checksheets
             </span>
-            <span className="text-2xl font-extrabold text-amber-400 print:text-amber-700 font-mono">
+            <span className="text-2xl font-extrabold text-amber-600 font-mono">
               {data?.summary?.pendingChecksheets || 0}
             </span>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#09090C] border border-white/5 print:border print:border-zinc-300">
-            <span className="text-[10px] uppercase font-bold text-zinc-400 print:text-zinc-600 block">
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <span className="text-[10px] uppercase font-bold text-slate-500 block">
               Total Tea Count
             </span>
-            <span className="text-2xl font-extrabold text-[#CDFE02] print:text-black font-mono">
+            <span className="text-2xl font-extrabold text-indigo-600 font-mono">
               {data?.summary?.totalTeaCount || 0} Cups
             </span>
           </div>
@@ -241,8 +245,8 @@ export default function ReportsAndDownloadsPage() {
 
         {/* 2. DEPARTMENT-WISE TEA DISTRIBUTION */}
         <div className="space-y-3">
-          <h3 className="font-bold text-white print:text-black text-sm flex items-center gap-2">
-            <Coffee className="w-4 h-4 text-[#CDFE02] print:text-black" />
+          <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+            <Coffee className="w-4 h-4 text-indigo-600" />
             <span>Department-wise Tea Distribution ({data?.period})</span>
           </h3>
 
@@ -250,10 +254,10 @@ export default function ReportsAndDownloadsPage() {
             {Object.entries(data?.teaByDepartment || {}).map(([dName, count], idx) => (
               <div
                 key={idx}
-                className="p-3.5 rounded-xl bg-[#09090C] border border-white/5 print:border print:border-zinc-300 flex items-center justify-between text-xs"
+                className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs"
               >
-                <span className="font-medium text-white print:text-black truncate">{dName}</span>
-                <span className="font-mono font-bold text-[#CDFE02] print:text-black">{count} cups</span>
+                <span className="font-medium text-slate-800 truncate">{dName}</span>
+                <span className="font-mono font-bold text-indigo-700">{count} cups</span>
               </div>
             ))}
           </div>
@@ -261,14 +265,14 @@ export default function ReportsAndDownloadsPage() {
 
         {/* 3. CHECKSHEET COMPLIANCE STATUS TABLE */}
         <div className="space-y-3">
-          <h3 className="font-bold text-white print:text-black text-sm flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-[#CDFE02] print:text-black" />
+          <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-indigo-600" />
             <span>Checksheet Status Breakdown</span>
           </h3>
 
-          <div className="overflow-x-auto border border-white/5 rounded-xl">
+          <div className="overflow-x-auto border border-slate-200 rounded-xl">
             <table className="w-full text-left text-xs">
-              <thead className="bg-[#09090C] print:bg-zinc-100 text-zinc-400 print:text-black font-semibold uppercase text-[10px] border-b border-white/5">
+              <thead className="bg-slate-50 text-slate-500 font-semibold uppercase text-[10px] border-b border-slate-200">
                 <tr>
                   <th className="py-2.5 px-4">Code</th>
                   <th className="py-2.5 px-4">Equipment / Check Sheet Name</th>
@@ -277,22 +281,22 @@ export default function ReportsAndDownloadsPage() {
                   <th className="py-2.5 px-4 text-right">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 print:divide-zinc-200">
+              <tbody className="divide-y divide-slate-100">
                 {data?.checksheets?.map((cs, idx) => {
                   const isFilled = idx < (data?.summary?.filledChecksheets || 0);
                   return (
-                    <tr key={cs._id}>
-                      <td className="py-2.5 px-4 font-mono font-bold text-zinc-400">{cs.code}</td>
-                      <td className="py-2.5 px-4 font-semibold text-white print:text-black">{cs.title}</td>
-                      <td className="py-2.5 px-4 text-zinc-400">{cs.category || "-"}</td>
-                      <td className="py-2.5 px-4 text-zinc-400">{cs.slaHours ? `${cs.slaHours}h target` : "Daily"}</td>
+                    <tr key={cs._id} className="hover:bg-slate-50/50">
+                      <td className="py-2.5 px-4 font-mono font-bold text-indigo-600">{cs.code}</td>
+                      <td className="py-2.5 px-4 font-semibold text-slate-900">{cs.title}</td>
+                      <td className="py-2.5 px-4 text-slate-500">{cs.category || "-"}</td>
+                      <td className="py-2.5 px-4 text-slate-500">{cs.slaHours ? `${cs.slaHours}h target` : "Daily"}</td>
                       <td className="py-2.5 px-4 text-right">
                         {isFilled ? (
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                             Filled Up
                           </span>
                         ) : (
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
                             Pending
                           </span>
                         )}

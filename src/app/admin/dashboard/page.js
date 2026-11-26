@@ -10,15 +10,9 @@ import {
   Building2,
   Sparkles,
   ArrowRight,
-  TrendingUp,
-  AlertTriangle,
   RefreshCw,
   FileDown,
-  MailCheck,
-  BellRing,
   PieChart,
-  PlusCircle,
-  Calendar,
 } from "lucide-react";
 
 export default function AdminDashboardPage() {
@@ -103,18 +97,18 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-8 max-w-7xl mx-auto pb-16 font-sans">
       {/* TOP HEADER & QUICK ACTIONS */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#CDFE02] animate-pulse" />
-            <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-[#CDFE02]">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-indigo-600">
               Bajaj Canteen Operations Console
             </span>
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">
-            Admin Master Dashboard
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">
+            Admin Dashboard
           </h1>
-          <p className="text-xs text-zinc-400 mt-0.5">
+          <p className="text-xs text-slate-500 mt-0.5">
             Checksheet completion chart, department-wise tea tracking & automated report dispatch.
           </p>
         </div>
@@ -123,26 +117,26 @@ export default function AdminDashboardPage() {
         <div className="flex items-center gap-2.5 flex-wrap">
           <button
             onClick={() => setQuickTeaModal(true)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#5733F0] hover:bg-[#5733F0]/90 text-white font-semibold text-xs transition shadow-lg shadow-[#5733F0]/25"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition shadow-sm"
           >
-            <Coffee className="w-4 h-4 text-[#CDFE02]" />
+            <Coffee className="w-4 h-4 text-amber-300" />
             <span>+ Log Tea Count</span>
           </button>
 
           <Link
             href="/admin/reports"
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-200 hover:text-white font-medium text-xs transition border border-white/10"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-medium text-xs transition border border-slate-200 shadow-xs"
           >
-            <FileDown className="w-4 h-4 text-emerald-400" />
+            <FileDown className="w-4 h-4 text-emerald-600" />
             <span>Download Reports</span>
           </Link>
 
           <button
             onClick={fetchDashboardData}
-            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition border border-white/10"
+            className="p-2 rounded-xl bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-900 transition border border-slate-200 shadow-xs"
             title="Refresh Data"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-[#CDFE02]" : ""}`} />
+            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-indigo-600" : ""}`} />
           </button>
         </div>
       </div>
@@ -150,78 +144,78 @@ export default function AdminDashboardPage() {
       {/* TOP KPI CARDS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* KPI 1: Checksheet Fill-up */}
-        <div className="bg-[#141418] border border-white/10 rounded-2xl p-5 space-y-2 relative overflow-hidden">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-2 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
               Checksheets Fill-up
             </span>
-            <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
+            <div className="p-2 rounded-lg bg-emerald-50 text-emerald-600">
               <CheckCircle2 className="w-4 h-4" />
             </div>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-extrabold text-white">{fillupPct}%</span>
-            <span className="text-xs text-zinc-400">({filledChecksheets}/{totalChecksheets} done)</span>
+            <span className="text-2xl font-extrabold text-slate-900">{fillupPct}%</span>
+            <span className="text-xs text-slate-500">({filledChecksheets}/{totalChecksheets} done)</span>
           </div>
-          <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden mt-2">
+          <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden mt-2">
             <div
-              className="bg-emerald-400 h-full rounded-full transition-all duration-500"
+              className="bg-emerald-500 h-full rounded-full transition-all duration-500"
               style={{ width: `${fillupPct}%` }}
             />
           </div>
         </div>
 
         {/* KPI 2: Pending Checksheets */}
-        <div className="bg-[#141418] border border-white/10 rounded-2xl p-5 space-y-2 relative overflow-hidden">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-2 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
               Pending Checksheets
             </span>
-            <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400">
+            <div className="p-2 rounded-lg bg-amber-50 text-amber-600">
               <Clock className="w-4 h-4" />
             </div>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-extrabold text-amber-400">{pendingChecksheets}</span>
-            <span className="text-xs text-zinc-400">Awaiting Fill-up</span>
+            <span className="text-2xl font-extrabold text-amber-600">{pendingChecksheets}</span>
+            <span className="text-xs text-slate-500">Awaiting Fill-up</span>
           </div>
-          <p className="text-[11px] text-zinc-500 mt-1">Requires floor operator entry</p>
+          <p className="text-[11px] text-slate-400 mt-1">Requires floor operator entry</p>
         </div>
 
         {/* KPI 3: Total Tea Cups Today */}
-        <div className="bg-[#141418] border border-white/10 rounded-2xl p-5 space-y-2 relative overflow-hidden">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-2 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
               Total Tea Count (Today)
             </span>
-            <div className="p-2 rounded-lg bg-[#5733F0]/20 text-[#CDFE02]">
+            <div className="p-2 rounded-lg bg-indigo-50 text-indigo-600">
               <Coffee className="w-4 h-4" />
             </div>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-extrabold text-[#CDFE02]">{totalTeaCups}</span>
-            <span className="text-xs text-zinc-400">Cups Served</span>
+            <span className="text-2xl font-extrabold text-indigo-600">{totalTeaCups}</span>
+            <span className="text-xs text-slate-500">Cups Served</span>
           </div>
-          <p className="text-[11px] text-zinc-400">Across {Object.keys(deptTotals).length} factory depts</p>
+          <p className="text-[11px] text-slate-500">Across {Object.keys(deptTotals).length} factory depts</p>
         </div>
 
         {/* KPI 4: Active Factory Departments */}
-        <div className="bg-[#141418] border border-white/10 rounded-2xl p-5 space-y-2 relative overflow-hidden">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-2 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
               Active Departments
             </span>
-            <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400">
+            <div className="p-2 rounded-lg bg-blue-50 text-blue-600">
               <Building2 className="w-4 h-4" />
             </div>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-extrabold text-white">
+            <span className="text-2xl font-extrabold text-slate-900">
               {teaData?.departments?.length || 6}
             </span>
-            <span className="text-xs text-zinc-400">Count Centers</span>
+            <span className="text-xs text-slate-500">Count Centers</span>
           </div>
-          <p className="text-[11px] text-zinc-500 mt-1">Engine, Vehicle Assy, etc.</p>
+          <p className="text-[11px] text-slate-400 mt-1">Engine, Vehicle Assy, etc.</p>
         </div>
       </div>
 
@@ -229,26 +223,26 @@ export default function AdminDashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
         {/* LEFT COLUMN: POINT 5 - CHECKSHEET CHART (FILLUP VS NOT FILLUP) */}
-        <div className="lg:col-span-5 bg-[#141418] border border-white/10 rounded-2xl p-6 space-y-6">
-          <div className="flex items-center justify-between border-b border-white/5 pb-4">
+        <div className="lg:col-span-5 bg-white border border-slate-200 rounded-2xl p-6 space-y-6 shadow-xs">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-[#5733F0]/20 text-[#CDFE02]">
+              <div className="p-2 rounded-xl bg-indigo-50 text-indigo-600">
                 <PieChart className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="font-bold text-white text-sm">Checksheet Fill-up Chart</h3>
-                <p className="text-[11px] text-zinc-400">Filled up vs. Not filled up</p>
+                <h3 className="font-bold text-slate-900 text-sm">Checksheet Fill-up Chart</h3>
+                <p className="text-[11px] text-slate-500">Filled up vs. Not filled up</p>
               </div>
             </div>
 
             {/* Daily / Monthly Switcher */}
-            <div className="flex items-center gap-1 bg-[#09090C] p-1 rounded-lg border border-white/10 text-xs">
+            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200 text-xs">
               <button
                 onClick={() => setChartPeriod("daily")}
                 className={`px-2.5 py-1 rounded font-medium transition ${
                   chartPeriod === "daily"
-                    ? "bg-[#5733F0] text-white font-semibold"
-                    : "text-zinc-400 hover:text-white"
+                    ? "bg-white text-indigo-700 font-semibold shadow-xs"
+                    : "text-slate-500 hover:text-slate-900"
                 }`}
               >
                 Today
@@ -257,8 +251,8 @@ export default function AdminDashboardPage() {
                 onClick={() => setChartPeriod("monthly")}
                 className={`px-2.5 py-1 rounded font-medium transition ${
                   chartPeriod === "monthly"
-                    ? "bg-[#5733F0] text-white font-semibold"
-                    : "text-zinc-400 hover:text-white"
+                    ? "bg-white text-indigo-700 font-semibold shadow-xs"
+                    : "text-slate-500 hover:text-slate-900"
                 }`}
               >
                 Monthly
@@ -275,7 +269,7 @@ export default function AdminDashboardPage() {
                   cx="50"
                   cy="50"
                   r="40"
-                  className="text-white/10"
+                  className="text-slate-100"
                   strokeWidth="12"
                   stroke="currentColor"
                   fill="transparent"
@@ -285,7 +279,7 @@ export default function AdminDashboardPage() {
                   cx="50"
                   cy="50"
                   r="40"
-                  className="text-[#CDFE02] transition-all duration-700 ease-out"
+                  className="text-emerald-500 transition-all duration-700 ease-out"
                   strokeWidth="12"
                   strokeDasharray={251.2}
                   strokeDashoffset={251.2 - (251.2 * fillupPct) / 100}
@@ -295,32 +289,32 @@ export default function AdminDashboardPage() {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-3xl font-extrabold text-white tracking-tight">{fillupPct}%</span>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">Filled Up</span>
+                <span className="text-3xl font-extrabold text-slate-900 tracking-tight">{fillupPct}%</span>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold">Filled Up</span>
               </div>
             </div>
 
             {/* Legend Stats */}
             <div className="space-y-3 text-xs w-full sm:w-auto">
-              <div className="flex items-center justify-between gap-4 p-2.5 rounded-xl bg-white/[0.02] border border-white/5">
-                <span className="flex items-center gap-2 text-zinc-300">
-                  <span className="w-3 h-3 rounded-full bg-[#CDFE02]" />
+              <div className="flex items-center justify-between gap-4 p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                <span className="flex items-center gap-2 text-slate-700 font-medium">
+                  <span className="w-3 h-3 rounded-full bg-emerald-500" />
                   <span>Filled up</span>
                 </span>
-                <span className="font-bold text-white font-mono">{filledChecksheets} sheets</span>
+                <span className="font-bold text-slate-900 font-mono">{filledChecksheets} sheets</span>
               </div>
 
-              <div className="flex items-center justify-between gap-4 p-2.5 rounded-xl bg-white/[0.02] border border-white/5">
-                <span className="flex items-center gap-2 text-zinc-300">
-                  <span className="w-3 h-3 rounded-full bg-white/20" />
+              <div className="flex items-center justify-between gap-4 p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                <span className="flex items-center gap-2 text-slate-700 font-medium">
+                  <span className="w-3 h-3 rounded-full bg-slate-300" />
                   <span>Not Filled up</span>
                 </span>
-                <span className="font-bold text-amber-400 font-mono">{pendingChecksheets} sheets</span>
+                <span className="font-bold text-amber-600 font-mono">{pendingChecksheets} sheets</span>
               </div>
 
-              <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[11px] text-zinc-400">
+              <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
                 <span>Total Scheduled:</span>
-                <span className="text-white font-mono font-bold">{totalChecksheets}</span>
+                <span className="text-slate-900 font-mono font-bold">{totalChecksheets}</span>
               </div>
             </div>
           </div>
@@ -328,28 +322,28 @@ export default function AdminDashboardPage() {
           {/* Quick link to Checksheet Status */}
           <Link
             href="/admin/checksheets"
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-medium text-white transition border border-white/10"
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-xs font-semibold text-slate-700 transition border border-slate-200"
           >
             <span>Manage Checksheets & Status →</span>
           </Link>
         </div>
 
         {/* RIGHT COLUMN: POINT 9 - TEA COUNT SHOW DEPT-WISE */}
-        <div className="lg:col-span-7 bg-[#141418] border border-white/10 rounded-2xl p-6 space-y-6">
-          <div className="flex items-center justify-between border-b border-white/5 pb-4">
+        <div className="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-6 space-y-6 shadow-xs">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-[#5733F0]/20 text-[#CDFE02]">
+              <div className="p-2 rounded-xl bg-indigo-50 text-indigo-600">
                 <Coffee className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="font-bold text-white text-sm">Department-wise Tea Count</h3>
-                <p className="text-[11px] text-zinc-400">Today's tea cups served per factory department</p>
+                <h3 className="font-bold text-slate-900 text-sm">Department-wise Tea Count</h3>
+                <p className="text-[11px] text-slate-500">Today&apos;s tea cups served per factory department</p>
               </div>
             </div>
 
             <Link
               href="/admin/tea-count"
-              className="text-xs text-[#CDFE02] hover:underline font-semibold flex items-center gap-1"
+              className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1"
             >
               <span>View Full Details</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -363,17 +357,17 @@ export default function AdminDashboardPage() {
               const barWidth = Math.round((cups / maxCups) * 100);
 
               return (
-                <div key={idx} className="space-y-1.5 p-3 rounded-xl bg-white/[0.02] border border-white/5">
+                <div key={idx} className="space-y-1.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-medium text-white flex items-center gap-2">
-                      <Building2 className="w-3.5 h-3.5 text-zinc-500" />
+                    <span className="font-semibold text-slate-800 flex items-center gap-2">
+                      <Building2 className="w-3.5 h-3.5 text-slate-400" />
                       {deptName}
                     </span>
-                    <span className="font-mono font-bold text-[#CDFE02] text-sm">{cups} cups</span>
+                    <span className="font-mono font-bold text-indigo-600 text-sm">{cups} cups</span>
                   </div>
-                  <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden">
+                  <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
                     <div
-                      className="bg-gradient-to-r from-[#5733F0] to-[#CDFE02] h-full rounded-full transition-all duration-500"
+                      className="bg-indigo-600 h-full rounded-full transition-all duration-500"
                       style={{ width: `${barWidth}%` }}
                     />
                   </div>
@@ -383,9 +377,9 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Quick Footer Summary */}
-          <div className="pt-2 flex items-center justify-between text-xs text-zinc-400 border-t border-white/5">
+          <div className="pt-2 flex items-center justify-between text-xs text-slate-500 border-t border-slate-100">
             <span>Combined Total Today:</span>
-            <span className="font-mono font-extrabold text-white text-sm">
+            <span className="font-mono font-extrabold text-slate-900 text-sm">
               {totalTeaCups} Cups
             </span>
           </div>
@@ -393,13 +387,13 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* POINT 3: REAL-TIME CHECKSHEET STATUS STREAM */}
-      <div className="bg-[#141418] border border-white/10 rounded-2xl p-6 space-y-4">
-        <div className="flex items-center justify-between border-b border-white/5 pb-3">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-xs">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-[#CDFE02]" />
-            <h3 className="font-bold text-white text-sm">Today's Checksheet Status Feed</h3>
+            <Clock className="w-4 h-4 text-indigo-600" />
+            <h3 className="font-bold text-slate-900 text-sm">Today&apos;s Checksheet Status Feed</h3>
           </div>
-          <Link href="/admin/checksheets" className="text-xs text-zinc-400 hover:text-white transition">
+          <Link href="/admin/checksheets" className="text-xs text-indigo-600 hover:underline transition font-medium">
             View All Checksheets →
           </Link>
         </div>
@@ -410,18 +404,18 @@ export default function AdminDashboardPage() {
             return (
               <div
                 key={idx}
-                className="p-3.5 rounded-xl bg-[#09090C] border border-white/5 flex items-center justify-between gap-3 text-xs"
+                className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3 text-xs"
               >
                 <div className="space-y-0.5 truncate">
-                  <div className="font-medium text-white truncate">{cs.title}</div>
-                  <div className="text-[10px] text-zinc-500 font-mono">{cs.code} • {cs.category || "JH Inspection"}</div>
+                  <div className="font-semibold text-slate-900 truncate">{cs.title}</div>
+                  <div className="text-[10px] text-slate-500 font-mono">{cs.code} • {cs.category || "JH Inspection"}</div>
                 </div>
                 {isFilled ? (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
                     Filled Up
                   </span>
                 ) : (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 shrink-0">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 shrink-0">
                     Pending
                   </span>
                 )}
@@ -433,16 +427,16 @@ export default function AdminDashboardPage() {
 
       {/* QUICK LOG TEA MODAL */}
       {quickTeaModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#141418] border border-white/10 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <div className="flex items-center gap-2 text-white font-bold text-sm">
-                <Coffee className="w-4 h-4 text-[#CDFE02]" />
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
+                <Coffee className="w-4 h-4 text-indigo-600" />
                 <span>Quick Log Department Tea Count</span>
               </div>
               <button
                 onClick={() => setQuickTeaModal(false)}
-                className="text-zinc-500 hover:text-white text-sm"
+                className="text-slate-400 hover:text-slate-700 text-sm font-bold"
               >
                 ✕
               </button>
@@ -450,13 +444,13 @@ export default function AdminDashboardPage() {
 
             <form onSubmit={handleQuickLogTea} className="space-y-4 text-xs">
               <div className="space-y-1">
-                <label className="text-zinc-300 font-semibold uppercase tracking-wider text-[10px]">
+                <label className="text-slate-700 font-semibold uppercase tracking-wider text-[10px]">
                   Select Factory Department
                 </label>
                 <select
                   value={selectedDeptId}
                   onChange={(e) => setSelectedDeptId(e.target.value)}
-                  className="w-full bg-[#09090C] border border-white/10 rounded-xl p-2.5 text-white text-xs focus:outline-none focus:border-[#5733F0]"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
                   required
                 >
                   {teaData?.departments?.map((dept) => (
@@ -469,13 +463,13 @@ export default function AdminDashboardPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-zinc-300 font-semibold uppercase tracking-wider text-[10px]">
+                  <label className="text-slate-700 font-semibold uppercase tracking-wider text-[10px]">
                     Session
                   </label>
                   <select
                     value={sessionInput}
                     onChange={(e) => setSessionInput(e.target.value)}
-                    className="w-full bg-[#09090C] border border-white/10 rounded-xl p-2.5 text-white text-xs focus:outline-none focus:border-[#5733F0]"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
                   >
                     <option value="MORNING">Morning Tea</option>
                     <option value="EVENING">Evening Tea</option>
@@ -485,7 +479,7 @@ export default function AdminDashboardPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-zinc-300 font-semibold uppercase tracking-wider text-[10px]">
+                  <label className="text-slate-700 font-semibold uppercase tracking-wider text-[10px]">
                     Cups Count
                   </label>
                   <input
@@ -494,7 +488,7 @@ export default function AdminDashboardPage() {
                     value={teaCountInput}
                     onChange={(e) => setTeaCountInput(e.target.value)}
                     required
-                    className="w-full bg-[#09090C] border border-white/10 rounded-xl p-2.5 text-white text-xs focus:outline-none focus:border-[#5733F0]"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white font-mono"
                   />
                 </div>
               </div>
@@ -503,14 +497,14 @@ export default function AdminDashboardPage() {
                 <button
                   type="button"
                   onClick={() => setQuickTeaModal(false)}
-                  className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 text-xs font-medium"
+                  className="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submittingTea}
-                  className="px-4 py-2 rounded-xl bg-[#5733F0] hover:bg-[#5733F0]/90 text-white font-semibold text-xs transition"
+                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition shadow-xs"
                 >
                   {submittingTea ? "Saving..." : "Save Count"}
                 </button>

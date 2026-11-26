@@ -13,10 +13,6 @@ import {
   Trash2,
   X,
   RefreshCw,
-  Sparkles,
-  Layers,
-  ArrowRight,
-  Shield,
 } from "lucide-react";
 
 export default function DepartmentsPage() {
@@ -144,21 +140,21 @@ export default function DepartmentsPage() {
   );
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-16 max-w-7xl mx-auto font-sans">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#CDFE02] animate-pulse" />
-            <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-[#CDFE02]">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-indigo-600">
               Point 7: Factory Departments (हे फक्त count साठी)
             </span>
           </div>
-          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-            <Building2 className="w-6 h-6 text-[#CDFE02]" />
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+            <Building2 className="w-6 h-6 text-indigo-600" />
             <span>Departments Master</span>
           </h1>
-          <p className="text-xs text-zinc-400 mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             Add, update, delete factory departments (Engine Assembly, Vehicle Assembly, Machine Shop, etc.) specifically for count tracking.
           </p>
         </div>
@@ -167,105 +163,91 @@ export default function DepartmentsPage() {
           <button
             onClick={fetchDepartments}
             disabled={loading}
-            className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 flex items-center gap-2 transition-all cursor-pointer"
+            className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 flex items-center gap-2 transition-all shadow-xs"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-indigo-600" : ""}`} />
             <span>Refresh</span>
           </button>
 
           <button
             onClick={openCreateModal}
-            className="px-4 py-2 rounded-xl font-semibold text-xs text-white bg-[#5733F0] hover:bg-[#5733F0]/90 transition-all flex items-center gap-2 shadow-lg shadow-[#5733F0]/30 cursor-pointer"
+            className="px-4 py-2 rounded-xl font-semibold text-xs text-white bg-indigo-600 hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-xs"
           >
-            <Plus className="w-3.5 h-3.5 text-[#CDFE02]" />
+            <Plus className="w-3.5 h-3.5 text-amber-300" />
             <span>Add Department</span>
           </button>
         </div>
       </div>
 
-      {/* Facility Telemetry Banner */}
-      <div className="rounded-2xl bg-gradient-to-r from-[#5733F0]/15 via-white/[0.02] to-[#141414] border border-white/10 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-2xl bg-[#5733F0]/20 border border-[#5733F0]/40 flex items-center justify-center text-[#CDFE02]">
-            <Building2 className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="text-xs font-bold text-white flex items-center gap-2">
-              <span>Bajaj Auto Akurdi Industrial Complex</span>
-              <span className="text-[10px] px-2 py-0.2 rounded-full bg-[#CDFE02]/15 text-[#CDFE02] border border-[#CDFE02]/30">
-                Plant 04
-              </span>
-            </div>
-            <p className="text-[11px] text-zinc-400">
-              {departments.length} Active Operational Facilities Configured
-            </p>
-          </div>
-        </div>
-
-        <div className="relative w-full sm:w-64">
-          <Search className="w-3.5 h-3.5 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
+      {/* Filter / Search Bar */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs">
+        <div className="relative w-full sm:w-80">
+          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search departments..."
-            className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2 pl-9 pr-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#5733F0]"
+            placeholder="Search department by name or code..."
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 pl-9 pr-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:bg-white transition"
           />
+        </div>
+        <div className="text-xs text-slate-500 font-mono">
+          Showing {paginatedDepts.length} of {filteredDepts.length} departments
         </div>
       </div>
 
-      {/* Departments Table */}
-      <div className="rounded-2xl bg-[#141414] border border-white/10 overflow-hidden">
+      {/* Table Container */}
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead>
-              <tr className="border-b border-white/10 bg-white/[0.02] text-zinc-400">
-                <th className="py-3.5 px-4 font-semibold">Department & Code</th>
-                <th className="py-3.5 px-4 font-semibold">Plant Location</th>
-                <th className="py-3.5 px-4 font-semibold">Scope & Description</th>
-                <th className="py-3.5 px-4 font-semibold">Status</th>
-                <th className="py-3.5 px-4 font-semibold text-right">Actions</th>
+            <thead className="bg-slate-100 text-slate-600 font-semibold uppercase text-[10px] tracking-wider border-b border-slate-200">
+              <tr>
+                <th className="py-3 px-4">Department Name & Code</th>
+                <th className="py-3 px-4">Location / Bay</th>
+                <th className="py-3 px-4">Description</th>
+                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="py-8 text-center text-zinc-500">
+                  <td colSpan={5} className="py-8 text-center text-slate-400">
                     Loading facility departments...
                   </td>
                 </tr>
               ) : filteredDepts.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-10 text-center text-zinc-500">
+                  <td colSpan={5} className="py-10 text-center text-slate-400">
                     No departments found matching your criteria.
                   </td>
                 </tr>
               ) : (
                 paginatedDepts.map((dept) => (
-                  <tr key={dept._id} className="hover:bg-white/[0.02] transition-colors">
+                  <tr key={dept._id} className="hover:bg-slate-50 transition-colors">
                     <td className="py-3.5 px-4">
-                      <div className="font-semibold text-white text-xs">{dept.name}</div>
-                      <div className="text-[10px] font-mono text-[#D2EFF7] mt-0.5">{dept.code}</div>
+                      <div className="font-semibold text-slate-900 text-xs">{dept.name}</div>
+                      <div className="text-[10px] font-mono text-indigo-600 font-bold mt-0.5">{dept.code}</div>
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <div className="flex items-center gap-1.5 text-zinc-300">
-                        <MapPin className="w-3.5 h-3.5 text-[#CDFE02]" />
+                      <div className="flex items-center gap-1.5 text-slate-600">
+                        <MapPin className="w-3.5 h-3.5 text-slate-400" />
                         <span>{dept.plantLocation}</span>
                       </div>
                     </td>
 
-                    <td className="py-3.5 px-4 text-zinc-400 max-w-xs truncate">
+                    <td className="py-3.5 px-4 text-slate-500 max-w-xs truncate">
                       {dept.description || "Operational plant facility"}
                     </td>
 
                     <td className="py-3.5 px-4">
                       {dept.isActive ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#CDFE02]/15 text-[#CDFE02] border border-[#CDFE02]/30">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                           <CheckCircle2 className="w-3 h-3" /> Active
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-zinc-800 text-zinc-400">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500">
                           <XCircle className="w-3 h-3" /> Inactive
                         </span>
                       )}
@@ -275,14 +257,14 @@ export default function DepartmentsPage() {
                       <div className="inline-flex items-center gap-1.5">
                         <button
                           onClick={() => openEditModal(dept)}
-                          className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-slate-100 transition-colors"
                           title="Edit Department"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => handleDelete(dept._id, dept.name)}
-                          className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
                           title="Delete Department"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -296,8 +278,8 @@ export default function DepartmentsPage() {
           </table>
         </div>
 
-        {/* Dynamic Pagination Controls */}
-        <div className="p-4 border-t border-white/5">
+        {/* Pagination Controls */}
+        <div className="p-4 border-t border-slate-100 bg-slate-50">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
@@ -313,103 +295,105 @@ export default function DepartmentsPage() {
         </div>
       </div>
 
-      {/* Centered Modal: Create / Edit Department */}
+      {/* Modal: Create / Edit Department */}
       {modalOpen && (
         <div
           onClick={(e) => {
             if (e.target === e.currentTarget) setModalOpen(false);
           }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs"
         >
-          <div className="relative w-full max-w-md bg-[#18181D] border border-white/15 rounded-3xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-[#CDFE02]" />
-                {editingDept ? "Edit Facility Department" : "Add Facility Department"}
-              </h3>
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
+                <Building2 className="w-4 h-4 text-indigo-600" />
+                <span>{editingDept ? "Edit Department" : "Add Factory Department"}</span>
+              </div>
               <button
                 onClick={() => setModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                className="text-slate-400 hover:text-slate-700 text-sm font-bold"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {error && (
-              <div className="rounded-xl bg-rose-500/10 border border-rose-500/20 p-3 text-xs text-rose-300">
+              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs">
                 {error}
               </div>
             )}
 
-            <form onSubmit={handleFormSubmit} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider block">
-                  Department Name *
+            <form onSubmit={handleFormSubmit} className="space-y-4 text-xs">
+              <div className="space-y-1">
+                <label className="text-slate-700 font-semibold uppercase tracking-wider text-[10px]">
+                  Department Name * (e.g. Engine Assembly)
                 </label>
                 <input
                   type="text"
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="e.g. Canteen Main Kitchen"
-                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#5733F0]"
+                  placeholder="e.g. Engine Assembly"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider block">
-                  Department Code *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.code}
-                  onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                  placeholder="e.g. DEPT_KITCHEN"
-                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white font-mono placeholder-zinc-500 focus:outline-none focus:border-[#5733F0]"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-slate-700 font-semibold uppercase tracking-wider text-[10px]">
+                    Department Code *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.code}
+                    onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
+                    placeholder="e.g. DEPT_ENG_ASSY"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white font-mono"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-slate-700 font-semibold uppercase tracking-wider text-[10px]">
+                    Plant / Bay Location
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.plantLocation}
+                    onChange={(e) => setFormData({ ...formData, plantLocation: e.target.value })}
+                    placeholder="e.g. Akurdi Bay 1"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
+                  />
+                </div>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider block">
-                  Plant Location
-                </label>
-                <input
-                  type="text"
-                  value={formData.plantLocation}
-                  onChange={(e) => setFormData({ ...formData, plantLocation: e.target.value })}
-                  placeholder="e.g. Bajaj Auto Akurdi Facility - Unit 04"
-                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#5733F0]"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider block">
-                  Description / Operational Scope
+              <div className="space-y-1">
+                <label className="text-slate-700 font-semibold uppercase tracking-wider text-[10px]">
+                  Description
                 </label>
                 <textarea
                   rows={2}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="e.g. Main food preparation, cooking ranges and fryer station"
-                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl p-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#5733F0]"
+                  placeholder="Operational details for tea distribution..."
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-2">
+              <div className="pt-2 flex items-center justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white hover:bg-white/5 cursor-pointer"
+                  className="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={formLoading}
-                  className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-[#5733F0] hover:bg-[#5733F0]/90 transition-all shadow-md shadow-[#5733F0]/25 cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition shadow-xs"
                 >
-                  {formLoading ? "Saving..." : editingDept ? "Save Changes" : "Create Department"}
+                  {formLoading ? "Saving..." : "Save Department"}
                 </button>
               </div>
             </form>

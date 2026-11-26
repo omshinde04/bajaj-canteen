@@ -189,27 +189,16 @@ export default function UsersPage() {
   const getRoleBadge = (code, name) => {
     switch (code) {
       case "SUPER_ADMIN":
+      case "ADMIN":
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#CDFE02]/20 text-[#CDFE02] border border-[#CDFE02]/40">
-            <Shield className="w-2.5 h-2.5" /> Super Admin
-          </span>
-        );
-      case "PLANT_ADMIN":
-        return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#5733F0]/25 text-[#D2EFF7] border border-[#5733F0]/40">
-            Plant Admin
-          </span>
-        );
-      case "SUPERVISOR":
-        return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
-            Supervisor
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+            <Shield className="w-2.5 h-2.5" /> Admin
           </span>
         );
       case "OPERATOR":
       default:
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/5 text-zinc-300 border border-white/10">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
             Operator
           </span>
         );
@@ -217,21 +206,21 @@ export default function UsersPage() {
   };
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-12 font-sans">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#CDFE02] animate-pulse" />
-            <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-[#CDFE02]">
+            <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
+            <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-indigo-600">
               Point 1: All Access — (Admin, Operator)
             </span>
           </div>
-          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-            <Users className="w-6 h-6 text-[#CDFE02]" />
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+            <Users className="w-6 h-6 text-indigo-600" />
             <span>User Access Management</span>
           </h1>
-          <p className="text-xs text-zinc-400 mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             Add, update, delete Admin and Operator accounts with credentials and department bindings.
           </p>
         </div>
@@ -240,24 +229,24 @@ export default function UsersPage() {
           <button
             onClick={fetchData}
             disabled={loading}
-            className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 flex items-center gap-2 transition-all cursor-pointer"
+            className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 flex items-center gap-2 transition-all shadow-xs cursor-pointer"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-indigo-600" : ""}`} />
             <span>Refresh</span>
           </button>
 
           <button
             onClick={openCreateModal}
-            className="px-4 py-2 rounded-xl font-semibold text-xs text-white bg-[#5733F0] hover:bg-[#5733F0]/90 transition-all flex items-center gap-2 shadow-lg shadow-[#5733F0]/30 cursor-pointer"
+            className="px-4 py-2 rounded-xl font-semibold text-xs text-white bg-indigo-600 hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-xs cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5 text-[#CDFE02]" />
+            <Plus className="w-3.5 h-3.5 text-white" />
             <span>Add Staff Member</span>
           </button>
         </div>
       </div>
 
       {/* Role Filter Tabs (Only Admin & Operator as per Handwritten Specification) */}
-      <div className="flex items-center gap-2 overflow-x-auto border-b border-white/10 pb-3 [scrollbar-width:none]">
+      <div className="flex items-center gap-2 overflow-x-auto border-b border-slate-200 pb-3 [scrollbar-width:none]">
         {[
           { key: "ALL", label: "All Users", count: users.length },
           { key: "SUPER_ADMIN", label: "Admin Accounts", count: users.filter((u) => u.role?.code === "SUPER_ADMIN" || u.role?.code === "ADMIN").length },
@@ -270,14 +259,14 @@ export default function UsersPage() {
               onClick={() => setActiveRoleFilter(tab.key)}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-medium shrink-0 flex items-center gap-2 transition-all cursor-pointer ${
                 isActive
-                  ? "bg-[#5733F0] text-white font-semibold shadow-md shadow-[#5733F0]/25"
-                  : "bg-white/[0.03] text-zinc-400 hover:text-white hover:bg-white/5 border border-white/5"
+                  ? "bg-indigo-600 text-white font-semibold shadow-xs"
+                  : "bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-slate-200"
               }`}
             >
               <span>{tab.label}</span>
               <span
-                className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                  isActive ? "bg-white/20 text-white" : "bg-white/5 text-zinc-400"
+                className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                  isActive ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
                 }`}
               >
                 {tab.count}
@@ -288,29 +277,29 @@ export default function UsersPage() {
       </div>
 
       {/* Search Bar */}
-      <div className="rounded-2xl bg-[#141414] border border-white/10 p-4 flex items-center justify-between gap-3">
+      <div className="rounded-2xl bg-white border border-slate-200 p-4 flex items-center justify-between gap-3 shadow-xs">
         <div className="relative w-full sm:w-80">
-          <Search className="w-3.5 h-3.5 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name, email, or employee ID..."
-            className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2 pl-9 pr-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#5733F0]"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 pl-9 pr-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:bg-white"
           />
         </div>
 
-        <span className="text-xs text-zinc-400 hidden sm:inline">
-          Showing {filteredUsers.length} active staff profiles
+        <span className="text-xs text-slate-500 hidden sm:inline">
+          Showing {filteredUsers.length} staff profiles
         </span>
       </div>
 
       {/* Staff Table */}
-      <div className="rounded-2xl bg-[#141414] border border-white/10 overflow-hidden">
+      <div className="rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-white/10 bg-white/[0.02] text-zinc-400">
+              <tr className="border-b border-slate-200 bg-slate-50 text-slate-500">
                 <th className="py-3.5 px-4 font-semibold">Staff Name & ID</th>
                 <th className="py-3.5 px-4 font-semibold">Corporate Email</th>
                 <th className="py-3.5 px-4 font-semibold">Assigned Role</th>
@@ -319,43 +308,43 @@ export default function UsersPage() {
                 <th className="py-3.5 px-4 font-semibold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="py-8 text-center text-zinc-500">
+                  <td colSpan={6} className="py-8 text-center text-slate-400">
                     Loading staff directory...
                   </td>
                 </tr>
               ) : filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-10 text-center text-zinc-500">
+                  <td colSpan={6} className="py-10 text-center text-slate-400">
                     No users found matching your search.
                   </td>
                 </tr>
               ) : (
                 paginatedUsers.map((u) => (
-                  <tr key={u._id} className="hover:bg-white/[0.02] transition-colors">
+                  <tr key={u._id} className="hover:bg-slate-50/70 transition-colors">
                     <td className="py-3.5 px-4">
-                      <div className="font-semibold text-white">{u.name}</div>
-                      <div className="text-[10px] font-mono text-[#D2EFF7] mt-0.5">{u.employeeId}</div>
+                      <div className="font-semibold text-slate-900">{u.name}</div>
+                      <div className="text-[10px] font-mono text-indigo-600 mt-0.5">{u.employeeId}</div>
                     </td>
 
-                    <td className="py-3.5 px-4 text-zinc-300 font-mono text-[11px]">{u.email}</td>
+                    <td className="py-3.5 px-4 text-slate-600 font-mono text-[11px]">{u.email}</td>
 
                     <td className="py-3.5 px-4">{getRoleBadge(u.role?.code, u.role?.name)}</td>
 
                     <td className="py-3.5 px-4">
-                      <div className="text-zinc-200">{u.department?.name || "All Departments"}</div>
-                      <div className="text-[10px] text-zinc-500">{u.assignedShift?.name || "Flexible"}</div>
+                      <div className="text-slate-800">{u.department?.name || "All Departments"}</div>
+                      <div className="text-[10px] text-slate-500">{u.assignedShift?.name || "Flexible"}</div>
                     </td>
 
                     <td className="py-3.5 px-4">
                       {u.isActive ? (
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#CDFE02]">
-                          <CheckCircle2 className="w-3 h-3" /> Active
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Active
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-zinc-500">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-medium text-slate-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full">
                           <XCircle className="w-3 h-3" /> Deactivated
                         </span>
                       )}
@@ -365,7 +354,7 @@ export default function UsersPage() {
                       <div className="inline-flex items-center gap-1.5">
                         <button
                           onClick={() => openEditModal(u)}
-                          className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
                           title="Edit Profile"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
@@ -374,8 +363,8 @@ export default function UsersPage() {
                           onClick={() => handleDeactivate(u._id, u.name, u.isActive)}
                           className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
                             u.isActive
-                              ? "text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10"
-                              : "text-zinc-400 hover:text-[#CDFE02] hover:bg-[#CDFE02]/10"
+                              ? "text-slate-400 hover:text-rose-600 hover:bg-rose-50"
+                              : "text-slate-400 hover:text-emerald-600 hover:bg-emerald-50"
                           }`}
                           title={u.isActive ? "Deactivate User" : "Reactivate User"}
                         >
@@ -391,7 +380,7 @@ export default function UsersPage() {
         </div>
 
         {/* Dynamic Pagination Controls */}
-        <div className="p-4 border-t border-white/5">
+        <div className="p-4 border-t border-slate-100">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
@@ -413,24 +402,24 @@ export default function UsersPage() {
           onClick={(e) => {
             if (e.target === e.currentTarget) setModalOpen(false);
           }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200"
         >
-          <div className="relative w-full max-w-lg bg-[#18181D] border border-white/15 rounded-3xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Users className="w-4 h-4 text-[#CDFE02]" />
+          <div className="relative w-full max-w-lg bg-white border border-slate-200 rounded-3xl p-6 space-y-5 shadow-xl animate-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <Users className="w-4 h-4 text-indigo-600" />
                 {editingUser ? "Edit Staff Member" : "Add New Staff Member"}
               </h3>
               <button
                 onClick={() => setModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {error && (
-              <div className="rounded-xl bg-rose-500/10 border border-rose-500/20 p-3 text-xs text-rose-300">
+              <div className="rounded-xl bg-rose-50 border border-rose-200 p-3 text-xs text-rose-700">
                 {error}
               </div>
             )}
@@ -438,7 +427,7 @@ export default function UsersPage() {
             <form onSubmit={handleFormSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider block">
+                  <label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider block">
                     Employee ID *
                   </label>
                   <input
@@ -448,12 +437,12 @@ export default function UsersPage() {
                     onChange={(e) => setFormData({ ...formData, employeeId: e.target.value.toUpperCase() })}
                     placeholder="e.g. BAJAJ-140"
                     disabled={!!editingUser}
-                    className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2 px-3 text-xs text-white font-mono placeholder-zinc-500 focus:outline-none focus:border-[#5733F0] disabled:opacity-50"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs text-slate-900 font-mono placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:bg-white disabled:opacity-50"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider block">
+                  <label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider block">
                     Full Name *
                   </label>
                   <input
@@ -462,13 +451,13 @@ export default function UsersPage() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="e.g. Rajesh Sharma"
-                    className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2 px-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#5733F0]"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:bg-white"
                   />
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider block">
+                <label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider block">
                   Corporate Email Address *
                 </label>
                 <input
@@ -477,12 +466,12 @@ export default function UsersPage() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="rsharma@bajaj.com"
-                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2 px-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#5733F0]"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:bg-white"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider block">
+                <label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider block">
                   {editingUser ? "Change Password (leave empty to keep current)" : "Password *"}
                 </label>
                 <input
@@ -491,19 +480,19 @@ export default function UsersPage() {
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   placeholder="••••••••••••"
-                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2 px-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#5733F0]"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:bg-white"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider block">
+                  <label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider block">
                     Role *
                   </label>
                   <select
                     value={formData.roleId}
                     onChange={(e) => setFormData({ ...formData, roleId: e.target.value })}
-                    className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2 px-2.5 text-xs text-white focus:outline-none focus:border-[#5733F0]"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-2.5 text-xs text-slate-900 focus:outline-none focus:border-indigo-600 focus:bg-white"
                   >
                     {roles
                       .filter((r) => r.code === "SUPER_ADMIN" || r.code === "ADMIN" || r.code === "OPERATOR")
@@ -516,13 +505,13 @@ export default function UsersPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider block">
+                  <label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider block">
                     Department
                   </label>
                   <select
                     value={formData.departmentId}
                     onChange={(e) => setFormData({ ...formData, departmentId: e.target.value })}
-                    className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2 px-2.5 text-xs text-white focus:outline-none focus:border-[#5733F0]"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-2.5 text-xs text-slate-900 focus:outline-none focus:border-indigo-600 focus:bg-white"
                   >
                     <option value="">None / All</option>
                     {departments.map((d) => (
@@ -534,13 +523,13 @@ export default function UsersPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider block">
+                  <label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider block">
                     Shift
                   </label>
                   <select
                     value={formData.shiftId}
                     onChange={(e) => setFormData({ ...formData, shiftId: e.target.value })}
-                    className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2 px-2.5 text-xs text-white focus:outline-none focus:border-[#5733F0]"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-2.5 text-xs text-slate-900 focus:outline-none focus:border-indigo-600 focus:bg-white"
                   >
                     <option value="">None / Flexible</option>
                     {shifts.map((s) => (
@@ -552,18 +541,18 @@ export default function UsersPage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-white/5">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white hover:bg-white/5 cursor-pointer"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={formLoading}
-                  className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-[#5733F0] hover:bg-[#5733F0]/90 transition-all shadow-md shadow-[#5733F0]/25 cursor-pointer"
+                  className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition-all shadow-xs cursor-pointer"
                 >
                   {formLoading ? "Saving..." : editingUser ? "Update Profile" : "Create User"}
                 </button>
