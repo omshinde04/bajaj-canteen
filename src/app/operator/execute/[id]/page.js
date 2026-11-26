@@ -251,9 +251,9 @@ export default function CheckSheetExecutionWizard({ params }) {
 
   if (loading) {
     return (
-      <div className="py-24 text-center space-y-3">
-        <div className="w-8 h-8 border-2 border-[#5733F0] border-t-[#CDFE02] rounded-full animate-spin mx-auto" />
-        <p className="text-xs text-zinc-400">Loading check sheet wizard...</p>
+      <div className="py-24 text-center space-y-3 font-sans">
+        <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto" />
+        <p className="text-xs text-slate-500">Loading check sheet wizard...</p>
       </div>
     );
   }
@@ -261,56 +261,50 @@ export default function CheckSheetExecutionWizard({ params }) {
   if (submittedSuccess) {
     return (
       <div className="w-full max-w-3xl mx-auto py-12 px-4 text-center space-y-6 animate-fadeIn font-sans">
-        <div className="w-16 h-16 rounded-full bg-[#CDFE02]/20 border border-[#CDFE02]/40 flex items-center justify-center text-[#CDFE02] mx-auto animate-bounce">
+        <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 mx-auto shadow-xs">
           <CheckCircle2 className="w-8 h-8" />
         </div>
 
         <div className="space-y-2">
-          <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-[#CDFE02] text-black">
+          <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
             Submission Dispatched Successfully
           </span>
-          <h2 className="text-2xl font-bold text-white tracking-tight">
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
             Check Sheet Queued for Supervisor Review
           </h2>
-          <p className="text-xs text-zinc-400 max-w-md mx-auto">
+          <p className="text-xs text-slate-500 max-w-md mx-auto">
             {checkSheet.title} ({checkSheet.code}) has been committed to the live supervisor approval queue and logged in the immutable audit trail.
           </p>
         </div>
 
         {/* Submission Details Card */}
-        <div className="p-5 rounded-2xl bg-[#141418] border border-white/10 text-left space-y-3">
-          <div className="flex items-center justify-between text-xs pb-3 border-b border-white/5">
-            <span className="text-zinc-400">Submission Reference ID</span>
-            <span className="font-mono font-bold text-white">{submittedSuccess._id}</span>
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 text-left space-y-3 shadow-xs">
+          <div className="flex items-center justify-between text-xs pb-3 border-b border-slate-100">
+            <span className="text-slate-500">Submission Reference ID</span>
+            <span className="font-mono font-bold text-slate-900">{submittedSuccess._id}</span>
           </div>
-          <div className="flex items-center justify-between text-xs pb-3 border-b border-white/5">
-            <span className="text-zinc-400">Compliance Index</span>
-            <span className="font-bold text-[#CDFE02]">{submittedSuccess.complianceScore}%</span>
+          <div className="flex items-center justify-between text-xs pb-3 border-b border-slate-100">
+            <span className="text-slate-500">Compliance Index</span>
+            <span className="font-bold text-indigo-600 font-mono">{submittedSuccess.complianceScore}%</span>
           </div>
-          <div className="flex items-center justify-between text-xs pb-3 border-b border-white/5">
-            <span className="text-zinc-400">Defects / Non-Conformances</span>
-            <span className={submittedSuccess.hasDefects ? "text-rose-400 font-bold" : "text-emerald-400 font-bold"}>
+          <div className="flex items-center justify-between text-xs pb-3 border-b border-slate-100">
+            <span className="text-slate-500">Defects / Non-Conformances</span>
+            <span className={submittedSuccess.hasDefects ? "text-rose-600 font-bold" : "text-emerald-600 font-bold"}>
               {submittedSuccess.hasDefects ? "Flagged for Correction" : "Zero Defects"}
             </span>
           </div>
           <div className="flex items-center justify-between text-xs">
-            <span className="text-zinc-400">Evidence Uploads</span>
-            <span className="text-white">{photos.length} photograph(s) attached</span>
+            <span className="text-slate-500">Evidence Uploads</span>
+            <span className="text-slate-900 font-medium">{photos.length} photograph(s) attached</span>
           </div>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
           <Link
             href="/operator"
-            className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#5733F0] hover:bg-[#6c4cf5] text-white text-xs font-bold transition-all shadow-md shadow-[#5733F0]/25"
+            className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-xs"
           >
             Back to Shift Taskboard
-          </Link>
-          <Link
-            href="/operator/history"
-            className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#141418] hover:bg-white/5 border border-white/10 text-zinc-300 text-xs font-bold transition-all"
-          >
-            View Submissions Log
           </Link>
         </div>
       </div>
@@ -319,13 +313,13 @@ export default function CheckSheetExecutionWizard({ params }) {
 
   if (!checkSheet) {
     return (
-      <div className="py-20 text-center space-y-4">
-        <AlertTriangle className="w-10 h-10 text-amber-400 mx-auto" />
-        <h3 className="text-lg font-bold text-white">Check Sheet Not Found</h3>
-        <p className="text-xs text-zinc-400">{errorMessage || "The requested template does not exist."}</p>
+      <div className="py-20 text-center space-y-4 font-sans">
+        <AlertTriangle className="w-10 h-10 text-amber-500 mx-auto" />
+        <h3 className="text-lg font-bold text-slate-900">Check Sheet Not Found</h3>
+        <p className="text-xs text-slate-500">{errorMessage || "The requested template does not exist."}</p>
         <Link
           href="/operator"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#5733F0] text-white text-xs font-bold"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow-xs"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Return to Tasks</span>
@@ -335,26 +329,26 @@ export default function CheckSheetExecutionWizard({ params }) {
   }
 
   return (
-    <div className="space-y-5 pb-12 w-full font-sans">
+    <div className="space-y-5 pb-12 w-full font-sans max-w-7xl mx-auto">
       {/* Top Header & Breadcrumb Bar (Spans 100% full width) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
         <div className="flex items-center gap-3">
           <Link
             href="/operator"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-400 hover:text-white transition-all p-1.5 rounded-lg hover:bg-white/5"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all p-1.5 rounded-lg hover:bg-slate-100"
             title="Return to Shift Taskboard"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Tasks</span>
           </Link>
 
-          <div className="h-4 w-px bg-white/10" />
+          <div className="h-4 w-px bg-slate-200" />
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono font-bold text-[#CDFE02] bg-[#CDFE02]/10 border border-[#CDFE02]/20 px-2.5 py-0.5 rounded-lg">
+            <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-lg">
               {checkSheet.code}
             </span>
-            <span className="text-xs text-zinc-400 uppercase tracking-wider font-semibold hidden md:inline">
+            <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold hidden md:inline">
               {checkSheet.category}
             </span>
           </div>
@@ -362,46 +356,46 @@ export default function CheckSheetExecutionWizard({ params }) {
 
         {/* Quick Metadata & Live Compliance Pill */}
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-1.5 text-xs text-zinc-400">
-            <Building2 className="w-3.5 h-3.5 text-zinc-500" />
+          <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-500">
+            <Building2 className="w-3.5 h-3.5 text-slate-400" />
             <span>{checkSheet.department?.name || "Kitchen Operations"}</span>
           </div>
 
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#141418] border border-white/10 text-xs">
-            <span className="text-zinc-400">Live Score:</span>
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 text-xs shadow-xs">
+            <span className="text-slate-500">Live Score:</span>
             <span
               className={`font-mono font-bold ${
-                currentCompliance < 100 ? "text-amber-400" : "text-[#CDFE02]"
+                currentCompliance < 100 ? "text-amber-600" : "text-emerald-600"
               }`}
             >
               {currentCompliance}%
             </span>
             {defectCount > 0 && (
-              <span className="text-[10px] text-rose-400 font-semibold">({defectCount} defect)</span>
+              <span className="text-[10px] text-rose-600 font-semibold">({defectCount} defect)</span>
             )}
           </div>
         </div>
       </div>
 
       {/* Check Sheet Banner (Compact Full-Width Card) */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-[#141418] border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
         <div className="space-y-1">
-          <h1 className="text-lg sm:text-2xl font-bold text-white tracking-tight">
+          <h1 className="text-lg sm:text-2xl font-bold text-slate-900 tracking-tight">
             {checkSheet.title}
           </h1>
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs text-slate-500">
             Akurdi Canteen Plant Facility &bull; Shift A Morning Run &bull; Record all operational telemetry before handover.
           </p>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0 text-xs text-zinc-400">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#101014] border border-white/5">
-            <Clock className="w-3.5 h-3.5 text-zinc-500" />
+        <div className="flex items-center gap-3 shrink-0 text-xs text-slate-500">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
+            <Clock className="w-3.5 h-3.5 text-slate-400" />
             <span>Target SLA: {checkSheet.slaHours}h</span>
           </div>
           {checkSheet.mandatoryPhotoCount > 0 && (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 font-semibold">
-              <Camera className="w-3.5 h-3.5" />
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold">
+              <Camera className="w-3.5 h-3.5 text-indigo-600" />
               <span>{checkSheet.mandatoryPhotoCount} Mandatory Photo</span>
             </div>
           )}
@@ -410,7 +404,7 @@ export default function CheckSheetExecutionWizard({ params }) {
 
       {/* Error Alert Banner */}
       {errorMessage && (
-        <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2 animate-fadeIn">
+        <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2 animate-fadeIn">
           <AlertTriangle className="w-4 h-4 shrink-0" />
           <span>{errorMessage}</span>
         </div>
@@ -422,15 +416,15 @@ export default function CheckSheetExecutionWizard({ params }) {
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-5 w-full items-start">
         {/* LEFT COLUMN: Inspection Parameters & Remarks (Spans 7 of 12 columns) */}
         <div className="lg:col-span-7 xl:col-span-8 space-y-4">
-          <div className="p-5 rounded-2xl bg-[#141418] border border-white/10 space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-white/5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
+          <div className="p-5 rounded-2xl bg-white border border-slate-200 space-y-4 shadow-xs">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-2">
                 <span>Inspection Parameters & Readings</span>
-                <span className="px-1.5 py-0.2 rounded bg-white/10 text-zinc-300 font-mono text-[10px]">
+                <span className="px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 font-mono text-[10px]">
                   {checkSheet.fields?.length || 0}
                 </span>
               </h3>
-              <span className="text-[11px] text-zinc-500 font-mono">Real-time CCP Guardrails</span>
+              <span className="text-[11px] text-slate-400 font-mono">Real-time CCP Guardrails</span>
             </div>
 
             <div className="space-y-3">
@@ -443,27 +437,27 @@ export default function CheckSheetExecutionWizard({ params }) {
                     key={field.fieldId || idx}
                     className={`p-3.5 sm:p-4 rounded-xl border transition-all ${
                       isNonConforming
-                        ? "bg-rose-500/[0.04] border-rose-500/30"
-                        : "bg-[#101014] border-white/5 hover:border-white/10"
+                        ? "bg-rose-50/50 border-rose-200"
+                        : "bg-slate-50/70 border-slate-200 hover:border-slate-300"
                     }`}
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       {/* Label & Description */}
                       <div className="space-y-0.5 max-w-md">
                         <div className="flex items-center gap-2">
-                          <span className="text-xs font-bold text-white">{field.label}</span>
+                          <span className="text-xs font-bold text-slate-900">{field.label}</span>
                           {field.isRequired && (
-                            <span className="text-[10px] text-rose-400 font-bold">*</span>
+                            <span className="text-[10px] text-rose-500 font-bold">*</span>
                           )}
                           {field.requiresPhoto && (
-                            <span className="text-[9px] text-sky-400 bg-sky-500/10 px-1.5 py-0.2 rounded border border-sky-500/20">
+                            <span className="text-[9px] text-indigo-700 bg-indigo-50 px-1.5 py-0.2 rounded border border-indigo-200">
                               Photo
                             </span>
                           )}
                         </div>
                         {field.fieldType === "number" &&
                           (field.minValue !== null || field.maxValue !== null) && (
-                            <p className="text-[10px] text-zinc-400 font-mono">
+                            <p className="text-[10px] text-slate-500 font-mono">
                               Tolerance:{" "}
                               {field.minValue !== null ? `Min: ${field.minValue}${field.unit} ` : ""}
                               {field.maxValue !== null ? `Max: ${field.maxValue}${field.unit}` : ""}
@@ -475,14 +469,14 @@ export default function CheckSheetExecutionWizard({ params }) {
                       <div className="flex items-center gap-2 shrink-0">
                         {/* 1. Boolean Toggle */}
                         {field.fieldType === "boolean" && (
-                          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[#141418] border border-white/5">
+                          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-white border border-slate-200">
                             <button
                               type="button"
                               onClick={() => handleValueChange(field, true)}
-                              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                                 currentResp.value === true
-                                  ? "bg-emerald-500 text-black shadow-md shadow-emerald-500/20"
-                                  : "text-zinc-400 hover:text-white"
+                                  ? "bg-emerald-600 text-white shadow-xs"
+                                  : "text-slate-500 hover:text-slate-900"
                               }`}
                             >
                               Pass
@@ -490,10 +484,10 @@ export default function CheckSheetExecutionWizard({ params }) {
                             <button
                               type="button"
                               onClick={() => handleValueChange(field, false)}
-                              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                                 currentResp.value === false
-                                  ? "bg-rose-500 text-white shadow-md shadow-rose-500/20"
-                                  : "text-zinc-400 hover:text-white"
+                                  ? "bg-rose-600 text-white shadow-xs"
+                                  : "text-slate-500 hover:text-slate-900"
                               }`}
                             >
                               Defect
@@ -510,14 +504,14 @@ export default function CheckSheetExecutionWizard({ params }) {
                               value={currentResp.value ?? ""}
                               onChange={(e) => handleValueChange(field, e.target.value)}
                               placeholder="0.0"
-                              className={`w-28 bg-[#141418] border rounded-xl px-3 py-2 text-xs font-mono text-white text-right focus:outline-none ${
+                              className={`w-28 bg-white border rounded-xl px-3 py-2 text-xs font-mono text-slate-900 text-right focus:outline-none ${
                                 isNonConforming
-                                  ? "border-rose-500 focus:border-rose-400"
-                                  : "border-white/10 focus:border-[#5733F0]"
+                                  ? "border-rose-400 focus:border-rose-500"
+                                  : "border-slate-200 focus:border-indigo-600"
                               }`}
                             />
                             {field.unit && (
-                              <span className="text-xs text-zinc-400 font-mono min-w-[20px]">
+                              <span className="text-xs text-slate-500 font-mono min-w-[20px]">
                                 {field.unit}
                               </span>
                             )}
@@ -529,7 +523,7 @@ export default function CheckSheetExecutionWizard({ params }) {
                           <select
                             value={currentResp.value || ""}
                             onChange={(e) => handleValueChange(field, e.target.value)}
-                            className="bg-[#141418] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#5733F0]"
+                            className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-indigo-600"
                           >
                             {(field.options || []).map((opt, oIdx) => (
                               <option key={oIdx} value={opt}>
@@ -546,7 +540,7 @@ export default function CheckSheetExecutionWizard({ params }) {
                             value={currentResp.value || ""}
                             onChange={(e) => handleValueChange(field, e.target.value)}
                             placeholder="Record observation..."
-                            className="w-44 bg-[#141418] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#5733F0]"
+                            className="w-44 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-indigo-600"
                           />
                         )}
                       </div>
@@ -554,8 +548,8 @@ export default function CheckSheetExecutionWizard({ params }) {
 
                     {/* Non-conformance breach alert & defect explanation */}
                     {isNonConforming && (
-                      <div className="mt-2.5 pt-2.5 border-t border-rose-500/20 space-y-1.5 animate-fadeIn">
-                        <div className="flex items-center gap-1.5 text-xs font-semibold text-rose-400">
+                      <div className="mt-2.5 pt-2.5 border-t border-rose-200 space-y-1.5 animate-fadeIn">
+                        <div className="flex items-center gap-1.5 text-xs font-semibold text-rose-700">
                           <AlertTriangle className="w-3.5 h-3.5" />
                           <span>Critical Parameter Breach Detected!</span>
                         </div>
@@ -564,7 +558,7 @@ export default function CheckSheetExecutionWizard({ params }) {
                           placeholder="Provide mandatory defect details and immediate corrective action..."
                           value={currentResp.remarks || ""}
                           onChange={(e) => handleRemarksChange(field.fieldId, e.target.value)}
-                          className="w-full bg-[#141418] border border-rose-500/30 rounded-lg px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-rose-400"
+                          className="w-full bg-white border border-rose-300 rounded-lg px-3 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-rose-500"
                         />
                       </div>
                     )}
@@ -575,8 +569,8 @@ export default function CheckSheetExecutionWizard({ params }) {
           </div>
 
           {/* Operator Remarks / Observations */}
-          <div className="p-5 rounded-2xl bg-[#141418] border border-white/10 space-y-2">
-            <label className="text-xs font-bold uppercase tracking-wider text-white block">
+          <div className="p-5 rounded-2xl bg-white border border-slate-200 space-y-2 shadow-xs">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-900 block">
               Shift Observations & Handover Remarks
             </label>
             <textarea
@@ -584,7 +578,7 @@ export default function CheckSheetExecutionWizard({ params }) {
               value={operatorNotes}
               onChange={(e) => setOperatorNotes(e.target.value)}
               placeholder="Record any equipment noises, calibration notes, or specific handover instructions for Shift B..."
-              className="w-full bg-[#101014] border border-white/10 rounded-xl p-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#5733F0]"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:bg-white"
             />
           </div>
         </div>
@@ -592,30 +586,30 @@ export default function CheckSheetExecutionWizard({ params }) {
         {/* RIGHT COLUMN: Evidence, Verification & Dispatch Cockpit (Spans 5 of 12 columns) */}
         <div className="lg:col-span-5 xl:col-span-4 space-y-4 lg:sticky lg:top-4">
           {/* 1. Quality & Compliance Scorecard */}
-          <div className="p-5 rounded-2xl bg-[#141418] border border-white/10 space-y-3">
+          <div className="p-5 rounded-2xl bg-white border border-slate-200 space-y-3 shadow-xs">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-bold uppercase tracking-wider text-zinc-400">Quality Index</span>
-              <span className="text-[10px] text-zinc-500 font-mono">Real-Time Evaluation</span>
+              <span className="font-bold uppercase tracking-wider text-slate-500">Quality Index</span>
+              <span className="text-[10px] text-slate-400 font-mono">Real-Time Evaluation</span>
             </div>
 
             <div className="flex items-baseline justify-between pt-1">
-              <div className="text-3xl font-extrabold font-mono text-[#CDFE02]">
+              <div className="text-3xl font-extrabold font-mono text-indigo-600">
                 {currentCompliance}%
               </div>
               <div className="text-right">
-                <div className="text-xs font-semibold text-white">
+                <div className="text-xs font-semibold text-slate-900">
                   {totalCount - defectCount} / {totalCount} Conforming
                 </div>
-                <div className={`text-[10px] font-bold ${defectCount > 0 ? "text-rose-400" : "text-emerald-400"}`}>
+                <div className={`text-[10px] font-bold ${defectCount > 0 ? "text-rose-600" : "text-emerald-600"}`}>
                   {defectCount > 0 ? `${defectCount} Defect Flagged` : "Zero Defects"}
                 </div>
               </div>
             </div>
 
-            <div className="w-full bg-zinc-800 h-2 rounded-full overflow-hidden">
+            <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all duration-300 ${
-                  currentCompliance < 100 ? "bg-amber-400" : "bg-[#CDFE02]"
+                  currentCompliance < 100 ? "bg-amber-500" : "bg-emerald-500"
                 }`}
                 style={{ width: `${currentCompliance}%` }}
               />
@@ -623,17 +617,17 @@ export default function CheckSheetExecutionWizard({ params }) {
           </div>
 
           {/* 2. Photo Evidence & Camera Capture Card */}
-          <div className="p-5 rounded-2xl bg-[#141418] border border-white/10 space-y-3">
+          <div className="p-5 rounded-2xl bg-white border border-slate-200 space-y-3 shadow-xs">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
-                <Camera className="w-4 h-4 text-[#CDFE02]" />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-2">
+                <Camera className="w-4 h-4 text-indigo-600" />
                 <span>Photo Evidence</span>
               </h3>
               <span
                 className={`text-[10px] font-mono font-bold ${
                   photos.length >= (checkSheet.mandatoryPhotoCount || 0)
-                    ? "text-[#CDFE02]"
-                    : "text-amber-400"
+                    ? "text-emerald-600"
+                    : "text-amber-600"
                 }`}
               >
                 {photos.length} / {checkSheet.mandatoryPhotoCount || 0} Attached
@@ -641,7 +635,7 @@ export default function CheckSheetExecutionWizard({ params }) {
             </div>
 
             {/* Dropzone Button */}
-            <label className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-white/10 hover:border-[#5733F0] rounded-xl bg-[#101014] cursor-pointer transition-all group text-center">
+            <label className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 hover:border-indigo-600 rounded-xl bg-slate-50 cursor-pointer transition-all group text-center">
               <input
                 type="file"
                 accept="image/*"
@@ -650,13 +644,13 @@ export default function CheckSheetExecutionWizard({ params }) {
                 disabled={uploadingPhoto}
                 className="hidden"
               />
-              <div className="w-9 h-9 rounded-full bg-[#5733F0]/20 flex items-center justify-center text-[#CDFE02] group-hover:scale-105 transition-all mb-1.5">
+              <div className="w-9 h-9 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 group-hover:scale-105 transition-all mb-1.5">
                 <Upload className="w-4 h-4" />
               </div>
-              <span className="text-xs font-bold text-white">
+              <span className="text-xs font-bold text-slate-900">
                 {uploadingPhoto ? "Uploading photograph..." : "Snap Photo or Upload"}
               </span>
-              <p className="text-[10px] text-zinc-500 mt-0.5">Mobile camera / gallery (Max 8MB)</p>
+              <p className="text-[10px] text-slate-500 mt-0.5">Mobile camera / gallery (Max 8MB)</p>
             </label>
 
             {/* Photo Thumbnails */}
@@ -665,7 +659,7 @@ export default function CheckSheetExecutionWizard({ params }) {
                 {photos.map((photo, pIdx) => (
                   <div
                     key={pIdx}
-                    className="relative group rounded-xl overflow-hidden border border-white/10 bg-black aspect-video flex items-center justify-center"
+                    className="relative group rounded-xl overflow-hidden border border-slate-200 bg-slate-100 aspect-video flex items-center justify-center shadow-xs"
                   >
                     <img
                       src={photo.url}
@@ -675,12 +669,12 @@ export default function CheckSheetExecutionWizard({ params }) {
                     <button
                       type="button"
                       onClick={() => removePhoto(pIdx)}
-                      className="absolute top-1.5 right-1.5 p-1 rounded-md bg-black/80 hover:bg-rose-500 text-white transition-all opacity-0 group-hover:opacity-100"
+                      className="absolute top-1.5 right-1.5 p-1 rounded-md bg-white/90 hover:bg-rose-600 hover:text-white text-slate-700 transition-all opacity-0 group-hover:opacity-100 shadow-xs cursor-pointer"
                       title="Remove Photo"
                     >
                       <Trash2 className="w-3 h-3" />
                     </button>
-                    <div className="absolute bottom-0 inset-x-0 p-1 bg-black/80 backdrop-blur-xs text-[9px] text-zinc-300 truncate">
+                    <div className="absolute bottom-0 inset-x-0 p-1 bg-white/90 backdrop-blur-xs text-[9px] text-slate-700 truncate border-t border-slate-200">
                       {photo.caption || "Inspection Evidence"}
                     </div>
                   </div>
@@ -690,30 +684,30 @@ export default function CheckSheetExecutionWizard({ params }) {
           </div>
 
           {/* 3. Operator Attestation & Submit CTA */}
-          <div className="p-5 rounded-2xl bg-[#141418] border border-white/10 space-y-4">
+          <div className="p-5 rounded-2xl bg-white border border-slate-200 space-y-4 shadow-xs">
             <div className="flex items-start gap-2.5">
-              <div className="p-1.5 rounded-lg bg-[#5733F0]/20 text-[#CDFE02] border border-[#5733F0]/30 shrink-0 mt-0.5">
+              <div className="p-1.5 rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-100 shrink-0 mt-0.5">
                 <Fingerprint className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+                <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
                   Digital Verification
                 </h4>
-                <p className="text-[10px] text-zinc-400 mt-0.5">
+                <p className="text-[10px] text-slate-500 mt-0.5">
                   I certify that all readings reflect true physical measurements on the floor.
                 </p>
               </div>
             </div>
 
-            <label className="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#101014] border border-white/5 cursor-pointer">
+            <label className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
               <input
                 type="checkbox"
                 checked={digitalSignChecked}
                 onChange={(e) => setDigitalSignChecked(e.target.checked)}
-                className="w-4 h-4 rounded accent-[#5733F0] mt-0.5"
+                className="w-4 h-4 rounded accent-indigo-600 mt-0.5"
               />
-              <span className="text-[11px] font-semibold text-zinc-300 leading-snug">
-                I, <strong className="text-white">{currentUser?.name || "Ramesh Pawar"}</strong> ({currentUser?.employeeId || "BAJAJ-OP-01"}), confirm and submit this checksheet.
+              <span className="text-[11px] font-semibold text-slate-700 leading-snug">
+                I, <strong className="text-slate-900">{currentUser?.name || "Ramesh Pawar"}</strong> ({currentUser?.employeeId || "BAJAJ-OP-01"}), confirm and submit this checksheet.
               </span>
             </label>
 
@@ -722,11 +716,11 @@ export default function CheckSheetExecutionWizard({ params }) {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#CDFE02] hover:bg-[#b8e602] text-[#101010] text-xs font-bold transition-all shadow-lg shadow-[#CDFE02]/20 active:scale-95 disabled:opacity-50 cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-xs active:scale-95 disabled:opacity-50 cursor-pointer"
               >
                 {submitting ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     <span>Dispatching Submission...</span>
                   </>
                 ) : (
@@ -739,7 +733,7 @@ export default function CheckSheetExecutionWizard({ params }) {
 
               <Link
                 href="/operator"
-                className="w-full block text-center py-2 text-xs font-semibold text-zinc-500 hover:text-zinc-300 transition-colors"
+                className="w-full block text-center py-2 text-xs font-semibold text-slate-500 hover:text-slate-700 transition-colors"
               >
                 Cancel & Return to Tasks
               </Link>

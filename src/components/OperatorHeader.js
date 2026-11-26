@@ -64,30 +64,30 @@ export default function OperatorHeader() {
   };
 
   return (
-    <header className="h-16 border-b border-white/10 bg-[#141414]/90 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-40 font-sans">
+    <header className="h-16 border-b border-slate-200 bg-white px-6 flex items-center justify-between sticky top-0 z-40 font-sans shadow-xs">
       {/* Left: Quick Search Bar */}
       <div className="flex items-center gap-4">
         <div className="relative w-64 md:w-80 hidden sm:block">
-          <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search check sheets, equipment, SOP..."
-            className="w-full bg-[#101010] border border-white/10 rounded-xl py-2 pl-9 pr-4 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-[#5733F0] transition-colors"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 pl-9 pr-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition"
           />
         </div>
       </div>
 
       {/* Center: Active Shift Execution Status Pill */}
-      <div className="hidden lg:flex items-center gap-3 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-xs text-zinc-300 font-mono">
+      <div className="hidden lg:flex items-center gap-3 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs text-indigo-700 font-mono">
         <div className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-[#CDFE02] animate-pulse" />
-          <span className="text-[#CDFE02] font-bold">Shift A</span>
-          <span className="text-zinc-500">•</span>
-          <span className="text-zinc-300">06:00 – 14:00</span>
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-indigo-900 font-bold">Shift A</span>
+          <span className="text-indigo-300">•</span>
+          <span className="text-indigo-700">06:00 – 14:00</span>
         </div>
-        <div className="w-px h-3.5 bg-white/10" />
-        <div className="flex items-center gap-1.5 text-zinc-400">
-          <Clock className="w-3 h-3 text-zinc-500" />
+        <div className="w-px h-3.5 bg-indigo-200" />
+        <div className="flex items-center gap-1.5 text-indigo-600">
+          <Clock className="w-3 h-3 text-indigo-500" />
           <span>{currentTime || "08:30:00"} IST</span>
         </div>
       </div>
@@ -95,37 +95,37 @@ export default function OperatorHeader() {
       {/* Right Actions: Report Incident, Notifications, Operator Profile */}
       <div className="flex items-center gap-3">
         <Link
-          href="/operator/incidents"
-          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-semibold transition-all"
+          href="/operator"
+          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-xs font-semibold transition-all"
         >
-          <AlertTriangle className="w-3.5 h-3.5" />
+          <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
           <span>Report Defect</span>
         </Link>
 
         {/* Notifications Icon with Badge */}
         <button
           type="button"
-          className="relative p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+          className="relative p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
           title="Shift Notifications"
         >
           <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#CDFE02] rounded-full ring-2 ring-[#141414]" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-600 rounded-full ring-2 ring-white" />
         </button>
 
         {/* Operator Profile Badge */}
-        <div className="flex items-center gap-2 pl-3 border-l border-white/10">
-          <div className="w-8 h-8 rounded-full bg-[#5733F0] flex items-center justify-center font-bold text-xs text-white shadow-sm shadow-[#5733F0]/40">
+        <div className="flex items-center gap-2 pl-3 border-l border-slate-200">
+          <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-xs">
             {user.name ? user.name[0] : "O"}
           </div>
 
           <div className="hidden md:block text-left">
-            <div className="text-xs font-semibold text-white leading-tight flex items-center gap-1.5">
+            <div className="text-xs font-semibold text-slate-900 leading-tight flex items-center gap-1.5">
               <span>{user.name}</span>
-              <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 font-bold">
+              <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
                 ON DUTY
               </span>
             </div>
-            <div className="text-[10px] text-zinc-400 font-mono">
+            <div className="text-[10px] text-slate-500 font-mono">
               {user.employeeId || "BAJAJ-OP-01"}
             </div>
           </div>
@@ -134,7 +134,7 @@ export default function OperatorHeader() {
           <button
             onClick={handleLogout}
             disabled={loggingOut}
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors ml-1 cursor-pointer"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors ml-1 cursor-pointer"
             title="End Shift / Logout"
           >
             <LogOut className={`w-3.5 h-3.5 ${loggingOut ? "animate-spin" : ""}`} />
