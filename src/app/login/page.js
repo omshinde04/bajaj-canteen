@@ -39,9 +39,7 @@ function LoginForm() {
     if (emailParam) {
       setEmail(emailParam);
       if (emailParam === "operator@bajaj.com") setPassword("Operator@2026");
-      else if (emailParam === "supervisor@bajaj.com") setPassword("Supervisor@2026");
-      else if (emailParam === "plantlead@bajaj.com") setPassword("PlantLead@2026");
-      else if (emailParam === "admin@bajaj.com") setPassword("AdminPassword@2026");
+      else setPassword("AdminPassword@2026");
     } else if (demoParam) {
       handleFillDemo(demoParam);
     }
@@ -84,9 +82,6 @@ function LoginForm() {
     if (type === "operator") {
       setEmail("operator@bajaj.com");
       setPassword("Operator@2026");
-    } else if (type === "supervisor") {
-      setEmail("supervisor@bajaj.com");
-      setPassword("Supervisor@2026");
     } else {
       setEmail("admin@bajaj.com");
       setPassword("AdminPassword@2026");
@@ -198,43 +193,32 @@ function LoginForm() {
         <div className="flex items-center justify-between text-[11px] text-zinc-400">
           <span className="flex items-center gap-1.5">
             <KeyRound className="w-3.5 h-3.5 text-[#5733F0]" />
-            <span>Demo Staging Accounts</span>
+            <span>Authorized Logins (Admin & Operator)</span>
           </span>
           <span className="text-[10px] text-zinc-500 font-mono">1-Click Fast Fill</span>
         </div>
         
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
             onClick={() => handleFillDemo("admin")}
-            className="p-2 rounded-xl bg-white/[0.02] hover:bg-[#5733F0]/10 border border-white/5 hover:border-[#5733F0]/40 text-left transition-all group"
+            className="p-2.5 rounded-xl bg-white/[0.02] hover:bg-[#5733F0]/10 border border-white/5 hover:border-[#5733F0]/40 text-left transition-all group"
           >
             <div className="text-white font-medium text-[11px] group-hover:text-[#CDFE02]">
-              Super Admin
+              Admin
             </div>
-            <div className="text-zinc-500 text-[9px] font-mono truncate">admin@bajaj</div>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleFillDemo("supervisor")}
-            className="p-2 rounded-xl bg-white/[0.02] hover:bg-[#5733F0]/10 border border-white/5 hover:border-[#5733F0]/40 text-left transition-all group"
-          >
-            <div className="text-white font-medium text-[11px] group-hover:text-[#CDFE02]">
-              Supervisor
-            </div>
-            <div className="text-zinc-500 text-[9px] font-mono truncate">supervisor@</div>
+            <div className="text-zinc-500 text-[10px] font-mono truncate">admin@bajaj.com</div>
           </button>
 
           <button
             type="button"
             onClick={() => handleFillDemo("operator")}
-            className="p-2 rounded-xl bg-white/[0.02] hover:bg-[#CDFE02]/10 border border-white/5 hover:border-[#CDFE02]/40 text-left transition-all group"
+            className="p-2.5 rounded-xl bg-white/[0.02] hover:bg-[#CDFE02]/10 border border-white/5 hover:border-[#CDFE02]/40 text-left transition-all group"
           >
             <div className="text-white font-medium text-[11px] group-hover:text-[#CDFE02]">
-              Floor Operator
+              Operator
             </div>
-            <div className="text-zinc-500 text-[9px] font-mono truncate">operator@</div>
+            <div className="text-zinc-500 text-[10px] font-mono truncate">operator@bajaj.com</div>
           </button>
         </div>
       </div>

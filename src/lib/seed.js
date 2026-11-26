@@ -173,11 +173,11 @@ export async function seedDatabase() {
   }
   console.log("✓ Departments seeded:", Object.keys(deptMap));
 
-  // 4. Default Super Admin User & Staff
+  // 4. Default Logins (Strictly Admin & Operator as per Handwritten Specification)
   const staffMembers = [
     {
       employeeId: "BAJAJ-001",
-      name: "Super Administrator",
+      name: "Admin",
       email: "admin@bajaj.com",
       passwordRaw: "AdminPassword@2026",
       roleCode: "SUPER_ADMIN",
@@ -186,28 +186,8 @@ export async function seedDatabase() {
       phoneNumber: "+91 98000 00001",
     },
     {
-      employeeId: "BAJAJ-SUP-01",
-      name: "Rajesh Sharma",
-      email: "supervisor@bajaj.com",
-      passwordRaw: "Supervisor@2026",
-      roleCode: "SUPERVISOR",
-      deptCode: "DEPT_KITCHEN",
-      shiftCode: "SHIFT_A",
-      phoneNumber: "+91 98000 00002",
-    },
-    {
-      employeeId: "BAJAJ-PLANT-01",
-      name: "Amit Deshmukh",
-      email: "plantlead@bajaj.com",
-      passwordRaw: "PlantLead@2026",
-      roleCode: "PLANT_ADMIN",
-      deptCode: "DEPT_ENG_ASSY",
-      shiftCode: "SHIFT_B",
-      phoneNumber: "+91 98000 00003",
-    },
-    {
       employeeId: "BAJAJ-OP-01",
-      name: "Ramesh Pawar",
+      name: "Ramesh Pawar (Operator)",
       email: "operator@bajaj.com",
       passwordRaw: "Operator@2026",
       roleCode: "OPERATOR",
@@ -216,6 +196,9 @@ export async function seedDatabase() {
       phoneNumber: "+91 98000 00004",
     },
   ];
+
+  // Remove any non-whitelisted accounts
+  await User.deleteMany({ email: { $nin: ["admin@bajaj.com", "operator@bajaj.com"] } });
 
   for (const s of staffMembers) {
     const existing = await User.findOne({ email: s.email });

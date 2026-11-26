@@ -256,14 +256,12 @@ export default function UsersPage() {
         </div>
       </div>
 
-      {/* Role Filter Tabs */}
+      {/* Role Filter Tabs (Only Admin & Operator as per Handwritten Specification) */}
       <div className="flex items-center gap-2 overflow-x-auto border-b border-white/10 pb-3 [scrollbar-width:none]">
         {[
-          { key: "ALL", label: "All Personnel", count: users.length },
-          { key: "SUPER_ADMIN", label: "Super Admins", count: users.filter((u) => u.role?.code === "SUPER_ADMIN").length },
-          { key: "PLANT_ADMIN", label: "Plant Admins", count: users.filter((u) => u.role?.code === "PLANT_ADMIN").length },
-          { key: "SUPERVISOR", label: "Shift Supervisors", count: users.filter((u) => u.role?.code === "SUPERVISOR").length },
-          { key: "OPERATOR", label: "Floor Operators", count: users.filter((u) => u.role?.code === "OPERATOR").length },
+          { key: "ALL", label: "All Users", count: users.length },
+          { key: "SUPER_ADMIN", label: "Admin Accounts", count: users.filter((u) => u.role?.code === "SUPER_ADMIN" || u.role?.code === "ADMIN").length },
+          { key: "OPERATOR", label: "Operator Accounts", count: users.filter((u) => u.role?.code === "OPERATOR").length },
         ].map((tab) => {
           const isActive = activeRoleFilter === tab.key;
           return (
@@ -507,11 +505,13 @@ export default function UsersPage() {
                     onChange={(e) => setFormData({ ...formData, roleId: e.target.value })}
                     className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2 px-2.5 text-xs text-white focus:outline-none focus:border-[#5733F0]"
                   >
-                    {roles.map((r) => (
-                      <option key={r._id} value={r._id}>
-                        {r.name}
-                      </option>
-                    ))}
+                    {roles
+                      .filter((r) => r.code === "SUPER_ADMIN" || r.code === "ADMIN" || r.code === "OPERATOR")
+                      .map((r) => (
+                        <option key={r._id} value={r._id}>
+                          {r.code === "SUPER_ADMIN" ? "Admin" : r.name}
+                        </option>
+                      ))}
                   </select>
                 </div>
 
