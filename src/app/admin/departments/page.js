@@ -32,6 +32,7 @@ import {
   Edit2,
   Trash2,
   RefreshCw,
+  X,
 } from "lucide-react";
 
 export default function DepartmentsPage() {
@@ -209,8 +210,18 @@ export default function DepartmentsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search department by name or code..."
-            className="pl-9"
+            className="pl-9 pr-8"
           />
+          {search && (
+            <button
+              type="button"
+              onClick={() => setSearch("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 rounded-full hover:bg-slate-100"
+              title="Clear search"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
         <div className="text-xs text-slate-500 font-mono">
           Showing {paginatedDepts.length} of {filteredDepts.length} departments

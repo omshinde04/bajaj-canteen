@@ -52,11 +52,37 @@ export async function GET(req) {
     if (department) filter.department = department;
     if (category) filter.category = category;
     if (frequency) filter.frequency = frequency;
-    if (search) {
-      filter.$or = [
-        { title: { $regex: search, $options: "i" } },
-        { code: { $regex: search, $options: "i" } },
+    if (search && search.trim()) {
+      const clean = search.trim();
+      const escaped = clean.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const tokens = clean
+        .split(/[\s\-_\/]+/)
+        .filter(Boolean)
+        .map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+
+      const flexibleRegex = tokens.join("[\\s\\-_]+");
+
+      // Build precise matching conditions
+      const conditions = [
+        { title: { $regex: flexibleRegex, $options: "i" } },
+        { code: { $regex: escaped, $options: "i" } },
+        { category: { $regex: flexibleRegex, $options: "i" } },
       ];
+
+      // If user typed multiple words, match documents containing all words (with word boundaries)
+      if (tokens.length > 1) {
+        conditions.push({
+          $and: tokens.map((t) => ({
+            $or: [
+              { title: { $regex: `(^|[^a-zA-Z0-9])${t}`, $options: "i" } },
+              { code: { $regex: t, $options: "i" } },
+              { category: { $regex: `(^|[^a-zA-Z0-9])${t}`, $options: "i" } },
+            ],
+          })),
+        });
+      }
+
+      filter.$or = conditions;
     }
 
     const [total, checkSheets] = await Promise.all([

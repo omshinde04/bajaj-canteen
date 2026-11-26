@@ -31,6 +31,8 @@ import {
   FileDown,
   RefreshCw,
   CheckCircle2,
+  Search,
+  X,
 } from "lucide-react";
 
 export default function TeaCountPage() {
@@ -43,6 +45,7 @@ export default function TeaCountPage() {
   const [session, setSession] = useState("MORNING");
   const [count, setCount] = useState(100);
   const [notes, setNotes] = useState("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     setDate(new Date().toISOString().split("T")[0]);
@@ -282,9 +285,43 @@ export default function TeaCountPage() {
 
       {/* DETAILED LOGS TABLE */}
       <Card className="overflow-hidden">
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-          <h3 className="font-bold text-slate-900 text-sm">Individual Tea Log Entries ({date})</h3>
-          <span className="text-xs text-slate-500">Showing {data?.records?.length || 0} entries</span>
+        <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50">
+          <div>
+            <h3 className="font-bold text-slate-900 text-sm">Individual Tea Log Entries ({date})</h3>
+            <span className="text-xs text-slate-500">
+              Showing{" "}
+              {(data?.records || []).filter((r) => {
+                if (!search.trim()) return true;
+                const q = search.toLowerCase();
+                return (
+                  r.departmentName?.toLowerCase().includes(q) ||
+                  r.notes?.toLowerCase().includes(q) ||
+                  r.session?.toLowerCase().includes(q)
+                );
+              }).length}{" "}
+              of {data?.records?.length || 0} entries
+            </span>
+          </div>
+
+          <div className="relative w-full sm:w-64">
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Filter by dept or notes..."
+              className="pl-9 pr-8 py-1 text-xs h-8 bg-white"
+            />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
         </div>
 
         <Table>
@@ -316,7 +353,17 @@ export default function TeaCountPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              data.records.map((r) => (
+              (data.records || [])
+                .filter((r) => {
+                  if (!search.trim()) return true;
+                  const q = search.toLowerCase();
+                  return (
+                    r.departmentName?.toLowerCase().includes(q) ||
+                    r.notes?.toLowerCase().includes(q) ||
+                    r.session?.toLowerCase().includes(q)
+                  );
+                })
+                .map((r) => (
                 <TableRow key={r._id}>
                   <TableCell className="font-semibold text-slate-900 flex items-center gap-2">
                     <Building2 className="w-3.5 h-3.5 text-slate-400" />

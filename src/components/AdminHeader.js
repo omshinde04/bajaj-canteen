@@ -7,12 +7,14 @@ import {
   Search,
   LogOut,
   Clock,
+  X,
 } from "lucide-react";
 
 export default function AdminHeader() {
   const router = useRouter();
   const [user, setUser] = useState({ name: "Admin", role: { name: "Admin" }, email: "admin@bajaj.com" });
   const [loggingOut, setLoggingOut] = useState(false);
+  const [headerSearch, setHeaderSearch] = useState("");
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -35,18 +37,36 @@ export default function AdminHeader() {
     }
   };
 
+  const handleHeaderSearch = (e) => {
+    e.preventDefault();
+    if (headerSearch.trim()) {
+      router.push(`/admin/checksheets?search=${encodeURIComponent(headerSearch.trim())}`);
+    }
+  };
+
   return (
     <header className="h-16 border-b border-slate-200 bg-white px-6 flex items-center justify-between sticky top-0 z-40 shadow-xs">
       {/* Search / Context bar */}
       <div className="flex items-center gap-4">
-        <div className="relative w-64 md:w-80 hidden sm:block">
+        <form onSubmit={handleHeaderSearch} className="relative w-64 md:w-80 hidden sm:block">
           <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
+            value={headerSearch}
+            onChange={(e) => setHeaderSearch(e.target.value)}
             placeholder="Search checksheets, departments, tea counts..."
-            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 pl-9 pr-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 pl-9 pr-8 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition"
           />
-        </div>
+          {headerSearch && (
+            <button
+              type="button"
+              onClick={() => setHeaderSearch("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </form>
 
         {/* Live Shift Pill */}
         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-xs text-indigo-700">
