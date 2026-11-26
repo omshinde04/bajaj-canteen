@@ -6,6 +6,9 @@ import Shift from "../models/Shift.js";
 import User from "../models/User.js";
 import CheckSheet from "../models/CheckSheet.js";
 import Submission from "../models/Submission.js";
+import TeaCount from "../models/TeaCount.js";
+import ReportRecipient from "../models/ReportRecipient.js";
+import Notification from "../models/Notification.js";
 import { hashPassword } from "./auth.js";
 
 const ALL_PERMISSIONS = [
@@ -49,25 +52,6 @@ export async function seedDatabase() {
       description: "Plant-level administration across all departments and shifts",
       isSystemRole: true,
       permissions: ALL_PERMISSIONS.filter((p) => p !== "manage_backups"),
-    },
-    {
-      name: "Department Admin",
-      code: "DEPT_ADMIN",
-      description: "Departmental administration and check sheet configuration",
-      isSystemRole: true,
-      permissions: [
-        "view",
-        "add",
-        "edit",
-        "update",
-        "approve",
-        "reject",
-        "upload",
-        "download",
-        "export",
-        "manage_checksheets",
-        "access_analytics",
-      ],
     },
     {
       name: "Supervisor",
@@ -117,7 +101,7 @@ export async function seedDatabase() {
       code: "SHIFT_C",
       startTime: "22:00",
       endTime: "06:00",
-      description: "Overnight sanitization and baking prep shift",
+      description: "Overnight sanitization shift",
     },
   ];
 
@@ -132,31 +116,49 @@ export async function seedDatabase() {
   }
   console.log("✓ Shifts seeded:", Object.keys(shiftMap));
 
-  // 3. Departments
+  // 3. Departments (Factory Departments for Tea Count Tracking as per handwritten spec)
   const departments = [
+    {
+      name: "Engine Assembly",
+      code: "DEPT_ENG_ASSY",
+      plantLocation: "Bajaj Auto Akurdi Facility - Bay 1",
+      description: "Engine assembly and testing line",
+    },
+    {
+      name: "Vehicle Assembly",
+      code: "DEPT_VEH_ASSY",
+      plantLocation: "Bajaj Auto Akurdi Facility - Bay 2",
+      description: "Two-wheeler and chassis final assembly",
+    },
+    {
+      name: "Machine Shop",
+      code: "DEPT_MACHINE_SHOP",
+      plantLocation: "Bajaj Auto Akurdi Facility - Bay 3",
+      description: "Engine components, transmission & machining",
+    },
+    {
+      name: "Paint Shop",
+      code: "DEPT_PAINT_SHOP",
+      plantLocation: "Bajaj Auto Akurdi Facility - Unit 4",
+      description: "Automated electrostatic painting booths",
+    },
+    {
+      name: "Press Shop",
+      code: "DEPT_PRESS_SHOP",
+      plantLocation: "Bajaj Auto Akurdi Facility - Unit 2",
+      description: "Heavy sheet metal pressing and stamping",
+    },
+    {
+      name: "Quality Assurance",
+      code: "DEPT_QA",
+      plantLocation: "Bajaj Auto Akurdi Facility - Admin Block",
+      description: "Inspection, metrology & quality testing labs",
+    },
     {
       name: "Canteen Main Kitchen",
       code: "DEPT_KITCHEN",
-      plantLocation: "Bajaj Auto Akurdi Facility",
-      description: "Main food preparation and cooking facility",
-    },
-    {
-      name: "Bakery & Confectionery",
-      code: "DEPT_BAKERY",
-      plantLocation: "Bajaj Auto Akurdi Facility",
-      description: "Daily bakery and snack production line",
-    },
-    {
-      name: "Cold Storage & Raw Materials",
-      code: "DEPT_STORAGE",
-      plantLocation: "Bajaj Auto Akurdi Facility",
-      description: "Refrigeration, meat, dairy and ingredient storage",
-    },
-    {
-      name: "Dining Hall & Sanitization",
-      code: "DEPT_DINING",
-      plantLocation: "Bajaj Auto Akurdi Facility",
-      description: "Dining area hygiene, dishwashing and waste management",
+      plantLocation: "Bajaj Auto Akurdi Facility - Central Canteen",
+      description: "Main food preparation and tea production facility",
     },
   ];
 
@@ -171,7 +173,7 @@ export async function seedDatabase() {
   }
   console.log("✓ Departments seeded:", Object.keys(deptMap));
 
-  // 4. Default Super Admin User & Plant Personnel
+  // 4. Default Super Admin User & Staff
   const staffMembers = [
     {
       employeeId: "BAJAJ-001",
@@ -199,7 +201,7 @@ export async function seedDatabase() {
       email: "plantlead@bajaj.com",
       passwordRaw: "PlantLead@2026",
       roleCode: "PLANT_ADMIN",
-      deptCode: "DEPT_STORAGE",
+      deptCode: "DEPT_ENG_ASSY",
       shiftCode: "SHIFT_B",
       phoneNumber: "+91 98000 00003",
     },
@@ -234,12 +236,12 @@ export async function seedDatabase() {
     }
   }
 
-  // 5. Seed Master Operational Check Sheets
+  // 5. Real JH CheckSheets from Client's Master Sheet
   const masterCheckSheets = [
     {
-      title: "Deep Fryer TPM & Cooking Oil Quality Log",
-      code: "CS-KTCH-01",
-      category: "Food Safety & Quality",
+      title: "JH CheckSheet - Four Burner Range (PNG)",
+      code: "CS-JH-01",
+      category: "PNG Kitchen Equipment",
       department: deptMap["DEPT_KITCHEN"],
       allowedShifts: [shiftMap["SHIFT_A"], shiftMap["SHIFT_B"]],
       frequency: "daily",
@@ -247,215 +249,291 @@ export async function seedDatabase() {
       slaHours: 2,
       isActive: true,
       fields: [
-        { fieldId: "f_tpm", label: "Total Polar Material (TPM %)", fieldType: "number", isRequired: true, unit: "%", minValue: 0, maxValue: 25, order: 1 },
-        { fieldId: "f_oil_temp", label: "Cooking Oil Temperature (°C)", fieldType: "number", isRequired: true, unit: "°C", minValue: 150, maxValue: 190, order: 2 },
-        { fieldId: "f_clarity", label: "Oil Color & Clarity Test", fieldType: "select", options: ["Pass (Clear Golden)", "Warning (Amber)", "Fail (Dark/Foaming - Discard)"], isRequired: true, order: 3 },
-        { fieldId: "f_photo", label: "Digital TPM Meter Reading Photo", fieldType: "photo", requiresPhoto: true, isRequired: true, order: 4 },
+        { fieldId: "f_body", label: "Range top, drip tray & body - Clean, no residue (C)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 1 },
+        { fieldId: "f_ports", label: "Burner heads & ports (all 4) - Not clogged (C)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 2 },
+        { fieldId: "f_flame", label: "Burner flame - Blue, steady, uniform (I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 3 },
+        { fieldId: "f_knobs", label: "Control knobs - Turn smoothly, shut off fully (I, T)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 4 },
+        { fieldId: "f_leak", label: "PNG leak check at joints - No bubbles/smell (I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 5 },
+        { fieldId: "f_photo", label: "Burner flame & inspection photo", fieldType: "photo", requiresPhoto: true, isRequired: true, order: 6 },
       ],
     },
     {
-      title: "Walk-in Freezer & Chiller Temp Monitor",
-      code: "CS-COLD-02",
+      title: "JH CheckSheet - Deep Freezer (Electrical)",
+      code: "CS-JH-02",
       category: "Cold Chain Monitoring",
-      department: deptMap["DEPT_STORAGE"],
+      department: deptMap["DEPT_KITCHEN"],
       allowedShifts: [shiftMap["SHIFT_A"], shiftMap["SHIFT_B"], shiftMap["SHIFT_C"]],
-      frequency: "per_shift",
+      frequency: "daily",
       mandatoryPhotoCount: 1,
       slaHours: 1,
       isActive: true,
       fields: [
-        { fieldId: "f_chiller", label: "Walk-in Chiller Temperature (°C)", fieldType: "number", isRequired: true, unit: "°C", minValue: 0, maxValue: 4, order: 1 },
-        { fieldId: "f_freezer", label: "Walk-in Deep Freezer Temp (°C)", fieldType: "number", isRequired: true, unit: "°C", minValue: -25, maxValue: -18, order: 2 },
-        { fieldId: "f_door_seal", label: "Door Gaskets & Air Curtain Integrity", fieldType: "boolean", isRequired: true, order: 3 },
-        { fieldId: "f_photo", label: "Digital Thermometer Dial Photograph", fieldType: "photo", requiresPhoto: true, isRequired: true, order: 4 },
+        { fieldId: "f_temp", label: "Temperature display (°C) - Target <= -18°C", fieldType: "number", isRequired: true, unit: "°C", minValue: -30, maxValue: -18, order: 1 },
+        { fieldId: "f_gasket", label: "Door gasket & seal - Intact, no tear (C, I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 2 },
+        { fieldId: "f_frost", label: "Frost build-up inside - < 5mm (C)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 3 },
+        { fieldId: "f_compressor", label: "Compressor & fan - No abnormal vibration (I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 4 },
+        { fieldId: "f_photo", label: "Thermometer display dial photo", fieldType: "photo", requiresPhoto: true, isRequired: true, order: 5 },
       ],
     },
     {
-      title: "Dining Hall Sanitization & UV Inspection",
-      code: "CS-DINE-03",
-      category: "Hygiene & Sanitization",
-      department: deptMap["DEPT_DINING"],
+      title: "JH CheckSheet - Veg Cutting Machine (Electrical)",
+      code: "CS-JH-03",
+      category: "Electrical Equipment",
+      department: deptMap["DEPT_KITCHEN"],
       allowedShifts: [shiftMap["SHIFT_A"], shiftMap["SHIFT_B"]],
-      frequency: "per_shift",
-      mandatoryPhotoCount: 2,
+      frequency: "daily",
+      mandatoryPhotoCount: 0,
       slaHours: 2,
       isActive: true,
       fields: [
-        { fieldId: "f_tables", label: "Tabletop 200ppm Chlorine Disinfection", fieldType: "boolean", isRequired: true, order: 1 },
-        { fieldId: "f_uv", label: "Cutlery UV Sterilization Chamber Timer", fieldType: "select", options: ["Active (15 Min Cycle)", "Maintenance Required"], isRequired: true, order: 2 },
-        { fieldId: "f_floor", label: "Floor Auto-Scrubber Cleaning Complete", fieldType: "boolean", isRequired: true, order: 3 },
-        { fieldId: "f_bin", label: "Wet & Dry Waste Segregation Bins Cleared", fieldType: "boolean", isRequired: true, order: 4 },
+        { fieldId: "f_body", label: "Machine body, hopper & chute - Clean (C)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 1 },
+        { fieldId: "f_blades", label: "Cutting blades/discs - Sharp, no rust (C, I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 2 },
+        { fieldId: "f_safety", label: "Hopper lid safety interlock working (I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 3 },
+        { fieldId: "f_emergency", label: "ON/OFF & Emergency stop functional (I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 4 },
       ],
     },
     {
-      title: "Bakery Oven Calibration & Proofing Log",
-      code: "CS-BAKE-04",
-      category: "Production Quality",
-      department: deptMap["DEPT_BAKERY"],
-      allowedShifts: [shiftMap["SHIFT_A"]],
-      frequency: "daily",
-      mandatoryPhotoCount: 0,
-      slaHours: 4,
-      isActive: true,
-      fields: [
-        { fieldId: "f_proof_temp", label: "Dough Proofing Room Temp (°C)", fieldType: "number", isRequired: true, unit: "°C", minValue: 28, maxValue: 38, order: 1 },
-        { fieldId: "f_oven_temp", label: "Deck Oven Core Temp (°C)", fieldType: "number", isRequired: true, unit: "°C", minValue: 180, maxValue: 240, order: 2 },
-        { fieldId: "f_batch_weight", label: "Sample Bun Weight Conformity (g)", fieldType: "number", isRequired: true, unit: "g", minValue: 65, maxValue: 75, order: 3 },
-      ],
-    },
-    {
-      title: "Food Handler Personal Hygiene Audit",
-      code: "CS-HYGN-05",
-      category: "Personal Hygiene & FSSAI",
+      title: "JH CheckSheet - Walk-in Chiller 1 (Electrical)",
+      code: "CS-JH-04",
+      category: "Cold Chain Monitoring",
       department: deptMap["DEPT_KITCHEN"],
       allowedShifts: [shiftMap["SHIFT_A"], shiftMap["SHIFT_B"], shiftMap["SHIFT_C"]],
+      frequency: "daily",
+      mandatoryPhotoCount: 1,
+      slaHours: 1,
+      isActive: true,
+      fields: [
+        { fieldId: "f_temp", label: "Temperature display (°C) - Target 0 to 5°C", fieldType: "number", isRequired: true, unit: "°C", minValue: 0, maxValue: 5, order: 1 },
+        { fieldId: "f_door", label: "Door handle & hinges close smoothly (I, T)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 2 },
+        { fieldId: "f_emergency", label: "Inside emergency door release working (I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 3 },
+        { fieldId: "f_evaporator", label: "Evaporator fan running without noise (I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 4 },
+        { fieldId: "f_photo", label: "Digital temperature readout photo", fieldType: "photo", requiresPhoto: true, isRequired: true, order: 5 },
+      ],
+    },
+    {
+      title: "JH CheckSheet - Boiler 1 (PNG)",
+      code: "CS-JH-05",
+      category: "PNG Kitchen Equipment",
+      department: deptMap["DEPT_KITCHEN"],
+      allowedShifts: [shiftMap["SHIFT_A"], shiftMap["SHIFT_B"]],
       frequency: "daily",
       mandatoryPhotoCount: 1,
       slaHours: 2,
       isActive: true,
       fields: [
-        { fieldId: "f_nails", label: "Finger Nails Clipped & No Jewelry", fieldType: "boolean", isRequired: true, order: 1 },
-        { fieldId: "f_ppe", label: "Clean Apron, Hair Net & Beard Cover", fieldType: "boolean", isRequired: true, order: 2 },
-        { fieldId: "f_health", label: "Zero Symptoms of Cough, Fever, or Lesions", fieldType: "boolean", isRequired: true, order: 3 },
-        { fieldId: "f_photo", label: "Line Hygiene Inspection Group Photo", fieldType: "photo", requiresPhoto: true, isRequired: true, order: 4 },
+        { fieldId: "f_gauge", label: "Pressure gauge reading in normal range (I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 1 },
+        { fieldId: "f_water", label: "Water level gauge glass visible & clean (C, I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 2 },
+        { fieldId: "f_safety", label: "Safety valve - No leak or blockage (I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 3 },
+        { fieldId: "f_gas", label: "PNG gas leak check at joints (I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 4 },
+        { fieldId: "f_photo", label: "Boiler gauge & valve status photo", fieldType: "photo", requiresPhoto: true, isRequired: true, order: 5 },
+      ],
+    },
+    {
+      title: "JH CheckSheet - Combi Oven (Electrical)",
+      code: "CS-JH-06",
+      category: "Electrical Equipment",
+      department: deptMap["DEPT_KITCHEN"],
+      allowedShifts: [shiftMap["SHIFT_A"], shiftMap["SHIFT_B"]],
+      frequency: "daily",
+      mandatoryPhotoCount: 0,
+      slaHours: 2,
+      isActive: true,
+      fields: [
+        { fieldId: "f_cavity", label: "Cooking cavity & door glass clean (C)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 1 },
+        { fieldId: "f_gasket", label: "Door gasket intact, no tear (C, I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 2 },
+        { fieldId: "f_probe", label: "Core temperature probe intact & clean (C, I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 3 },
+        { fieldId: "f_drain", label: "Drain filter clear, no water leak (C, I)", fieldType: "select", options: ["✔️ Ok", "❌ Not Ok", "🔴 Ok After Repair"], isRequired: true, order: 4 },
       ],
     },
   ];
 
-  const checkSheetMap = {};
   for (const cs of masterCheckSheets) {
-    const upserted = await CheckSheet.findOneAndUpdate({ code: cs.code }, cs, {
+    await CheckSheet.findOneAndUpdate({ code: cs.code }, cs, {
       upsert: true,
       returnDocument: "after",
       setDefaultsOnInsert: true,
     });
-    checkSheetMap[cs.code] = upserted._id;
   }
-  console.log("✓ Master Operational Check Sheets seeded:", Object.keys(checkSheetMap));
+  console.log("✓ Real JH CheckSheets seeded successfully");
 
-  // 6. Seed Operational Submissions
-  const adminUser = await User.findOne({ email: "admin@bajaj.com" });
+  // 6. Pre-seed Department-wise Tea Counts for Today & Recent Days
+  const todayStr = new Date().toISOString().split("T")[0];
+  const yesterdayDate = new Date(Date.now() - 86400000);
+  const yesterdayStr = yesterdayDate.toISOString().split("T")[0];
 
-  const existingSubmissionsCount = await Submission.countDocuments();
-  if (existingSubmissionsCount === 0) {
-    const sampleSubmissions = [
-      {
-        checkSheet: checkSheetMap["CS-KTCH-01"],
-        department: deptMap["DEPT_KITCHEN"],
-        shift: shiftMap["SHIFT_A"],
-        submittedBy: adminUser._id,
-        status: "PENDING_APPROVAL",
-        complianceScore: 100,
-        hasDefects: false,
-        notes: "Morning batch deep fryer testing completed at 07:15 AM.",
-        responses: [
-          { fieldId: "f_tpm", label: "Total Polar Material (TPM %)", fieldType: "number", value: 14.5, unit: "%", isConforming: true },
-          { fieldId: "f_oil_temp", label: "Cooking Oil Temperature (°C)", fieldType: "number", value: 175, unit: "°C", isConforming: true },
-          { fieldId: "f_clarity", label: "Oil Color & Clarity Test", fieldType: "select", value: "Pass (Clear Golden)", isConforming: true },
-        ],
-        photos: [
-          {
-            url: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=600&q=80",
-            caption: "Digital TPM meter showing 14.5% reading",
-            fieldId: "f_photo",
-          },
-        ],
-        submissionDate: new Date(Date.now() - 15 * 60 * 1000), // 15m ago
-      },
-      {
-        checkSheet: checkSheetMap["CS-COLD-02"],
-        department: deptMap["DEPT_STORAGE"],
-        shift: shiftMap["SHIFT_A"],
-        submittedBy: adminUser._id,
-        status: "PENDING_APPROVAL",
-        complianceScore: 100,
-        hasDefects: false,
-        notes: "Chiller and deep freezer within nominal ISO range.",
-        responses: [
-          { fieldId: "f_chiller", label: "Walk-in Chiller Temperature (°C)", fieldType: "number", value: 2.8, unit: "°C", isConforming: true },
-          { fieldId: "f_freezer", label: "Walk-in Deep Freezer Temp (°C)", fieldType: "number", value: -20.5, unit: "°C", isConforming: true },
-          { fieldId: "f_door_seal", label: "Door Gaskets & Air Curtain Integrity", fieldType: "boolean", value: true, isConforming: true },
-        ],
-        photos: [
-          {
-            url: "https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&w=600&q=80",
-            caption: "Deep freezer thermostat digital reading display",
-            fieldId: "f_photo",
-          },
-        ],
-        submissionDate: new Date(Date.now() - 35 * 60 * 1000), // 35m ago
-      },
-      {
-        checkSheet: checkSheetMap["CS-DINE-03"],
-        department: deptMap["DEPT_DINING"],
-        shift: shiftMap["SHIFT_A"],
-        submittedBy: adminUser._id,
-        status: "APPROVED",
-        complianceScore: 100,
-        hasDefects: false,
-        reviewedBy: adminUser._id,
-        reviewedAt: new Date(Date.now() - 20 * 60 * 1000),
-        supervisorRemarks: "All dining hall tables sanitized and UV sterilization chamber verified.",
-        digitalSignature: {
-          signedBy: "Super Administrator (BAJAJ-001)",
-          timestamp: new Date(Date.now() - 20 * 60 * 1000),
-          hash: "a4f8902c3b5d8e71fa9900223bc789e023154876aefbc901235678cdfa1902bb",
+  const sampleTeaCounts = [
+    { deptCode: "DEPT_ENG_ASSY", deptName: "Engine Assembly", date: todayStr, session: "MORNING", count: 140, notes: "Morning tea 1st run" },
+    { deptCode: "DEPT_ENG_ASSY", deptName: "Engine Assembly", date: todayStr, session: "EVENING", count: 120, notes: "Evening tea 2nd run" },
+    { deptCode: "DEPT_VEH_ASSY", deptName: "Vehicle Assembly", date: todayStr, session: "MORNING", count: 110, notes: "Full line batch" },
+    { deptCode: "DEPT_VEH_ASSY", deptName: "Vehicle Assembly", date: todayStr, session: "EVENING", count: 100, notes: "Regular shift tea" },
+    { deptCode: "DEPT_MACHINE_SHOP", deptName: "Machine Shop", date: todayStr, session: "MORNING", count: 95, notes: "Delivered to Dispenser" },
+    { deptCode: "DEPT_MACHINE_SHOP", deptName: "Machine Shop", date: todayStr, session: "EVENING", count: 85, notes: "Delivered to Dispenser" },
+    { deptCode: "DEPT_PAINT_SHOP", deptName: "Paint Shop", date: todayStr, session: "MORNING", count: 75, notes: "Clean booth drop" },
+    { deptCode: "DEPT_PAINT_SHOP", deptName: "Paint Shop", date: todayStr, session: "EVENING", count: 65, notes: "Clean booth drop" },
+    { deptCode: "DEPT_PRESS_SHOP", deptName: "Press Shop", date: todayStr, session: "MORNING", count: 65, notes: "Delivered" },
+    { deptCode: "DEPT_PRESS_SHOP", deptName: "Press Shop", date: todayStr, session: "EVENING", count: 55, notes: "Delivered" },
+    { deptCode: "DEPT_QA", deptName: "Quality Assurance", date: todayStr, session: "MORNING", count: 30, notes: "Office drop" },
+    { deptCode: "DEPT_QA", deptName: "Quality Assurance", date: todayStr, session: "EVENING", count: 30, notes: "Office drop" },
+    // Yesterday
+    { deptCode: "DEPT_ENG_ASSY", deptName: "Engine Assembly", date: yesterdayStr, session: "MORNING", count: 135, notes: "Yesterday morning" },
+    { deptCode: "DEPT_VEH_ASSY", deptName: "Vehicle Assembly", date: yesterdayStr, session: "MORNING", count: 105, notes: "Yesterday morning" },
+  ];
+
+  for (const tc of sampleTeaCounts) {
+    const deptId = deptMap[tc.deptCode];
+    if (deptId) {
+      await TeaCount.findOneAndUpdate(
+        { department: deptId, date: tc.date, session: tc.session },
+        {
+          department: deptId,
+          departmentName: tc.deptName,
+          date: tc.date,
+          session: tc.session,
+          count: tc.count,
+          deliveryStatus: "DELIVERED",
+          loggedBy: "Canteen Supervisor",
+          notes: tc.notes,
         },
-        responses: [
-          { fieldId: "f_tables", label: "Tabletop 200ppm Chlorine Disinfection", fieldType: "boolean", value: true, isConforming: true },
-          { fieldId: "f_uv", label: "Cutlery UV Sterilization Chamber Timer", fieldType: "select", value: "Active (15 Min Cycle)", isConforming: true },
-          { fieldId: "f_floor", label: "Floor Auto-Scrubber Cleaning Complete", fieldType: "boolean", value: true, isConforming: true },
-          { fieldId: "f_bin", label: "Wet & Dry Waste Segregation Bins Cleared", fieldType: "boolean", value: true, isConforming: true },
-        ],
-        photos: [
-          {
-            url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80",
-            caption: "Sanitized dining hall seating area view",
-          },
-        ],
-        submissionDate: new Date(Date.now() - 60 * 60 * 1000), // 1h ago
-      },
-      {
-        checkSheet: checkSheetMap["CS-HYGN-05"],
-        department: deptMap["DEPT_KITCHEN"],
-        shift: shiftMap["SHIFT_A"],
-        submittedBy: adminUser._id,
-        status: "REJECTED",
-        complianceScore: 66,
-        hasDefects: true,
-        reviewedBy: adminUser._id,
-        reviewedAt: new Date(Date.now() - 45 * 60 * 1000),
-        rejectionReason: "Kitchen prep assistant #3 was wearing wrist jewelry and apron was stained. Must re-inspect after full attire replacement.",
-        responses: [
-          { fieldId: "f_nails", label: "Finger Nails Clipped & No Jewelry", fieldType: "boolean", value: false, isConforming: false },
-          { fieldId: "f_ppe", label: "Clean Apron, Hair Net & Beard Cover", fieldType: "boolean", value: false, isConforming: false },
-          { fieldId: "f_health", label: "Zero Symptoms of Cough, Fever, or Lesions", fieldType: "boolean", value: true, isConforming: true },
-        ],
-        photos: [
-          {
-            url: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=600&q=80",
-            caption: "Food handler personal hygiene station audit",
-          },
-        ],
-        submissionDate: new Date(Date.now() - 90 * 60 * 1000),
-      },
-    ];
+        { upsert: true, returnDocument: "after", setDefaultsOnInsert: true }
+      );
+    }
+  }
+  console.log("✓ Sample Department-wise Tea Counts seeded");
 
-    await Submission.insertMany(sampleSubmissions);
-    console.log("✓ Operational Submissions seeded:", sampleSubmissions.length);
-  } else {
-    console.log("✓ Submissions already present in database:", existingSubmissionsCount);
+  // 7. Pre-seed Report Recipients (Whose Mail & WhatsApp to send reports to)
+  const sampleRecipients = [
+    {
+      name: "Ramesh Kulkarni",
+      email: "canteen.admin@bajaj.com",
+      whatsapp: "+91 98000 00001",
+      frequency: "BOTH",
+      sendDailyReport: true,
+      sendMonthlyReport: true,
+      departmentName: "All Departments",
+      isActive: true,
+    },
+    {
+      name: "Rajesh Sharma",
+      email: "supervisor@bajaj.com",
+      whatsapp: "+91 98000 00002",
+      frequency: "DAILY",
+      sendDailyReport: true,
+      sendMonthlyReport: false,
+      departmentName: "Engine Assembly",
+      isActive: true,
+    },
+    {
+      name: "Amit Deshmukh (FE Manager)",
+      email: "plantlead@bajaj.com",
+      whatsapp: "+91 98000 00003",
+      frequency: "BOTH",
+      sendDailyReport: true,
+      sendMonthlyReport: true,
+      departmentName: "Plant Operations",
+      isActive: true,
+    },
+  ];
+
+  for (const r of sampleRecipients) {
+    await ReportRecipient.findOneAndUpdate({ email: r.email }, r, {
+      upsert: true,
+      returnDocument: "after",
+      setDefaultsOnInsert: true,
+    });
+  }
+  console.log("✓ Report Recipients (Mail & WhatsApp) seeded");
+
+  // 8. Pre-seed Notifications (Receive & Send across WhatsApp, Email, Normal)
+  const sampleNotifications = [
+    {
+      title: "Daily Tea Distribution Report Sent",
+      message: "Daily tea summary report dispatched to FE Manager & Canteen In-charge via WhatsApp. Total: 970 cups.",
+      channel: "WHATSAPP",
+      direction: "OUTGOING",
+      recipient: "+91 98000 00001, +91 98000 00003",
+      sender: "Automated System",
+      status: "DELIVERED",
+      isRead: true,
+      priority: "NORMAL",
+    },
+    {
+      title: "Daily Checksheet Summary Dispatched",
+      message: "All 6 Daily JH checksheets filled and submitted for today. Consolidated PDF report emailed.",
+      channel: "EMAIL",
+      direction: "OUTGOING",
+      recipient: "plantlead@bajaj.com, canteen.admin@bajaj.com",
+      sender: "Automated Reporting",
+      status: "SENT",
+      isRead: true,
+      priority: "NORMAL",
+    },
+    {
+      title: "Equipment Inspection Alert: Deep Freezer",
+      message: "Deep Freezer temperature verified at -19°C (Within standard condition <= -18°C).",
+      channel: "NORMAL",
+      direction: "INCOMING",
+      recipient: "Canteen Admin Console",
+      sender: "Ramesh Pawar (Operator)",
+      status: "RECEIVED",
+      isRead: false,
+      priority: "LOW",
+    },
+    {
+      title: "⚠️ PNG Gas Line Pressure Verified",
+      message: "Four Burner Range PNG leak check completed with soap solution - zero bubbles, pressure normal.",
+      channel: "NORMAL",
+      direction: "INCOMING",
+      recipient: "Canteen Admin Console",
+      sender: "FE Technician",
+      status: "RECEIVED",
+      isRead: false,
+      priority: "NORMAL",
+    },
+  ];
+
+  for (const n of sampleNotifications) {
+    await Notification.findOneAndUpdate({ title: n.title }, n, {
+      upsert: true,
+      returnDocument: "after",
+      setDefaultsOnInsert: true,
+    });
+  }
+  console.log("✓ 2-Way Notifications seeded");
+
+  // 9. Pre-seed Submissions so Checksheet Fill-up Chart shows real data today!
+  const adminUser = await User.findOne({ email: "admin@bajaj.com" });
+  const operatorUser = await User.findOne({ email: "operator@bajaj.com" });
+  const checksheetsList = await CheckSheet.find();
+
+  if (operatorUser && checksheetsList.length > 0) {
+    // Submit 4 checksheets as completed today so chart has Filled vs Pending!
+    for (let i = 0; i < Math.min(4, checksheetsList.length); i++) {
+      const cs = checksheetsList[i];
+      const existing = await Submission.findOne({ checkSheet: cs._id, shift: shiftMap["SHIFT_A"] });
+      if (!existing) {
+        await Submission.create({
+          checkSheet: cs._id,
+          checkSheetCode: cs.code,
+          checkSheetTitle: cs.title,
+          department: cs.department,
+          shift: shiftMap["SHIFT_A"],
+          submittedBy: operatorUser._id,
+          status: "APPROVED",
+          reviewedBy: adminUser?._id,
+          reviewedAt: new Date(),
+          answers: [
+            { fieldId: cs.fields[0]?.fieldId || "f1", label: cs.fields[0]?.label || "Item 1", value: "✔️ Ok", isPassed: true },
+            { fieldId: cs.fields[1]?.fieldId || "f2", label: cs.fields[1]?.label || "Item 2", value: "✔️ Ok", isPassed: true },
+          ],
+          signature: "Ramesh Pawar",
+          digitalSignatureHash: "a7f34b29c91d8e6a12b4e5f7c89a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a",
+        });
+      }
+    }
+    console.log("✓ Sample Completed Checksheets seeded for today's chart");
   }
 
-  console.log("Master database seeding complete!");
-}
-
-// Allow direct execution: node -r dotenv/config src/lib/seed.js
-if (process.argv[1] && process.argv[1].endsWith("seed.js")) {
-  seedDatabase()
-    .then(() => process.exit(0))
-    .catch((err) => {
-      console.error("Seeding failed:", err);
-      process.exit(1);
-    });
+  console.log("==================================================");
+  console.log("MASTER DATA RE-SEED COMPLETE (Aligned to Handwritten Requirements)");
+  console.log("==================================================");
 }

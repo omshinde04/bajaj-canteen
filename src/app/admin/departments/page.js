@@ -146,18 +146,20 @@ export default function DepartmentsPage() {
   return (
     <div className="space-y-6 pb-12">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl md:text-2xl font-bold tracking-tight text-white">
-              Plant Departments & Facilities
-            </h1>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#CDFE02] text-[#101010]">
-              Module 15
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#CDFE02] animate-pulse" />
+            <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-[#CDFE02]">
+              Point 7: Factory Departments (हे फक्त count साठी)
             </span>
           </div>
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+            <Building2 className="w-6 h-6 text-[#CDFE02]" />
+            <span>Departments Master</span>
+          </h1>
           <p className="text-xs text-zinc-400 mt-1">
-            Manage factory food prep zones, cold storage units, dining areas, and hygiene stations at Akurdi Facility.
+            Add, update, delete factory departments (Engine Assembly, Vehicle Assembly, Machine Shop, etc.) specifically for count tracking.
           </p>
         </div>
 

@@ -219,18 +219,20 @@ export default function UsersPage() {
   return (
     <div className="space-y-6 pb-12">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl md:text-2xl font-bold tracking-tight text-white">
-              User & Role-Based Access Control (RBAC)
-            </h1>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#CDFE02] text-[#101010]">
-              Module 3
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#CDFE02] animate-pulse" />
+            <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-[#CDFE02]">
+              Point 1: All Access — (Admin, Operator)
             </span>
           </div>
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+            <Users className="w-6 h-6 text-[#CDFE02]" />
+            <span>User Access Management</span>
+          </h1>
           <p className="text-xs text-zinc-400 mt-1">
-            Manage factory plant personnel, floor supervisors, line operators, and granular access permissions across Akurdi Plant.
+            Add, update, delete Admin and Operator accounts with credentials and department bindings.
           </p>
         </div>
 
