@@ -54,26 +54,6 @@ export default function OperatorSidebar() {
           badge: "Active",
           badgeColor: "bg-[#CDFE02] text-[#101010]",
         },
-        {
-          label: "My Submissions",
-          href: "/operator/history",
-          icon: CheckCircle2,
-        },
-      ],
-    },
-    {
-      group: "Shift & Incident Triage",
-      items: [
-        {
-          label: "Shift Handover Log",
-          href: "/operator/handover",
-          icon: ArrowRightLeft,
-        },
-        {
-          label: "Incident & Defect Log",
-          href: "/operator/incidents",
-          icon: AlertTriangle,
-        },
       ],
     },
   ];
@@ -83,16 +63,11 @@ export default function OperatorSidebar() {
       group: "Elevated Controls",
       items: [
         {
-          label: "Supervisor Console",
+          label: "Admin Dashboard",
           href: "/admin/dashboard",
           icon: ShieldCheck,
           badge: "Admin",
           badgeColor: "bg-[#5733F0] text-white",
-        },
-        {
-          label: "Approval Queue",
-          href: "/admin/submissions",
-          icon: FileSpreadsheet,
         },
       ],
     });
