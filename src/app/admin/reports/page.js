@@ -1,6 +1,18 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Spinner, LoaderBlock } from "@/components/ui/loader";
 import {
   FileText,
   FileDown,
@@ -123,7 +135,7 @@ export default function ReportsAndDownloadsPage() {
           <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
             <button
               onClick={() => setReportType("daily")}
-              className={`px-3 py-1.5 rounded-lg font-medium transition ${
+              className={`px-3 py-1.5 rounded-lg font-medium transition cursor-pointer ${
                 reportType === "daily"
                   ? "bg-white text-indigo-700 font-semibold shadow-xs"
                   : "text-slate-600 hover:text-slate-900"
@@ -133,7 +145,7 @@ export default function ReportsAndDownloadsPage() {
             </button>
             <button
               onClick={() => setReportType("monthly")}
-              className={`px-3 py-1.5 rounded-lg font-medium transition ${
+              className={`px-3 py-1.5 rounded-lg font-medium transition cursor-pointer ${
                 reportType === "monthly"
                   ? "bg-white text-indigo-700 font-semibold shadow-xs"
                   : "text-slate-600 hover:text-slate-900"
@@ -161,34 +173,39 @@ export default function ReportsAndDownloadsPage() {
           )}
 
           {/* Download Buttons */}
-          <button
+          <Button
+            variant="success"
+            size="default"
             onClick={handleDownloadExcel}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-xs"
           >
             <FileSpreadsheet className="w-4 h-4" />
             <span>Download Excel</span>
-          </button>
+          </Button>
 
-          <button
+          <Button
+            variant="outline"
+            size="default"
             onClick={() => window.print()}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-medium text-xs transition border border-slate-200 shadow-xs"
           >
             <Printer className="w-4 h-4 text-slate-500" />
             <span>Print / PDF</span>
-          </button>
+          </Button>
 
-          <button
+          <Button
+            variant="outline"
+            size="icon"
             onClick={fetchReports}
-            className="p-2 rounded-xl bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition border border-slate-200 shadow-xs"
+            disabled={loading}
             title="Refresh"
+            className="h-9 w-9"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-indigo-600" : ""}`} />
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* REPORT CONTENT (PRINTABLE) */}
-      <div className="space-y-6 bg-white border border-slate-200 rounded-2xl p-6 shadow-xs print:border-none print:p-0 print:bg-white">
+      <Card className="space-y-6 p-6 print:border-none print:p-0 print:bg-white">
         {/* Printable Title Block */}
         <div className="border-b border-slate-200 pb-4 print:border-b-2 print:border-black flex items-center justify-between">
           <div>
@@ -199,9 +216,9 @@ export default function ReportsAndDownloadsPage() {
               Period: {data?.period} • Facility: Akurdi Industrial Complex
             </p>
           </div>
-          <span className="px-3 py-1 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-mono font-bold print:hidden">
+          <Badge variant="indigo" className="print:hidden">
             Official System Report
-          </span>
+          </Badge>
         </div>
 
         {/* 1. EXECUTIVE SUMMARY NUMBERS */}
@@ -271,45 +288,45 @@ export default function ReportsAndDownloadsPage() {
           </h3>
 
           <div className="overflow-x-auto border border-slate-200 rounded-xl">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-semibold uppercase text-[10px] border-b border-slate-200">
-                <tr>
-                  <th className="py-2.5 px-4">Code</th>
-                  <th className="py-2.5 px-4">Equipment / Check Sheet Name</th>
-                  <th className="py-2.5 px-4">Category</th>
-                  <th className="py-2.5 px-4">SLA Target</th>
-                  <th className="py-2.5 px-4 text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Code</TableHead>
+                  <TableHead>Equipment / Check Sheet Name</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead>SLA Target</TableHead>
+                  <TableHead className="text-right">Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {data?.checksheets?.map((cs, idx) => {
                   const isFilled = idx < (data?.summary?.filledChecksheets || 0);
                   return (
-                    <tr key={cs._id} className="hover:bg-slate-50/50">
-                      <td className="py-2.5 px-4 font-mono font-bold text-indigo-600">{cs.code}</td>
-                      <td className="py-2.5 px-4 font-semibold text-slate-900">{cs.title}</td>
-                      <td className="py-2.5 px-4 text-slate-500">{cs.category || "-"}</td>
-                      <td className="py-2.5 px-4 text-slate-500">{cs.slaHours ? `${cs.slaHours}h target` : "Daily"}</td>
-                      <td className="py-2.5 px-4 text-right">
+                    <TableRow key={cs._id}>
+                      <TableCell className="font-mono font-bold text-indigo-600">{cs.code}</TableCell>
+                      <TableCell className="font-semibold text-slate-900">{cs.title}</TableCell>
+                      <TableCell className="text-slate-500">{cs.category || "-"}</TableCell>
+                      <TableCell className="text-slate-500">{cs.slaHours ? `${cs.slaHours}h target` : "Daily"}</TableCell>
+                      <TableCell className="text-right">
                         {isFilled ? (
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          <Badge variant="success">
                             Filled Up
-                          </span>
+                          </Badge>
                         ) : (
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                          <Badge variant="warning">
                             Pending
-                          </span>
+                          </Badge>
                         )}
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   );
                 })}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </div>
 
-      </div>
+      </Card>
     </div>
   );
 }

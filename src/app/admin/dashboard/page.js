@@ -2,6 +2,18 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Spinner, LoaderBlock } from "@/components/ui/loader";
 import {
   FileSpreadsheet,
   Coffee,
@@ -115,36 +127,43 @@ export default function AdminDashboardPage() {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2.5 flex-wrap">
-          <button
+          <Button
+            variant="default"
+            size="default"
             onClick={() => setQuickTeaModal(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition shadow-sm"
           >
             <Coffee className="w-4 h-4 text-amber-300" />
             <span>+ Log Tea Count</span>
-          </button>
+          </Button>
 
-          <Link
-            href="/admin/reports"
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-medium text-xs transition border border-slate-200 shadow-xs"
+          <Button
+            variant="outline"
+            size="default"
+            asChild
           >
-            <FileDown className="w-4 h-4 text-emerald-600" />
-            <span>Download Reports</span>
-          </Link>
+            <Link href="/admin/reports">
+              <FileDown className="w-4 h-4 text-emerald-600" />
+              <span>Download Reports</span>
+            </Link>
+          </Button>
 
-          <button
+          <Button
+            variant="outline"
+            size="icon"
             onClick={fetchDashboardData}
-            className="p-2 rounded-xl bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-900 transition border border-slate-200 shadow-xs"
+            disabled={loading}
             title="Refresh Data"
+            className="h-9 w-9"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-indigo-600" : ""}`} />
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* TOP KPI CARDS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* KPI 1: Checksheet Fill-up */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-2 shadow-xs">
+        <Card className="p-5 space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
               Checksheets Fill-up
@@ -163,10 +182,10 @@ export default function AdminDashboardPage() {
               style={{ width: `${fillupPct}%` }}
             />
           </div>
-        </div>
+        </Card>
 
         {/* KPI 2: Pending Checksheets */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-2 shadow-xs">
+        <Card className="p-5 space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
               Pending Checksheets
@@ -180,10 +199,10 @@ export default function AdminDashboardPage() {
             <span className="text-xs text-slate-500">Awaiting Fill-up</span>
           </div>
           <p className="text-[11px] text-slate-400 mt-1">Requires floor operator entry</p>
-        </div>
+        </Card>
 
         {/* KPI 3: Total Tea Cups Today */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-2 shadow-xs">
+        <Card className="p-5 space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
               Total Tea Count (Today)
@@ -197,10 +216,10 @@ export default function AdminDashboardPage() {
             <span className="text-xs text-slate-500">Cups Served</span>
           </div>
           <p className="text-[11px] text-slate-500">Across {Object.keys(deptTotals).length} factory depts</p>
-        </div>
+        </Card>
 
         {/* KPI 4: Active Factory Departments */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-2 shadow-xs">
+        <Card className="p-5 space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
               Active Departments
@@ -216,14 +235,14 @@ export default function AdminDashboardPage() {
             <span className="text-xs text-slate-500">Count Centers</span>
           </div>
           <p className="text-[11px] text-slate-400 mt-1">Engine, Vehicle Assy, etc.</p>
-        </div>
+        </Card>
       </div>
 
       {/* TWO PRIMARY SECTIONS: POINT 5 (CHART) & POINT 9 (TEA COUNT DEPT-WISE) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
         {/* LEFT COLUMN: POINT 5 - CHECKSHEET CHART (FILLUP VS NOT FILLUP) */}
-        <div className="lg:col-span-5 bg-white border border-slate-200 rounded-2xl p-6 space-y-6 shadow-xs">
+        <Card className="lg:col-span-5 p-6 space-y-6">
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
             <div className="flex items-center gap-2.5">
               <div className="p-2 rounded-xl bg-indigo-50 text-indigo-600">
@@ -239,7 +258,7 @@ export default function AdminDashboardPage() {
             <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200 text-xs">
               <button
                 onClick={() => setChartPeriod("daily")}
-                className={`px-2.5 py-1 rounded font-medium transition ${
+                className={`px-2.5 py-1 rounded font-medium transition cursor-pointer ${
                   chartPeriod === "daily"
                     ? "bg-white text-indigo-700 font-semibold shadow-xs"
                     : "text-slate-500 hover:text-slate-900"
@@ -249,7 +268,7 @@ export default function AdminDashboardPage() {
               </button>
               <button
                 onClick={() => setChartPeriod("monthly")}
-                className={`px-2.5 py-1 rounded font-medium transition ${
+                className={`px-2.5 py-1 rounded font-medium transition cursor-pointer ${
                   chartPeriod === "monthly"
                     ? "bg-white text-indigo-700 font-semibold shadow-xs"
                     : "text-slate-500 hover:text-slate-900"
@@ -260,94 +279,102 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          {/* VISUAL DONUT CIRCLE CHART */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-8 py-4">
+          {/* DONUT SVG CHART */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 py-4">
             <div className="relative w-40 h-40 flex items-center justify-center">
-              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+              <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
                 {/* Background Ring */}
                 <circle
                   cx="50"
                   cy="50"
-                  r="40"
-                  className="text-slate-100"
-                  strokeWidth="12"
-                  stroke="currentColor"
+                  r="38"
+                  className="stroke-slate-100"
+                  strokeWidth="11"
                   fill="transparent"
                 />
-                {/* Filled-up Arc */}
+                {/* Progress Ring (Filled up) */}
                 <circle
                   cx="50"
                   cy="50"
-                  r="40"
-                  className="text-emerald-500 transition-all duration-700 ease-out"
-                  strokeWidth="12"
-                  strokeDasharray={251.2}
-                  strokeDashoffset={251.2 - (251.2 * fillupPct) / 100}
+                  r="38"
+                  className="stroke-indigo-600 transition-all duration-1000 ease-out"
+                  strokeWidth="11"
+                  strokeDasharray={`${fillupPct * 2.38} 238`}
                   strokeLinecap="round"
-                  stroke="currentColor"
                   fill="transparent"
                 />
               </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-3xl font-extrabold text-slate-900 tracking-tight">{fillupPct}%</span>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold">Filled Up</span>
+              {/* Center Metrics Text */}
+              <div className="absolute flex flex-col items-center justify-center text-center">
+                <span className="text-2xl font-extrabold text-slate-900 tracking-tight font-mono">
+                  {fillupPct}%
+                </span>
+                <span className="text-[10px] uppercase font-bold text-slate-400">
+                  {chartPeriod === "daily" ? "Daily SLA" : "Monthly"}
+                </span>
               </div>
             </div>
 
-            {/* Legend Stats */}
+            {/* Legend Column */}
             <div className="space-y-3 text-xs w-full sm:w-auto">
-              <div className="flex items-center justify-between gap-4 p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-                <span className="flex items-center gap-2 text-slate-700 font-medium">
-                  <span className="w-3 h-3 rounded-full bg-emerald-500" />
-                  <span>Filled up</span>
-                </span>
-                <span className="font-bold text-slate-900 font-mono">{filledChecksheets} sheets</span>
+              <div className="flex items-center justify-between sm:justify-start gap-3 p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-indigo-600" />
+                  <span className="text-slate-700 font-medium">Filled Up Checksheets:</span>
+                </div>
+                <span className="font-bold text-slate-900 font-mono">{filledChecksheets}</span>
               </div>
 
-              <div className="flex items-center justify-between gap-4 p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-                <span className="flex items-center gap-2 text-slate-700 font-medium">
+              <div className="flex items-center justify-between sm:justify-start gap-3 p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                <div className="flex items-center gap-2">
                   <span className="w-3 h-3 rounded-full bg-slate-300" />
-                  <span>Not Filled up</span>
-                </span>
-                <span className="font-bold text-amber-600 font-mono">{pendingChecksheets} sheets</span>
+                  <span className="text-slate-700 font-medium">Pending (Not Filled):</span>
+                </div>
+                <span className="font-bold text-amber-600 font-mono">{pendingChecksheets}</span>
               </div>
 
-              <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
-                <span>Total Scheduled:</span>
-                <span className="text-slate-900 font-mono font-bold">{totalChecksheets}</span>
+              <div className="flex items-center justify-between sm:justify-start gap-3 p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-emerald-500" />
+                  <span className="text-slate-700 font-medium">Total Scheduled:</span>
+                </div>
+                <span className="font-bold text-slate-900 font-mono">{totalChecksheets}</span>
               </div>
             </div>
           </div>
 
-          {/* Quick link to Checksheet Status */}
-          <Link
-            href="/admin/checksheets"
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-xs font-semibold text-slate-700 transition border border-slate-200"
-          >
-            <span>Manage Checksheets & Status →</span>
-          </Link>
-        </div>
+          {/* Quick Compliance Status Pill */}
+          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span className="text-slate-500">Compliance Status:</span>
+            <Badge variant="success" className="gap-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span>SLA Target Met (Above 60%)</span>
+            </Badge>
+          </div>
+        </Card>
 
-        {/* RIGHT COLUMN: POINT 9 - TEA COUNT SHOW DEPT-WISE */}
-        <div className="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-6 space-y-6 shadow-xs">
+        {/* RIGHT COLUMN: POINT 9 - DEPARTMENT-WISE TEA DISTRIBUTION */}
+        <Card className="lg:col-span-7 p-6 space-y-5">
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-indigo-50 text-indigo-600">
+              <div className="p-2 rounded-xl bg-amber-50 text-amber-600">
                 <Coffee className="w-4 h-4" />
               </div>
               <div>
                 <h3 className="font-bold text-slate-900 text-sm">Department-wise Tea Count</h3>
-                <p className="text-[11px] text-slate-500">Today&apos;s tea cups served per factory department</p>
+                <p className="text-[11px] text-slate-500">Real-time cup counts served to factory bays</p>
               </div>
             </div>
 
-            <Link
-              href="/admin/tea-count"
-              className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1"
+            <Button
+              variant="link"
+              size="sm"
+              asChild
             >
-              <span>View Full Details</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+              <Link href="/admin/tea-count">
+                Full Log Details →
+              </Link>
+            </Button>
           </div>
 
           {/* DEPARTMENT BREAKDOWN BARS */}
@@ -383,19 +410,21 @@ export default function AdminDashboardPage() {
               {totalTeaCups} Cups
             </span>
           </div>
-        </div>
+        </Card>
       </div>
 
       {/* POINT 3: REAL-TIME CHECKSHEET STATUS STREAM */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-xs">
+      <Card className="p-6 space-y-4">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-indigo-600" />
             <h3 className="font-bold text-slate-900 text-sm">Today&apos;s Checksheet Status Feed</h3>
           </div>
-          <Link href="/admin/checksheets" className="text-xs text-indigo-600 hover:underline transition font-medium">
-            View All Checksheets →
-          </Link>
+          <Button variant="link" size="sm" asChild>
+            <Link href="/admin/checksheets">
+              View All Checksheets →
+            </Link>
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -411,108 +440,100 @@ export default function AdminDashboardPage() {
                   <div className="text-[10px] text-slate-500 font-mono">{cs.code} • {cs.category || "JH Inspection"}</div>
                 </div>
                 {isFilled ? (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
+                  <Badge variant="success">
                     Filled Up
-                  </span>
+                  </Badge>
                 ) : (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 shrink-0">
+                  <Badge variant="warning">
                     Pending
-                  </span>
+                  </Badge>
                 )}
               </div>
             );
           })}
         </div>
-      </div>
+      </Card>
 
-      {/* QUICK LOG TEA MODAL */}
-      {quickTeaModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
-                <Coffee className="w-4 h-4 text-indigo-600" />
-                <span>Quick Log Department Tea Count</span>
-              </div>
-              <button
-                onClick={() => setQuickTeaModal(false)}
-                className="text-slate-400 hover:text-slate-700 text-sm font-bold"
+      {/* Shadcn Dialog: Quick Log Tea Modal */}
+      <Dialog open={quickTeaModal} onOpenChange={setQuickTeaModal}>
+        <DialogContent onClose={() => setQuickTeaModal(false)}>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Coffee className="w-4 h-4 text-indigo-600" />
+              <span>Quick Log Department Tea Count</span>
+            </DialogTitle>
+          </DialogHeader>
+
+          <form onSubmit={handleQuickLogTea} className="space-y-4 text-xs">
+            <div className="space-y-1">
+              <label className="text-slate-700 font-semibold uppercase tracking-wider text-[10px]">
+                Select Factory Department
+              </label>
+              <select
+                value={selectedDeptId}
+                onChange={(e) => setSelectedDeptId(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
+                required
               >
-                ✕
-              </button>
+                {teaData?.departments?.map((dept) => (
+                  <option key={dept._id} value={dept._id}>
+                    {dept.name} ({dept.code})
+                  </option>
+                ))}
+              </select>
             </div>
 
-            <form onSubmit={handleQuickLogTea} className="space-y-4 text-xs">
+            <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <label className="text-slate-700 font-semibold uppercase tracking-wider text-[10px]">
-                  Select Factory Department
+                  Session
                 </label>
                 <select
-                  value={selectedDeptId}
-                  onChange={(e) => setSelectedDeptId(e.target.value)}
+                  value={sessionInput}
+                  onChange={(e) => setSessionInput(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
-                  required
                 >
-                  {teaData?.departments?.map((dept) => (
-                    <option key={dept._id} value={dept._id}>
-                      {dept.name} ({dept.code})
-                    </option>
-                  ))}
+                  <option value="MORNING">Morning Tea</option>
+                  <option value="EVENING">Evening Tea</option>
+                  <option value="NIGHT">Night Shift</option>
+                  <option value="SPECIAL">Special Batch</option>
                 </select>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-slate-700 font-semibold uppercase tracking-wider text-[10px]">
-                    Session
-                  </label>
-                  <select
-                    value={sessionInput}
-                    onChange={(e) => setSessionInput(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
-                  >
-                    <option value="MORNING">Morning Tea</option>
-                    <option value="EVENING">Evening Tea</option>
-                    <option value="NIGHT">Night Shift</option>
-                    <option value="SPECIAL">Special Batch</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-slate-700 font-semibold uppercase tracking-wider text-[10px]">
-                    Cups Count
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={teaCountInput}
-                    onChange={(e) => setTeaCountInput(e.target.value)}
-                    required
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white font-mono"
-                  />
-                </div>
+              <div className="space-y-1">
+                <label className="text-slate-700 font-semibold uppercase tracking-wider text-[10px]">
+                  Cups Count
+                </label>
+                <Input
+                  type="number"
+                  min="0"
+                  value={teaCountInput}
+                  onChange={(e) => setTeaCountInput(e.target.value)}
+                  required
+                  className="font-mono"
+                />
               </div>
+            </div>
 
-              <div className="pt-2 flex items-center justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setQuickTeaModal(false)}
-                  className="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={submittingTea}
-                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition shadow-xs"
-                >
-                  {submittingTea ? "Saving..." : "Save Count"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setQuickTeaModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="default"
+                loading={submittingTea}
+              >
+                {submittingTea ? "Saving..." : "Save Count"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

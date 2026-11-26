@@ -1,6 +1,18 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Spinner, LoaderBlock } from "@/components/ui/loader";
 import {
   BellRing,
   Send,
@@ -115,31 +127,38 @@ export default function NotificationsPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
+          <Button
+            variant="default"
+            size="default"
             onClick={() => setModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition shadow-xs"
           >
             <Send className="w-4 h-4 text-white" />
             <span>+ Send Notification</span>
-          </button>
-          <button
+          </Button>
+
+          <Button
+            variant="outline"
+            size="default"
             onClick={handleMarkAllRead}
-            className="px-3 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium border border-slate-200 shadow-xs"
           >
             Mark All Read
-          </button>
-          <button
+          </Button>
+
+          <Button
+            variant="outline"
+            size="icon"
             onClick={fetchNotifications}
-            className="p-2 rounded-xl bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition border border-slate-200 shadow-xs"
+            disabled={loading}
             title="Refresh"
+            className="h-9 w-9"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-indigo-600" : ""}`} />
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* FILTERS */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-white border border-slate-200 rounded-2xl p-4 shadow-xs">
+      <Card className="flex flex-wrap items-center justify-between gap-3 p-4">
         {/* Channel Filter */}
         <div className="flex items-center gap-1.5 text-xs">
           <span className="text-slate-500 font-semibold mr-1">Channel:</span>
@@ -147,7 +166,7 @@ export default function NotificationsPage() {
             <button
               key={ch}
               onClick={() => setFilterChannel(ch)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer ${
                 filterChannel === ch
                   ? "bg-indigo-600 text-white font-semibold shadow-xs"
                   : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -165,7 +184,7 @@ export default function NotificationsPage() {
             <button
               key={dir}
               onClick={() => setFilterDirection(dir)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer ${
                 filterDirection === dir
                   ? "bg-slate-800 text-white font-semibold shadow-xs"
                   : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -175,16 +194,16 @@ export default function NotificationsPage() {
             </button>
           ))}
         </div>
-      </div>
+      </Card>
 
       {/* NOTIFICATION FEED */}
       <div className="space-y-3">
         {loading ? (
-          <div className="p-12 text-center text-slate-400 text-xs">Loading notifications...</div>
+          <LoaderBlock text="Loading notifications..." />
         ) : notifications.length === 0 ? (
-          <div className="p-12 text-center text-slate-400 text-xs bg-white border border-slate-200 rounded-2xl">
+          <Card className="p-12 text-center text-slate-400 text-xs">
             No notifications found for this filter.
-          </div>
+          </Card>
         ) : (
           notifications.map((n) => {
             const isWhatsApp = n.channel === "WHATSAPP";
@@ -222,15 +241,15 @@ export default function NotificationsPage() {
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <h4 className="font-bold text-slate-900 text-xs">{n.title}</h4>
-                      <span
-                        className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold ${
-                          isIncoming
-                            ? "bg-amber-50 text-amber-700 border border-amber-200"
-                            : "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                        }`}
-                      >
-                        {isIncoming ? "RECEIVED ALERT" : "SENT DISPATCH"}
-                      </span>
+                      {isIncoming ? (
+                        <Badge variant="warning">
+                          RECEIVED ALERT
+                        </Badge>
+                      ) : (
+                        <Badge variant="success">
+                          SENT DISPATCH
+                        </Badge>
+                      )}
                       <span className="text-[10px] text-slate-400 font-mono">
                         via {n.channel} • {new Date(n.createdAt).toLocaleTimeString()}
                       </span>
@@ -246,111 +265,106 @@ export default function NotificationsPage() {
                   </div>
                 </div>
 
-                <button
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={() => handleDelete(n._id)}
-                  className="text-slate-400 hover:text-rose-600 transition p-1"
                   title="Delete"
+                  className="h-8 w-8 text-slate-400 hover:text-rose-600"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
-                </button>
+                </Button>
               </div>
             );
           })
         )}
       </div>
 
-      {/* SEND NOTIFICATION MODAL */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-xl animate-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-              <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
-                <Send className="w-4 h-4 text-indigo-600" />
-                <span>Send Notification (Broadcast)</span>
-              </div>
-              <button onClick={() => setModalOpen(false)} className="text-slate-400 hover:text-slate-700 text-sm">
-                ✕
-              </button>
+      {/* Shadcn Dialog: Send Notification */}
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent onClose={() => setModalOpen(false)}>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Send className="w-4 h-4 text-indigo-600" />
+              <span>Send Notification (Broadcast)</span>
+            </DialogTitle>
+          </DialogHeader>
+
+          <form onSubmit={handleSendNotification} className="space-y-4 text-xs">
+            <div className="space-y-1">
+              <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                Channel (WhatsApp / Mail / In-App)
+              </label>
+              <select
+                value={formData.channel}
+                onChange={(e) => setFormData({ ...formData, channel: e.target.value })}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
+              >
+                <option value="NORMAL">Normal (In-App Notification)</option>
+                <option value="WHATSAPP">WhatsApp Notification</option>
+                <option value="EMAIL">Email Alert</option>
+              </select>
             </div>
 
-            <form onSubmit={handleSendNotification} className="space-y-4 text-xs">
-              <div className="space-y-1">
-                <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
-                  Channel (WhatsApp / Mail / In-App)
-                </label>
-                <select
-                  value={formData.channel}
-                  onChange={(e) => setFormData({ ...formData, channel: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
-                >
-                  <option value="NORMAL">Normal (In-App Notification)</option>
-                  <option value="WHATSAPP">WhatsApp Notification</option>
-                  <option value="EMAIL">Email Alert</option>
-                </select>
-              </div>
+            <div className="space-y-1">
+              <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                Target Recipient
+              </label>
+              <Input
+                type="text"
+                required
+                placeholder="e.g. All Staff, or +91 98000 00001, or plantlead@bajaj.com"
+                value={formData.recipient}
+                onChange={(e) => setFormData({ ...formData, recipient: e.target.value })}
+              />
+            </div>
 
-              <div className="space-y-1">
-                <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
-                  Target Recipient
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. All Staff, or +91 98000 00001, or plantlead@bajaj.com"
-                  value={formData.recipient}
-                  onChange={(e) => setFormData({ ...formData, recipient: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
-                />
-              </div>
+            <div className="space-y-1">
+              <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                Subject / Title
+              </label>
+              <Input
+                type="text"
+                required
+                placeholder="e.g. Morning Tea count updated for Engine Assembly"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              />
+            </div>
 
-              <div className="space-y-1">
-                <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
-                  Subject / Title
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Morning Tea count updated for Engine Assembly"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
-                />
-              </div>
+            <div className="space-y-1">
+              <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                Message Content
+              </label>
+              <textarea
+                required
+                rows={3}
+                placeholder="Enter message to send..."
+                value={formData.message}
+                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
+              />
+            </div>
 
-              <div className="space-y-1">
-                <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
-                  Message Content
-                </label>
-                <textarea
-                  required
-                  rows={3}
-                  placeholder="Enter message to send..."
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
-                />
-              </div>
-
-              <div className="pt-2 flex items-center justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
-                  className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition shadow-xs"
-                >
-                  {submitting ? "Sending..." : "Send Notification"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="default"
+                loading={submitting}
+              >
+                {submitting ? "Sending..." : "Send Notification"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

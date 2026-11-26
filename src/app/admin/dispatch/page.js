@@ -1,6 +1,18 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Spinner, LoaderBlock } from "@/components/ui/loader";
 import {
   MailCheck,
   Plus,
@@ -158,20 +170,25 @@ export default function ReportDispatchPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
+          <Button
+            variant="default"
+            size="default"
             onClick={openCreateModal}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition shadow-xs"
           >
             <Plus className="w-4 h-4 text-white" />
             <span>+ Add Report Recipient</span>
-          </button>
-          <button
+          </Button>
+
+          <Button
+            variant="outline"
+            size="icon"
             onClick={fetchRecipients}
-            className="p-2 rounded-xl bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition border border-slate-200 shadow-xs"
+            disabled={loading}
             title="Refresh"
+            className="h-9 w-9"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-indigo-600" : ""}`} />
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -186,18 +203,16 @@ export default function ReportDispatchPage() {
       {/* RECIPIENTS CARDS GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {loading ? (
-          <div className="col-span-full py-12 text-center text-slate-400 text-xs">
-            Loading recipient configuration...
-          </div>
+          <LoaderBlock text="Loading recipient configuration..." />
         ) : recipients.length === 0 ? (
-          <div className="col-span-full py-12 text-center text-slate-400 text-xs bg-white border border-slate-200 rounded-2xl">
-            No recipients configured yet. Click "+ Add Report Recipient" above.
-          </div>
+          <Card className="col-span-full py-12 text-center text-slate-400 text-xs">
+            No recipients configured yet. Click &quot;+ Add Report Recipient&quot; above.
+          </Card>
         ) : (
           recipients.map((r) => (
-            <div
+            <Card
               key={r._id}
-              className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 hover:border-slate-300 transition shadow-xs flex flex-col justify-between"
+              className="p-5 space-y-4 hover:border-slate-300 transition flex flex-col justify-between"
             >
               <div className="space-y-3">
                 <div className="flex items-start justify-between">
@@ -208,9 +223,9 @@ export default function ReportDispatchPage() {
                       {r.departmentName || "All Departments"}
                     </span>
                   </div>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                  <Badge variant="indigo" className="font-mono">
                     {r.frequency}
-                  </span>
+                  </Badge>
                 </div>
 
                 {/* Email & WhatsApp Details */}
@@ -228,158 +243,155 @@ export default function ReportDispatchPage() {
                 {/* Badges for Daily / Monthly */}
                 <div className="flex items-center gap-2 text-[10px]">
                   {r.sendDailyReport && (
-                    <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">
+                    <Badge variant="success">
                       Daily Report (Active)
-                    </span>
+                    </Badge>
                   )}
                   {r.sendMonthlyReport && (
-                    <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 font-medium">
+                    <Badge variant="indigo">
                       Monthly Report (Active)
-                    </span>
+                    </Badge>
                   )}
                 </div>
               </div>
 
               {/* Actions Footer */}
               <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                <button
+                <Button
+                  variant="link"
+                  size="sm"
                   onClick={() => handleSendTestReport(r)}
                   disabled={testSending === r._id}
-                  className="flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-800 font-semibold"
+                  className="p-0 h-auto text-indigo-600 font-semibold"
                 >
-                  <Send className={`w-3.5 h-3.5 ${testSending === r._id ? "animate-spin" : ""}`} />
+                  <Send className={`w-3.5 h-3.5 mr-1 ${testSending === r._id ? "animate-spin" : ""}`} />
                   <span>{testSending === r._id ? "Dispatching..." : "Send Test Report"}</span>
-                </button>
+                </Button>
 
                 <div className="flex items-center gap-1">
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={() => openEditModal(r)}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
                     title="Edit"
+                    className="h-8 w-8 text-slate-400 hover:text-slate-700"
                   >
                     <Edit2 className="w-3.5 h-3.5" />
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={() => handleDelete(r._id, r.name)}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
                     title="Delete"
+                    className="h-8 w-8 text-slate-400 hover:text-rose-600"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                  </Button>
                 </div>
               </div>
-            </div>
+            </Card>
           ))
         )}
       </div>
 
-      {/* CREATE / EDIT MODAL */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-xl animate-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-              <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
-                <MailCheck className="w-4 h-4 text-indigo-600" />
-                <span>{editingItem ? "Edit Report Recipient" : "Add Report Recipient"}</span>
-              </div>
-              <button onClick={() => setModalOpen(false)} className="text-slate-400 hover:text-slate-700 text-sm">
-                ✕
-              </button>
+      {/* Shadcn Dialog: Create / Edit Report Recipient */}
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent onClose={() => setModalOpen(false)}>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <MailCheck className="w-4 h-4 text-indigo-600" />
+              <span>{editingItem ? "Edit Report Recipient" : "Add Report Recipient"}</span>
+            </DialogTitle>
+          </DialogHeader>
+
+          <form onSubmit={handleSave} className="space-y-4 text-xs">
+            <div className="space-y-1">
+              <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                Recipient Name / Title
+              </label>
+              <Input
+                type="text"
+                required
+                placeholder="e.g. Ramesh Kulkarni (Canteen In-charge)"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
             </div>
 
-            <form onSubmit={handleSave} className="space-y-4 text-xs">
+            <div className="space-y-1">
+              <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                Email Address (Mail वर पाठवण्यासाठी)
+              </label>
+              <Input
+                type="email"
+                required
+                placeholder="e.g. admin@bajaj.com"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                WhatsApp Mobile Number (Whatsapp वर पाठवण्यासाठी)
+              </label>
+              <Input
+                type="text"
+                required
+                placeholder="e.g. +91 98000 00001"
+                value={formData.whatsapp}
+                onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
-                  Recipient Name / Title
+                  Frequency
                 </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Ramesh Kulkarni (Canteen In-charge)"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                <select
+                  value={formData.frequency}
+                  onChange={(e) => setFormData({ ...formData, frequency: e.target.value })}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
-                  Email Address (Mail वर पाठवण्यासाठी)
-                </label>
-                <input
-                  type="email"
-                  required
-                  placeholder="e.g. admin@bajaj.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
-                  WhatsApp Mobile Number (Whatsapp वर पाठवण्यासाठी)
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. +91 98000 00001"
-                  value={formData.whatsapp}
-                  onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
-                    Frequency
-                  </label>
-                  <select
-                    value={formData.frequency}
-                    onChange={(e) => setFormData({ ...formData, frequency: e.target.value })}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
-                  >
-                    <option value="BOTH">Daily & Monthly</option>
-                    <option value="DAILY">Daily Only</option>
-                    <option value="MONTHLY">Monthly Only</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
-                    Department
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.departmentName}
-                    onChange={(e) => setFormData({ ...formData, departmentName: e.target.value })}
-                    placeholder="e.g. All Departments"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-indigo-600 focus:bg-white"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-2 flex items-center justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
-                  className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={formLoading}
-                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition shadow-xs"
-                >
-                  {formLoading ? "Saving..." : "Save Recipient"}
-                </button>
+                  <option value="BOTH">Daily & Monthly</option>
+                  <option value="DAILY">Daily Only</option>
+                  <option value="MONTHLY">Monthly Only</option>
+                </select>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
+
+              <div className="space-y-1">
+                <label className="text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                  Department
+                </label>
+                <Input
+                  type="text"
+                  value={formData.departmentName}
+                  onChange={(e) => setFormData({ ...formData, departmentName: e.target.value })}
+                  placeholder="e.g. All Departments"
+                />
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="default"
+                loading={formLoading}
+              >
+                {formLoading ? "Saving..." : "Save Recipient"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

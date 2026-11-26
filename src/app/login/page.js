@@ -3,13 +3,16 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Spinner } from "@/components/ui/loader";
 import {
   Lock,
   Mail,
   Eye,
   EyeOff,
   AlertCircle,
-  Loader2,
   ArrowRight,
   ShieldCheck,
   CheckCircle2,
@@ -124,13 +127,13 @@ function LoginForm() {
           </label>
           <div className="relative">
             <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
+            <Input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="admin@bajaj.com"
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-10 pr-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:bg-white transition-all shadow-xs"
+              className="pl-10"
             />
           </div>
         </div>
@@ -150,13 +153,13 @@ function LoginForm() {
           </div>
           <div className="relative">
             <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
+            <Input
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="••••••••••••"
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-10 pr-10 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:bg-white transition-all shadow-xs"
+              className="pl-10 pr-10"
             />
             <button
               type="button"
@@ -168,24 +171,18 @@ function LoginForm() {
           </div>
         </div>
 
-        {/* Tactile Primary Button */}
-        <button
+        {/* Shadcn Button */}
+        <Button
           type="submit"
+          variant="default"
+          size="lg"
+          loading={loading}
           disabled={loading || success}
-          className="w-full mt-2 py-3 px-4 rounded-xl font-semibold text-sm text-white bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full mt-2"
         >
-          {loading ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin text-white" />
-              <span>Verifying credentials...</span>
-            </>
-          ) : (
-            <>
-              <span>Sign In</span>
-              <ArrowRight className="w-4 h-4 text-white" />
-            </>
-          )}
-        </button>
+          <span>Sign In</span>
+          <ArrowRight className="w-4 h-4" />
+        </Button>
       </form>
 
       {/* Refined Staging / Demo Instance Presets */}
@@ -262,9 +259,9 @@ export default function LoginPage() {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="font-extrabold text-sm tracking-tight text-slate-900">BAJAJ AUTO</span>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 border border-indigo-200 text-indigo-700">
+                  <Badge variant="indigo" className="text-[10px]">
                     OPERATIONS OS
-                  </span>
+                  </Badge>
                 </div>
                 <p className="text-[11px] text-slate-500">Akurdi Industrial Facility • Unit 04</p>
               </div>
@@ -279,10 +276,10 @@ export default function LoginPage() {
           {/* Center Live Cockpit Preview Card */}
           <div className="relative z-10 my-auto py-8 max-w-lg">
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold">
+              <Badge variant="indigo" className="gap-2 px-3 py-1 text-xs">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Real-Time Quality & Food Safety Governance</span>
-              </div>
+              </Badge>
 
               <h2 className="text-3xl xl:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
                 Standardized plant operations, daily checksheets & digital reporting.
@@ -341,9 +338,9 @@ export default function LoginPage() {
                     <div className="text-[10px] text-slate-500">Verified by Shift Supervisor • 12m ago</div>
                   </div>
                 </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <Badge variant="success">
                   Approved
-                </span>
+                </Badge>
               </div>
             </div>
           </div>
