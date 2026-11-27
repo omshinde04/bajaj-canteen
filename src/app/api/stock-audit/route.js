@@ -105,6 +105,7 @@ export async function POST(req) {
       productId,
       openingStock,
       newAddedStock,
+      deliveries,
       shift1Consumption,
       shift2Consumption,
       notes,
@@ -121,7 +122,7 @@ export async function POST(req) {
     const prodMeta = PRODUCTS.find((p) => p.id === productId);
     const productName = prodMeta ? prodMeta.name : productId;
 
-    // If opening stock wasn't explicitly supplied, carry over from previous day
+    // Operator can explicitly set opening stock; otherwise fallback to previous day closing
     let opening = Number(openingStock);
     if (isNaN(opening)) {
       const prev = await StockAudit.findOne({
@@ -133,7 +134,16 @@ export async function POST(req) {
       opening = prev ? prev.closingStock : prodMeta ? prodMeta.defaultInitial : 1000;
     }
 
-    const added = Number(newAddedStock) || 0;
+    // Calculate added stock from deliveries batches if provided, else use newAddedStock
+    let added = 0;
+    let deliveryList = [];
+    if (Array.isArray(deliveries) && deliveries.length > 0) {
+      deliveryList = deliveries;
+      added = deliveries.reduce((sum, d) => sum + (Number(d.quantity) || 0), 0);
+    } else {
+      added = Number(newAddedStock) || 0;
+    }
+
     const s1 = Number(shift1Consumption) || 0;
     const s2 = Number(shift2Consumption) || 0;
     const totalConsumed = s1 + s2;
@@ -147,6 +157,7 @@ export async function POST(req) {
         productName,
         openingStock: opening,
         newAddedStock: added,
+        deliveries: deliveryList,
         shift1Consumption: s1,
         shift2Consumption: s2,
         totalConsumption: totalConsumed,

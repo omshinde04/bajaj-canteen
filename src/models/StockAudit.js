@@ -29,6 +29,14 @@ const StockAuditSchema = new mongoose.Schema(
       default: 0,
       min: 0,
     },
+    deliveries: [
+      {
+        quantity: { type: Number, required: true },
+        time: { type: String, default: "" },
+        note: { type: String, default: "" },
+        addedAt: { type: Date, default: Date.now },
+      },
+    ],
     shift1Consumption: {
       type: Number,
       default: 0,
