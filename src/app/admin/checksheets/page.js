@@ -50,6 +50,7 @@ function CheckSheetsContent() {
   const [checkSheets, setCheckSheets] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [shifts, setShifts] = useState([]);
+  const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(initialSearch);
   const [debouncedSearch, setDebouncedSearch] = useState(initialSearch);
@@ -106,10 +107,11 @@ function CheckSheetsContent() {
       query.set("page", page);
       query.set("limit", limit);
 
-      const [csRes, deptRes, shiftRes] = await Promise.all([
-        fetch(`/api/checksheets?${query.toString()}`).then((r) => r.json()),
-        fetch("/api/departments").then((r) => r.json()),
-        fetch("/api/shifts").then((r) => r.json()),
+      const [csRes, deptRes, shiftRes, subRes] = await Promise.all([
+        fetch(`/api/checksheets?${query.toString()}`, { cache: "no-store" }).then((r) => r.json()),
+        fetch("/api/departments", { cache: "no-store" }).then((r) => r.json()),
+        fetch("/api/shifts", { cache: "no-store" }).then((r) => r.json()),
+        fetch("/api/submissions?limit=100", { cache: "no-store" }).then((r) => r.json()),
       ]);
 
       if (csRes.success) {
@@ -121,6 +123,9 @@ function CheckSheetsContent() {
       }
       if (shiftRes.success) {
         setShifts(shiftRes.shifts || []);
+      }
+      if (subRes.success) {
+        setSubmissions(subRes.submissions || []);
       }
     } catch (err) {
       console.error("Failed to load check sheets data:", err);
@@ -474,8 +479,13 @@ function CheckSheetsContent() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {checkSheets.map((cs, idx) => {
-                  const isFilled = idx < 4; // 4 filled today
+                {checkSheets.map((cs) => {
+                  const isFilled = submissions.some(
+                    (s) =>
+                      s.checkSheet?._id === cs._id ||
+                      s.checkSheet === cs._id ||
+                      s.checkSheet?.code === cs.code
+                  );
                   return (
                     <div
                       key={cs._id}
