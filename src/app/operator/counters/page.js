@@ -319,7 +319,13 @@ export default function OperatorCountersPage() {
             <input
               type="date"
               value={date}
-              onChange={(e) => setDate(e.target.value)}
+              max={new Date().toISOString().split("T")[0]}
+              onChange={(e) => {
+                const val = e.target.value;
+                const today = new Date().toISOString().split("T")[0];
+                if (val > today) return;
+                setDate(val);
+              }}
               className="bg-transparent text-slate-900 font-mono text-xs focus:outline-none"
             />
           </div>

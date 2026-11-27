@@ -119,6 +119,14 @@ export async function POST(req) {
       );
     }
 
+    const todayStr = new Date().toISOString().split("T")[0];
+    if (date > todayStr) {
+      return NextResponse.json(
+        { error: `Cannot record stock audit for future date (${date}). Maximum allowable date is today (${todayStr}).` },
+        { status: 400 }
+      );
+    }
+
     const prodMeta = PRODUCTS.find((p) => p.id === productId);
     const productName = prodMeta ? prodMeta.name : productId;
 

@@ -232,7 +232,13 @@ export default function BiscuitAuditPage() {
             <input
               type="date"
               value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
+              max={new Date().toISOString().split("T")[0]}
+              onChange={(e) => {
+                const val = e.target.value;
+                const today = new Date().toISOString().split("T")[0];
+                if (val > today) return;
+                setSelectedDate(val);
+              }}
               className="bg-transparent border-none text-sm font-medium text-slate-800 focus:outline-none"
             />
           </div>
