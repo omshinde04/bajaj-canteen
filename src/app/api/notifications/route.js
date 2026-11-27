@@ -9,17 +9,52 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const channel = searchParams.get("channel"); // NORMAL, WHATSAPP, EMAIL
     const direction = searchParams.get("direction"); // INCOMING, OUTGOING
+    const search = searchParams.get("search")?.trim() || "";
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "10", 10)));
 
     const query = {};
     if (channel && channel !== "ALL") query.channel = channel;
     if (direction && direction !== "ALL") query.direction = direction;
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { message: { $regex: search, $options: "i" } },
+        { sender: { $regex: search, $options: "i" } },
+        { recipient: { $regex: search, $options: "i" } },
+      ];
+    }
 
-    const notifications = await Notification.find(query).sort({ createdAt: -1 }).limit(100);
-    const unreadCount = await Notification.countDocuments({ isRead: false });
-    const totalCount = await Notification.countDocuments();
+    const [totalMatching, notifications, unreadCount, totalCount, incomingCount, outgoingCount] =
+      await Promise.all([
+        Notification.countDocuments(query),
+        Notification.find(query)
+          .sort({ createdAt: -1 })
+          .skip((page - 1) * limit)
+          .limit(limit)
+          .lean(),
+        Notification.countDocuments({ isRead: false }),
+        Notification.countDocuments(),
+        Notification.countDocuments({ direction: "INCOMING" }),
+        Notification.countDocuments({ direction: "OUTGOING" }),
+      ]);
+
+    const totalPages = Math.max(1, Math.ceil(totalMatching / limit));
 
     return NextResponse.json({
       success: true,
+      pagination: {
+        total: totalMatching,
+        page,
+        limit,
+        totalPages,
+      },
+      stats: {
+        total: totalCount,
+        unread: unreadCount,
+        incoming: incomingCount,
+        outgoing: outgoingCount,
+      },
       unreadCount,
       totalCount,
       notifications,
