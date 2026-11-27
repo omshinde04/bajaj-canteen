@@ -46,9 +46,10 @@ export async function GET(req) {
     const entries = [];
     for (const prod of PRODUCTS) {
       let item = await StockAudit.findOne({ date, productId: prod.id }).lean();
+      const autoOpening = await getPreviousClosing(prod.id, date);
+
       if (!item) {
         // Auto-fetch opening stock from previous day's closing stock!
-        const autoOpening = await getPreviousClosing(prod.id, date);
         item = {
           date,
           productId: prod.id,
@@ -61,6 +62,14 @@ export async function GET(req) {
           closingStock: autoOpening,
           isDraft: true,
         };
+      } else if (item.openingStock !== autoOpening) {
+        // Auto-heal: synchronize opening stock with the actual previous day closing
+        item.openingStock = autoOpening;
+        item.closingStock = autoOpening + (item.newAddedStock || 0) - (item.totalConsumption || 0);
+        await StockAudit.updateOne(
+          { _id: item._id },
+          { openingStock: item.openingStock, closingStock: item.closingStock }
+        );
       }
       entries.push(item);
     }
@@ -147,6 +156,25 @@ export async function POST(req) {
       },
       { upsert: true, returnDocument: "after" }
     );
+
+    // Auto-cascade closing stock forward to all subsequent future dates
+    try {
+      let currentClosing = closing;
+      const futureEntries = await StockAudit.find({
+        productId,
+        date: { $gt: date },
+      }).sort({ date: 1 });
+
+      for (const future of futureEntries) {
+        future.openingStock = currentClosing;
+        future.closingStock =
+          currentClosing + (future.newAddedStock || 0) - (future.totalConsumption || 0);
+        currentClosing = future.closingStock;
+        await future.save();
+      }
+    } catch (cascadeErr) {
+      console.warn("Future stock audit cascade warning:", cascadeErr.message);
+    }
 
     // Auto-dispatch in-app notification to Admin
     try {
