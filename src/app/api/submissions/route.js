@@ -5,6 +5,7 @@ import { connectDB } from "@/lib/db";
 import "@/models";
 import Submission from "@/models/Submission";
 import CheckSheet from "@/models/CheckSheet";
+import Notification from "@/models/Notification";
 import { requirePermission } from "@/lib/rbac";
 import { recordAuditLog } from "@/lib/audit";
 
@@ -202,6 +203,24 @@ export const POST = requirePermission("add")(async (req, { user }) => {
       },
       req,
     });
+
+    // Auto-dispatch in-app notification to Admin
+    try {
+      await Notification.create({
+        title: `Checksheet Submitted: ${checkSheet.title}`,
+        message: `${user.name || "Operator"} submitted ${checkSheet.code} with ${complianceScore}% compliance (${photos.length} photo proof attached).`,
+        channel: "NORMAL",
+        direction: "INCOMING",
+        sender: user.name || "Floor Operator",
+        recipient: "Admin Console",
+        priority: hasDefects ? "HIGH" : "NORMAL",
+        status: "RECEIVED",
+        isRead: false,
+        link: "/admin/checksheets",
+      });
+    } catch (notifErr) {
+      console.warn("Failed to create in-app notification for submission:", notifErr.message);
+    }
 
     return NextResponse.json(
       { success: true, submission },

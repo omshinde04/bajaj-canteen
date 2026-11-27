@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import StockAudit from "@/models/StockAudit";
+import Notification from "@/models/Notification";
 
 const PRODUCTS = [
   { id: "parle-g", name: "Parle-G", defaultInitial: 1000 },
@@ -146,6 +147,24 @@ export async function POST(req) {
       },
       { upsert: true, returnDocument: "after" }
     );
+
+    // Auto-dispatch in-app notification to Admin
+    try {
+      await Notification.create({
+        title: `Biscuit Inventory Audit: ${productName}`,
+        message: `${totalConsumed} consumed (S1: ${s1}, S2: ${s2}), closing stock: ${closing} packets for ${date}.`,
+        channel: "NORMAL",
+        direction: "INCOMING",
+        sender: loggedBy || "Operator 2",
+        recipient: "Admin Console",
+        priority: closing < 100 ? "HIGH" : "NORMAL",
+        status: "RECEIVED",
+        isRead: false,
+        link: "/operator/biscuit-audit",
+      });
+    } catch (notifErr) {
+      console.warn("Failed to create notification for stock audit:", notifErr.message);
+    }
 
     return NextResponse.json({
       success: true,

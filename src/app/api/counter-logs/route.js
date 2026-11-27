@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import CounterLog from "@/models/CounterLog";
+import Notification from "@/models/Notification";
 
 export async function GET(req) {
   try {
@@ -81,6 +82,25 @@ export async function POST(req) {
       },
       { upsert: true, returnDocument: "after" }
     );
+
+    // Auto-dispatch in-app notification to Admin
+    try {
+      const mealTitle = mealType ? mealType.replace(/_/g, " ") : "Counter";
+      await Notification.create({
+        title: `Counter Audit: ${mealTitle} (${shift})`,
+        message: `${total} plates prepared, ${consumed} consumed, balance ${balance}. Readiness: ${isReady ? "READY" : "IN PROGRESS"}.`,
+        channel: "NORMAL",
+        direction: "INCOMING",
+        sender: loggedBy || "Operator 1",
+        recipient: "Admin Console",
+        priority: "NORMAL",
+        status: "RECEIVED",
+        isRead: false,
+        link: "/admin/reports",
+      });
+    } catch (notifErr) {
+      console.warn("Failed to create in-app notification for counter log:", notifErr.message);
+    }
 
     return NextResponse.json({
       success: true,

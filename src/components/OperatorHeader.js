@@ -4,13 +4,13 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Search,
-  Bell,
   Clock,
   Building2,
   ShieldCheck,
   CheckCircle2,
   Sparkles,
 } from "lucide-react";
+import NotificationBell from "@/components/NotificationBell";
 
 export default function OperatorHeader() {
   const [currentTime, setCurrentTime] = useState("");
@@ -69,15 +69,8 @@ export default function OperatorHeader() {
           <span>Akurdi Plant • Floor Active</span>
         </div>
 
-        {/* Notifications Icon with Badge */}
-        <button
-          type="button"
-          className="relative p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
-          title="Notifications"
-        >
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-600 rounded-full ring-2 ring-white" />
-        </button>
+        {/* Notifications Dropdown with Live Badge */}
+        <NotificationBell role="OPERATOR" />
       </div>
     </header>
   );

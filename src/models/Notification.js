@@ -45,6 +45,14 @@ const NotificationSchema = new mongoose.Schema(
       enum: ["LOW", "NORMAL", "HIGH", "CRITICAL"],
       default: "NORMAL",
     },
+    link: {
+      type: String,
+      default: "",
+    },
+    metadata: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
   },
   {
     timestamps: true,

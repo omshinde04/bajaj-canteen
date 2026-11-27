@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Bell,
   Search,
   LogOut,
   Clock,
   X,
 } from "lucide-react";
+import NotificationBell from "@/components/NotificationBell";
 
 export default function AdminHeader() {
   const router = useRouter();
@@ -77,7 +77,10 @@ export default function AdminHeader() {
       </div>
 
       {/* Right User Bar */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
+        {/* In-App Live Notifications Bell */}
+        <NotificationBell role="ADMIN" />
+
         {/* User Badge */}
         <div className="flex items-center gap-3 pl-2 border-l border-slate-200">
           <div className="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-xs">

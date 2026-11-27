@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import TeaDeliveryLog from "@/models/TeaDeliveryLog";
 import Department from "@/models/Department";
+import Notification from "@/models/Notification";
 
 export async function GET(req) {
   try {
@@ -118,6 +119,24 @@ export async function POST(req) {
       notes: notes || "",
     });
 
+    // Auto-dispatch in-app notification to Admin
+    try {
+      await Notification.create({
+        title: `Tea Delivered: ${dept.name}`,
+        message: `${delivered}L dispatched to ${dept.name} (${shift || "SHIFT_1"}). Delivery photo logged.`,
+        channel: "NORMAL",
+        direction: "INCOMING",
+        sender: loggedBy || "Tea Operator",
+        recipient: "Admin Console",
+        priority: "NORMAL",
+        status: "RECEIVED",
+        isRead: false,
+        link: "/admin/tea-count",
+      });
+    } catch (notifErr) {
+      console.warn("Failed to create notification for tea delivery:", notifErr.message);
+    }
+
     return NextResponse.json({
       success: true,
       message: "Tea delivery logged successfully",
@@ -158,6 +177,24 @@ export async function PATCH(req) {
     if (notes) existingLog.notes = notes;
 
     await existingLog.save();
+
+    // Auto-dispatch in-app notification to Admin on tea kettle return & wastage
+    try {
+      await Notification.create({
+        title: `Tea Return & Waste: ${existingLog.departmentName || "Department"}`,
+        message: `${retLiters}L returned (waste recorded), ${existingLog.consumedLiters}L net consumed out of ${existingLog.deliveredLiters}L dispatched.`,
+        channel: "NORMAL",
+        direction: "INCOMING",
+        sender: "Tea Operator",
+        recipient: "Admin Console",
+        priority: retLiters > 5 ? "HIGH" : "NORMAL",
+        status: "RECEIVED",
+        isRead: false,
+        link: "/admin/tea-count",
+      });
+    } catch (notifErr) {
+      console.warn("Failed to create notification for tea return:", notifErr.message);
+    }
 
     return NextResponse.json({
       success: true,
