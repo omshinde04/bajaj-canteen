@@ -8,6 +8,9 @@ import Submission from "./Submission.js";
 import TeaCount from "./TeaCount.js";
 import ReportRecipient from "./ReportRecipient.js";
 import Notification from "./Notification.js";
+import CounterLog from "./CounterLog.js";
+import TeaDeliveryLog from "./TeaDeliveryLog.js";
+import StockAudit from "./StockAudit.js";
 
 export {
   Role,
@@ -20,6 +23,9 @@ export {
   TeaCount,
   ReportRecipient,
   Notification,
+  CounterLog,
+  TeaDeliveryLog,
+  StockAudit,
 };
 
 export default {
@@ -33,4 +39,7 @@ export default {
   TeaCount,
   ReportRecipient,
   Notification,
+  CounterLog,
+  TeaDeliveryLog,
+  StockAudit,
 };

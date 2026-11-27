@@ -4,6 +4,9 @@ import CheckSheet from "@/models/CheckSheet";
 import Submission from "@/models/Submission";
 import TeaCount from "@/models/TeaCount";
 import Department from "@/models/Department";
+import CounterLog from "@/models/CounterLog";
+import TeaDeliveryLog from "@/models/TeaDeliveryLog";
+import StockAudit from "@/models/StockAudit";
 
 export async function GET(req) {
   try {
@@ -38,8 +41,10 @@ export async function GET(req) {
     const pendingCount = Math.max(0, totalChecksheets - filledCount);
     const fillupPercentage = totalChecksheets > 0 ? Math.round((filledCount / totalChecksheets) * 100) : 0;
 
-    // 3. Tea Count for period
+    // 3. Tea Count (Cups) for period
     let teaQuery = {};
+    let dateFilterRegex = reportType === "monthly" ? new RegExp(`^${month}`) : date;
+
     if (reportType === "monthly") {
       teaQuery.date = { $regex: `^${month}` };
     } else {
@@ -56,6 +61,31 @@ export async function GET(req) {
       teaByDept[dName] = (teaByDept[dName] || 0) + (t.count || 0);
     });
 
+    // 4. Shop Floor Tea Delivery & Wastage Logs (In Liters - Sheet 3)
+    const teaLitersFilter = reportType === "monthly" ? { date: { $regex: `^${month}` } } : { date };
+    const teaDeliveryLogs = await TeaDeliveryLog.find(teaLitersFilter).sort({ date: -1, shift: 1 }).lean();
+
+    const teaLitersSummary = {
+      totalDeliveredLiters: teaDeliveryLogs.reduce((acc, r) => acc + (r.deliveredLiters || 0), 0),
+      totalReturnedLiters: teaDeliveryLogs.reduce((acc, r) => acc + (r.returnedLiters || 0), 0),
+      totalConsumedLiters: teaDeliveryLogs.reduce((acc, r) => acc + (r.consumedLiters || 0), 0),
+      totalWasteLiters: teaDeliveryLogs.reduce((acc, r) => acc + (r.wasteLiters || 0), 0),
+    };
+
+    // 5. Canteen Counter & Plates Audit (Sheets 1 & 2)
+    const counterFilter = reportType === "monthly" ? { date: { $regex: `^${month}` } } : { date };
+    const counterLogs = await CounterLog.find(counterFilter).sort({ date: -1, shift: 1 }).lean();
+
+    const counterSummary = {
+      totalPreparedPlates: counterLogs.reduce((acc, c) => acc + (c.totalPlates || 0), 0),
+      totalConsumedPlates: counterLogs.reduce((acc, c) => acc + (c.consumedPlates || 0), 0),
+      totalBalancePlates: counterLogs.reduce((acc, c) => acc + (c.balancePlates || 0), 0),
+    };
+
+    // 6. Biscuit Count Audit Ledgers (Sheet 4)
+    const stockFilter = reportType === "monthly" ? { date: { $regex: `^${month}` } } : { date };
+    const stockAuditLogs = await StockAudit.find(stockFilter).sort({ date: -1, productId: 1 }).lean();
+
     return NextResponse.json({
       success: true,
       reportType,
@@ -66,11 +96,18 @@ export async function GET(req) {
         pendingChecksheets: pendingCount,
         fillupPercentage,
         totalTeaCount,
+        ...teaLitersSummary,
+        ...counterSummary,
       },
       teaByDepartment: teaByDept,
       teaRecords,
       submissions,
       checksheets,
+      teaDeliveryLogs,
+      teaLitersSummary,
+      counterLogs,
+      counterSummary,
+      stockAuditLogs,
     });
   } catch (error) {
     console.error("GET /api/reports/summary error:", error);

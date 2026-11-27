@@ -25,6 +25,9 @@ import {
   RefreshCw,
   Sparkles,
   FileSpreadsheet,
+  UtensilsCrossed,
+  Package,
+  Radio,
 } from "lucide-react";
 
 export default function ReportsAndDownloadsPage() {
@@ -82,8 +85,8 @@ export default function ReportsAndDownloadsPage() {
     csvRows.push(["Completion Rate", `${data.summary.fillupPercentage}%`]);
     csvRows.push([]);
 
-    // 2. Department-wise Tea Count
-    csvRows.push(["2. DEPARTMENT-WISE TEA DISTRIBUTION"]);
+    // 2. Department-wise Tea Count (Cups)
+    csvRows.push(["2. DEPARTMENT-WISE TEA DISTRIBUTION (CUPS)"]);
     csvRows.push(["Department Name", "Cups Count"]);
     Object.entries(data.teaByDepartment || {}).forEach(([dept, count]) => {
       csvRows.push([`"${dept}"`, count]);
@@ -91,12 +94,59 @@ export default function ReportsAndDownloadsPage() {
     csvRows.push(["Total Tea Cups", data.summary.totalTeaCount]);
     csvRows.push([]);
 
-    // 3. Checksheet Status List
-    csvRows.push(["3. INDIVIDUAL CHECKSHEET STATUS"]);
-    csvRows.push(["Code", "Title", "Category", "Status"]);
-    (data.checksheets || []).forEach((cs, idx) => {
-      const status = idx < data.summary.filledChecksheets ? "FILLED UP" : "PENDING";
-      csvRows.push([cs.code, `"${cs.title}"`, cs.category || "-", status]);
+    // 3. Shop Floor Tea Liters & Wastage Log (Sheet 3)
+    csvRows.push(["3. SHOP FLOOR TEA DISTRIBUTION & WASTAGE (LITERS)"]);
+    csvRows.push(["Total Delivered Liters", data.summary.totalDeliveredLiters || 0]);
+    csvRows.push(["Total Returned Liters", data.summary.totalReturnedLiters || 0]);
+    csvRows.push(["Net Consumed Liters", data.summary.totalConsumedLiters || 0]);
+    csvRows.push(["Department Wastage Liters", data.summary.totalWasteLiters || 0]);
+    csvRows.push([]);
+    csvRows.push(["Department", "Shift", "Delivered (L)", "Returned (L)", "Consumed (L)", "Wastage (L)"]);
+    (data.teaDeliveryLogs || []).forEach((tl) => {
+      csvRows.push([
+        `"${tl.departmentName}"`,
+        tl.shift,
+        tl.deliveredLiters,
+        tl.returnedLiters || 0,
+        tl.consumedLiters || 0,
+        tl.wasteLiters || 0,
+      ]);
+    });
+    csvRows.push([]);
+
+    // 4. Canteen Counters & Plate Counts (Sheets 1 & 2)
+    csvRows.push(["4. CANTEEN COUNTER & PLATE AUDIT"]);
+    csvRows.push(["Total Prepared Plates", data.summary.totalPreparedPlates || 0]);
+    csvRows.push(["Total Consumed Plates", data.summary.totalConsumedPlates || 0]);
+    csvRows.push(["Total Balance Plates", data.summary.totalBalancePlates || 0]);
+    csvRows.push([]);
+    csvRows.push(["Counter Name", "Shift", "Status", "Prepared Plates", "Consumed Plates", "Balance Plates"]);
+    (data.counterLogs || []).forEach((c) => {
+      csvRows.push([
+        `"${c.counterName}"`,
+        c.shift,
+        c.status,
+        c.totalPlates || 0,
+        c.consumedPlates || 0,
+        c.balancePlates || 0,
+      ]);
+    });
+    csvRows.push([]);
+
+    // 5. Biscuit Stock Ledger (Sheet 4)
+    csvRows.push(["5. BISCUIT & INVENTORY AUDIT LEDGER"]);
+    csvRows.push(["Product", "Date", "Opening Stock", "Added Stock", "1st Shift", "2nd Shift", "Total Consumed", "Closing Stock"]);
+    (data.stockAuditLogs || []).forEach((s) => {
+      csvRows.push([
+        `"${s.productName}"`,
+        s.date,
+        s.openingStock,
+        s.newAddedStock,
+        s.shift1Consumption,
+        s.shift2Consumption,
+        s.totalConsumption,
+        s.closingStock,
+      ]);
     });
 
     const csvContent = "data:text/csv;charset=utf-8," + csvRows.map((e) => e.join(",")).join("\n");
@@ -117,15 +167,15 @@ export default function ReportsAndDownloadsPage() {
           <div className="flex items-center gap-2 mb-1">
             <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
             <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-indigo-600">
-              Reports & Downloads (Point 4)
+              REPORTS &amp; DOWNLOADS DOSSIER
             </span>
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2.5">
             <FileDown className="w-7 h-7 text-indigo-600" />
-            <span>Reports & Downloads</span>
+            <span>Reports &amp; Downloads</span>
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Check daily reports & monthly reports. Download every report in Excel / PDF.
+            Comprehensive daily and monthly dossiers covering checksheets, tea liters logistics, food counter plate audits, and biscuit ledgers.
           </p>
         </div>
 
@@ -205,7 +255,7 @@ export default function ReportsAndDownloadsPage() {
       </div>
 
       {/* REPORT CONTENT (PRINTABLE) */}
-      <Card className="space-y-6 p-6 print:border-none print:p-0 print:bg-white">
+      <Card className="space-y-6 p-6 print:border-none print:p-0 print:bg-white bg-white border-slate-200">
         {/* Printable Title Block */}
         <div className="border-b border-slate-200 pb-4 print:border-b-2 print:border-black flex items-center justify-between">
           <div>
@@ -225,62 +275,179 @@ export default function ReportsAndDownloadsPage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
             <span className="text-[10px] uppercase font-bold text-slate-500 block">
-              Total Scheduled Checksheets
+              Scheduled Checksheets
             </span>
             <span className="text-2xl font-extrabold text-slate-900 font-mono">
               {data?.summary?.totalChecksheets || 0}
             </span>
+            <div className="text-[11px] text-emerald-600 mt-0.5">
+              {data?.summary?.filledChecksheets || 0} Filled ({data?.summary?.fillupPercentage || 0}%)
+            </div>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
             <span className="text-[10px] uppercase font-bold text-slate-500 block">
-              Filled Up Checksheets
-            </span>
-            <span className="text-2xl font-extrabold text-emerald-600 font-mono">
-              {data?.summary?.filledChecksheets || 0}
-            </span>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-            <span className="text-[10px] uppercase font-bold text-slate-500 block">
-              Pending Checksheets
-            </span>
-            <span className="text-2xl font-extrabold text-amber-600 font-mono">
-              {data?.summary?.pendingChecksheets || 0}
-            </span>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-            <span className="text-[10px] uppercase font-bold text-slate-500 block">
-              Total Tea Count
+              Tea Dispatched (Liters)
             </span>
             <span className="text-2xl font-extrabold text-indigo-600 font-mono">
-              {data?.summary?.totalTeaCount || 0} Cups
+              {data?.summary?.totalDeliveredLiters || 0} L
             </span>
+            <div className="text-[11px] text-rose-600 mt-0.5">
+              Waste: {data?.summary?.totalWasteLiters || 0} L
+            </div>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <span className="text-[10px] uppercase font-bold text-slate-500 block">
+              Food Plates Served
+            </span>
+            <span className="text-2xl font-extrabold text-emerald-600 font-mono">
+              {data?.summary?.totalConsumedPlates || 0}
+            </span>
+            <div className="text-[11px] text-slate-500 mt-0.5">
+              Balance: {data?.summary?.totalBalancePlates || 0}
+            </div>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <span className="text-[10px] uppercase font-bold text-slate-500 block">
+              Tea Cups Tallied
+            </span>
+            <span className="text-2xl font-extrabold text-amber-600 font-mono">
+              {data?.summary?.totalTeaCount || 0}
+            </span>
+            <div className="text-[11px] text-slate-500 mt-0.5">Line deliveries</div>
           </div>
         </div>
 
-        {/* 2. DEPARTMENT-WISE TEA DISTRIBUTION */}
-        <div className="space-y-3">
-          <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-            <Coffee className="w-4 h-4 text-indigo-600" />
-            <span>Department-wise Tea Distribution ({data?.period})</span>
-          </h3>
+        {/* 2. CANTEEN COUNTER & PLATE COUNTS (SHEETS 1 & 2) */}
+        {data?.counterLogs && data.counterLogs.length > 0 && (
+          <div className="space-y-3">
+            <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <UtensilsCrossed className="w-4 h-4 text-emerald-600" />
+              <span>Canteen Counter Readiness &amp; Plate Audits</span>
+            </h3>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {Object.entries(data?.teaByDepartment || {}).map(([dName, count], idx) => (
-              <div
-                key={idx}
-                className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs"
-              >
-                <span className="font-medium text-slate-800 truncate">{dName}</span>
-                <span className="font-mono font-bold text-indigo-700">{count} cups</span>
-              </div>
-            ))}
+            <div className="overflow-x-auto border border-slate-200 rounded-xl">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Counter</TableHead>
+                    <TableHead>Shift</TableHead>
+                    <TableHead>Readiness</TableHead>
+                    <TableHead>Total Prepared</TableHead>
+                    <TableHead>Consumed</TableHead>
+                    <TableHead className="text-right">Balance</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {data.counterLogs.map((c) => (
+                    <TableRow key={c._id}>
+                      <TableCell className="font-semibold text-slate-900">{c.counterName}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="font-mono text-xs">
+                          {c.shift}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={c.status === "READY" ? "success" : "warning"} className="text-[10px]">
+                          {c.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="font-mono">{c.totalPlates || 0}</TableCell>
+                      <TableCell className="font-mono font-bold text-indigo-600">{c.consumedPlates || 0}</TableCell>
+                      <TableCell className="font-mono font-bold text-right text-slate-900">{c.balancePlates || 0}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* 3. CHECKSHEET COMPLIANCE STATUS TABLE */}
+        {/* 3. TEA LITERS LOGISTICS & WASTAGE (SHEET 3) */}
+        {data?.teaDeliveryLogs && data.teaDeliveryLogs.length > 0 && (
+          <div className="space-y-3">
+            <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <Radio className="w-4 h-4 text-amber-600" />
+              <span>Shop Floor Tea Delivery &amp; Wastage Log (Liters)</span>
+            </h3>
+
+            <div className="overflow-x-auto border border-slate-200 rounded-xl">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Department</TableHead>
+                    <TableHead>Shift</TableHead>
+                    <TableHead>Delivered (L)</TableHead>
+                    <TableHead>Returned (L)</TableHead>
+                    <TableHead>Net Consumed (L)</TableHead>
+                    <TableHead className="text-right">Dept. Wastage (L)</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {data.teaDeliveryLogs.map((t) => (
+                    <TableRow key={t._id}>
+                      <TableCell className="font-semibold text-slate-900">{t.departmentName}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="font-mono text-xs">
+                          {t.shift}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="font-mono font-bold text-indigo-600">{t.deliveredLiters} L</TableCell>
+                      <TableCell className="font-mono text-slate-700">{t.returnedLiters || 0} L</TableCell>
+                      <TableCell className="font-mono font-bold text-emerald-600">{t.consumedLiters || 0} L</TableCell>
+                      <TableCell className="font-mono font-bold text-right text-rose-600">{t.wasteLiters || 0} L</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        )}
+
+        {/* 4. BISCUIT INVENTORY AUDIT LEDGERS (SHEET 4) */}
+        {data?.stockAuditLogs && data.stockAuditLogs.length > 0 && (
+          <div className="space-y-3">
+            <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <Package className="w-4 h-4 text-purple-600" />
+              <span>Biscuit &amp; Inventory Daily Roll-over Ledgers</span>
+            </h3>
+
+            <div className="overflow-x-auto border border-slate-200 rounded-xl">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Product</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Opening Stock</TableHead>
+                    <TableHead>New Added</TableHead>
+                    <TableHead>1st Shift</TableHead>
+                    <TableHead>2nd Shift</TableHead>
+                    <TableHead>Total Consumed</TableHead>
+                    <TableHead className="text-right">Closing Stock</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {data.stockAuditLogs.map((s) => (
+                    <TableRow key={s._id}>
+                      <TableCell className="font-semibold text-slate-900">{s.productName}</TableCell>
+                      <TableCell className="font-mono text-xs">{s.date}</TableCell>
+                      <TableCell className="font-mono">{s.openingStock}</TableCell>
+                      <TableCell className="font-mono text-indigo-600">+{s.newAddedStock}</TableCell>
+                      <TableCell className="font-mono">{s.shift1Consumption}</TableCell>
+                      <TableCell className="font-mono">{s.shift2Consumption}</TableCell>
+                      <TableCell className="font-mono font-bold text-amber-600">{s.totalConsumption}</TableCell>
+                      <TableCell className="font-mono font-bold text-right text-emerald-700">{s.closingStock}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        )}
+
+        {/* 5. CHECKSHEET COMPLIANCE STATUS TABLE */}
         <div className="space-y-3">
           <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-indigo-600" />
@@ -299,7 +466,7 @@ export default function ReportsAndDownloadsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data?.checksheets?.map((cs, idx) => {
+                {data?.checksheets?.slice(0, 15).map((cs, idx) => {
                   const isFilled = idx < (data?.summary?.filledChecksheets || 0);
                   return (
                     <TableRow key={cs._id}>
@@ -309,13 +476,9 @@ export default function ReportsAndDownloadsPage() {
                       <TableCell className="text-slate-500">{cs.slaHours ? `${cs.slaHours}h target` : "Daily"}</TableCell>
                       <TableCell className="text-right">
                         {isFilled ? (
-                          <Badge variant="success">
-                            Filled Up
-                          </Badge>
+                          <Badge variant="success">Filled Up</Badge>
                         ) : (
-                          <Badge variant="warning">
-                            Pending
-                          </Badge>
+                          <Badge variant="warning">Pending</Badge>
                         )}
                       </TableCell>
                     </TableRow>
@@ -325,7 +488,6 @@ export default function ReportsAndDownloadsPage() {
             </Table>
           </div>
         </div>
-
       </Card>
     </div>
   );

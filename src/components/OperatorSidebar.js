@@ -45,14 +45,42 @@ export default function OperatorSidebar() {
 
   const navGroups = [
     {
-      group: "Floor Operations",
+      group: "Floor Operations Terminal",
       items: [
         {
-          label: "Shift Taskboard",
+          label: "Terminal Overview",
           href: "/operator",
           icon: ClipboardCheck,
           badge: "Active",
           badgeColor: "bg-indigo-100 text-indigo-700",
+        },
+        {
+          label: "Operator 1: Counters & Plates",
+          href: "/operator/counters",
+          icon: Clock,
+          badge: "Shift 1 & 2 / VIP",
+          badgeColor: "bg-emerald-100 text-emerald-800",
+        },
+        {
+          label: "Tea Operator: Delivery & Waste",
+          href: "/operator/tea-delivery",
+          icon: Radio,
+          badge: "Liters Log",
+          badgeColor: "bg-amber-100 text-amber-800",
+        },
+        {
+          label: "Operator 2: 50+ Checksheets",
+          href: "/operator/checksheets",
+          icon: FileSpreadsheet,
+          badge: "50+ Sheets",
+          badgeColor: "bg-indigo-100 text-indigo-700",
+        },
+        {
+          label: "Operator 2: Biscuit Audit",
+          href: "/operator/biscuit-audit",
+          icon: CheckCircle2,
+          badge: "5 Products",
+          badgeColor: "bg-purple-100 text-purple-700",
         },
       ],
     },
