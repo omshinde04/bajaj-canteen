@@ -226,23 +226,6 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <div className="min-h-screen w-full bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-indigo-100 selection:text-indigo-900">
-      {/* PUBLIC CLIENT WALKTHROUGH PROMO BAR */}
-      <div className="bg-white border-b border-slate-200 px-4 py-2 text-xs flex items-center justify-between z-20 shadow-xs">
-        <div className="flex items-center gap-2 max-w-4xl mx-auto sm:mx-0">
-          <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
-          <span className="text-slate-600">
-            Testing Bajaj Operations OS 2.0? Read our complete client manual and walkthrough.
-          </span>
-        </div>
-        <Link
-          href="/guide"
-          className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-xs border border-indigo-200 transition"
-        >
-          <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
-          <span>Client Testing Guide →</span>
-        </Link>
-      </div>
-
       <div className="flex-1 flex">
         {/* LEFT COLUMN: Industrial Operations Showcase (Desktop Only) */}
         <div className="hidden lg:flex lg:w-[52%] xl:w-[55%] relative flex-col justify-between p-12 border-r border-slate-200 bg-linear-to-b from-indigo-50/70 via-slate-50 to-white overflow-hidden">
@@ -371,12 +354,9 @@ export default function LoginPage() {
                 <p className="text-[10px] text-slate-500">Operations Console</p>
               </div>
             </div>
-            <Link
-              href="/guide"
-              className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700"
-            >
-              CLIENT GUIDE
-            </Link>
+            <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700">
+              OPERATIONS 2.0
+            </span>
           </div>
 
           {/* Empty Spacer on Desktop Top */}
@@ -390,9 +370,7 @@ export default function LoginPage() {
           {/* Footer */}
           <div className="text-center text-xs text-slate-500 pt-8 relative z-10 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-slate-100">
             <p>© 2026 Bajaj Auto Limited • Operations OS 2.0</p>
-            <Link href="/guide" className="text-slate-600 hover:text-indigo-600 underline transition">
-              View Public Testing Manual
-            </Link>
+            <p className="text-slate-400 text-[11px]">Factory Canteen &amp; Shop Floor Operations</p>
           </div>
         </div>
       </div>

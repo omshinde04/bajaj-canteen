@@ -37,7 +37,7 @@ export async function seedDatabase() {
   await connectDB();
   console.log("Seeding Master Enterprise Data into MongoDB Atlas...");
 
-  // 1. Roles
+  // 1. Roles (Strictly Admin and Operator as per Client Specifications)
   const roles = [
     {
       name: "Super Admin",
@@ -47,23 +47,9 @@ export async function seedDatabase() {
       permissions: ALL_PERMISSIONS,
     },
     {
-      name: "Plant Admin",
-      code: "PLANT_ADMIN",
-      description: "Plant-level administration across all departments and shifts",
-      isSystemRole: true,
-      permissions: ALL_PERMISSIONS.filter((p) => p !== "manage_backups"),
-    },
-    {
-      name: "Supervisor",
-      code: "SUPERVISOR",
-      description: "Shift operational review, submissions approval and issue triage",
-      isSystemRole: true,
-      permissions: ["view", "approve", "reject", "upload", "download", "export"],
-    },
-    {
       name: "Operator",
       code: "OPERATOR",
-      description: "Check sheet execution, form submission, and evidence photo uploads",
+      description: "Check sheet execution, counter readiness, tea logistics, and biscuit audit",
       isSystemRole: true,
       permissions: ["view", "add", "upload"],
     },

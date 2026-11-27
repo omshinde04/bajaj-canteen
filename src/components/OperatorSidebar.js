@@ -38,10 +38,9 @@ export default function OperatorSidebar() {
       .catch(() => {});
   }, []);
 
-  const isSupervisorOrAdmin =
+  const isAdmin =
     user?.role?.code === "SUPER_ADMIN" ||
-    user?.role?.code === "PLANT_ADMIN" ||
-    user?.role?.code === "SUPERVISOR";
+    user?.role?.code === "ADMIN";
 
   const navGroups = [
     {
@@ -86,7 +85,7 @@ export default function OperatorSidebar() {
     },
   ];
 
-  if (isSupervisorOrAdmin) {
+  if (isAdmin) {
     navGroups.push({
       group: "Elevated Controls",
       items: [

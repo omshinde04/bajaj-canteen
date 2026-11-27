@@ -110,6 +110,9 @@ export async function GET(req) {
       stockAuditLogs,
     });
   } catch (error) {
+    if (error?.digest === "NEXT_PRERENDER_INTERRUPTED") {
+      throw error;
+    }
     console.error("GET /api/reports/summary error:", error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

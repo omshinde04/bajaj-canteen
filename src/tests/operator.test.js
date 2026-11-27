@@ -27,7 +27,6 @@ describe("Floor Operator Execution Portal & Flow Tests", () => {
   it("determines correct redirection target based on user RBAC role", () => {
     const operatorUser = { role: { code: "OPERATOR" } };
     const adminUser = { role: { code: "SUPER_ADMIN" } };
-    const supervisorUser = { role: { code: "SUPERVISOR" } };
 
     const getRedirect = (user) => {
       return user.role?.code === "OPERATOR" ? "/operator" : "/admin/dashboard";
@@ -35,7 +34,6 @@ describe("Floor Operator Execution Portal & Flow Tests", () => {
 
     expect(getRedirect(operatorUser)).toBe("/operator");
     expect(getRedirect(adminUser)).toBe("/admin/dashboard");
-    expect(getRedirect(supervisorUser)).toBe("/admin/dashboard");
   });
 
   it("constructs compliant operational submission with photos and digital signature", () => {
