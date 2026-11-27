@@ -127,9 +127,11 @@ export default function BiscuitAuditPage() {
 
       const json = await res.json();
       if (json.success) {
+        const savedClosing =
+          json.entry?.closingStock ?? json.audit?.closingStock ?? closingStock;
         setMessage({
           type: "success",
-          text: `Audit log for ${currentProductObj?.name} saved! Closing stock: ${json.audit.closingStock} pkts. Rolled over automatically for next day.`,
+          text: `Audit log for ${currentProductObj?.name || "Product"} saved! Closing stock: ${savedClosing} pkts. Rolled over automatically for next day.`,
         });
         fetchAuditData();
       } else {

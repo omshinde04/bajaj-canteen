@@ -170,6 +170,7 @@ export async function POST(req) {
       success: true,
       message: `Stock audit for ${productName} saved successfully`,
       entry: auditEntry,
+      audit: auditEntry,
     });
   } catch (error) {
     console.error("POST /api/stock-audit error:", error);
