@@ -63,7 +63,7 @@ export default function TeaCountPage() {
     if (!date) return;
     setLoading(true);
     try {
-      const res = await fetch(`/api/tea-count?date=${date}`);
+      const res = await fetch(`/api/tea-count?date=${date}`, { cache: "no-store" });
       const json = await res.json();
       if (json.success) {
         setData(json);
@@ -82,7 +82,7 @@ export default function TeaCountPage() {
     if (!date) return;
     setLoadingLiters(true);
     try {
-      const res = await fetch(`/api/tea-delivery?date=${date}`);
+      const res = await fetch(`/api/tea-delivery?date=${date}`, { cache: "no-store" });
       const json = await res.json();
       if (json.success) {
         setLitersData(json);
@@ -555,7 +555,7 @@ export default function TeaCountPage() {
               </span>
               <div className="flex items-baseline gap-2">
                 <span className="text-xl font-bold text-slate-900 truncate">
-                  {Object.keys(deptTotals)[0] || "Engine Assembly"}
+                  {Object.keys(deptTotals)[0] || "None"}
                 </span>
                 <span className="text-xs text-emerald-600 font-mono font-bold">
                   ({Object.values(deptTotals)[0] || 0} cups)

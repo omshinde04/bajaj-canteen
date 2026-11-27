@@ -41,11 +41,11 @@ export default function OperatorTaskboard() {
       const today = new Date().toISOString().split("T")[0];
 
       const [csRes, subRes, counterRes, teaRes, stockRes] = await Promise.all([
-        fetch("/api/checksheets").then((r) => r.json()).catch(() => ({})),
-        fetch("/api/submissions").then((r) => r.json()).catch(() => ({})),
-        fetch(`/api/counter-logs?date=${today}&shift=SHIFT_1_GEN`).then((r) => r.json()).catch(() => ({})),
-        fetch(`/api/tea-delivery?date=${today}&shift=MORNING`).then((r) => r.json()).catch(() => ({})),
-        fetch(`/api/stock-audit?date=${today}`).then((r) => r.json()).catch(() => ({})),
+        fetch("/api/checksheets", { cache: "no-store" }).then((r) => r.json()).catch(() => ({})),
+        fetch("/api/submissions", { cache: "no-store" }).then((r) => r.json()).catch(() => ({})),
+        fetch(`/api/counter-logs?date=${today}&shift=SHIFT_1_GEN`, { cache: "no-store" }).then((r) => r.json()).catch(() => ({})),
+        fetch(`/api/tea-delivery?date=${today}&shift=MORNING`, { cache: "no-store" }).then((r) => r.json()).catch(() => ({})),
+        fetch(`/api/stock-audit?date=${today}`, { cache: "no-store" }).then((r) => r.json()).catch(() => ({})),
       ]);
 
       setCheckSheets(csRes.checkSheets || []);

@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/db";
 import CounterLog from "@/models/CounterLog";
 import Notification from "@/models/Notification";
 
+
 export async function GET(req) {
   try {
     await connectDB();

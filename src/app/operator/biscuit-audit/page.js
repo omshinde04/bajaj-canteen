@@ -44,11 +44,11 @@ import {
 } from "lucide-react";
 
 const PRODUCTS = [
-  { id: "parle-g", name: "Parle-G", code: "P-01", defaultInitial: 1000 },
-  { id: "good-day", name: "Good Day", code: "GD-02", defaultInitial: 500 },
-  { id: "marie-gold", name: "Marie Gold", code: "MG-03", defaultInitial: 500 },
-  { id: "monaco", name: "Monaco", code: "MC-04", defaultInitial: 400 },
-  { id: "krackjack", name: "Krackjack", code: "KJ-05", defaultInitial: 400 },
+  { id: "parle-g", name: "Parle-G", code: "P-01" },
+  { id: "good-day", name: "Good Day", code: "GD-02" },
+  { id: "marie-gold", name: "Marie Gold", code: "MG-03" },
+  { id: "monaco", name: "Monaco", code: "MC-04" },
+  { id: "krackjack", name: "Krackjack", code: "KJ-05" },
 ];
 
 export default function BiscuitAuditPage() {
@@ -81,7 +81,8 @@ export default function BiscuitAuditPage() {
     setLoading(true);
     try {
       const res = await fetch(
-        `/api/stock-audit?date=${selectedDate}&productId=${selectedProduct}`
+        `/api/stock-audit?date=${selectedDate}&productId=${selectedProduct}`,
+        { cache: "no-store" }
       );
       const json = await res.json();
       if (json.success) {

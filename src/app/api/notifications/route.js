@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/db";
 import Notification from "@/models/Notification";
 import { recordAuditLog } from "@/lib/audit";
 
+
 export async function GET(req) {
   try {
     await connectDB();

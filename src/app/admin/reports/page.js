@@ -77,7 +77,7 @@ export default function ReportsAndDownloadsPage() {
         reportType === "monthly"
           ? `/api/reports/summary?type=monthly&month=${month}`
           : `/api/reports/summary?type=daily&date=${date}`;
-      const res = await fetch(url);
+      const res = await fetch(url, { cache: "no-store" });
       const json = await res.json();
       if (json.success) {
         setData(json);
@@ -492,8 +492,10 @@ export default function ReportsAndDownloadsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data?.checksheets?.slice(0, 15).map((cs, idx) => {
-                  const isFilled = idx < (data?.summary?.filledChecksheets || 0);
+                {data?.checksheets?.slice(0, 15).map((cs) => {
+                  const isFilled = (data?.submissions || []).some(
+                    (s) => s.checkSheet?._id === cs._id || s.checkSheet === cs._id || s.checkSheet?.code === cs.code
+                  );
                   return (
                     <TableRow key={cs._id}>
                       <TableCell className="font-mono font-bold text-indigo-600">{cs.code}</TableCell>

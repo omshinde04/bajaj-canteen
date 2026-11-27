@@ -31,65 +31,71 @@ export default function OperatorCountersPage() {
   const [savingMeal, setSavingMeal] = useState("");
   const [feedback, setFeedback] = useState("");
 
-  // Counter Forms State for Shift 1 & General
-  const [shift1Forms, setShift1Forms] = useState({
+  const emptyShift1 = {
     BREAKFAST: {
-      isReady: true,
-      totalPlates: 600,
-      consumedPlates: 550,
-      shift1Count: 350,
-      generalCount: 200,
+      isReady: false,
+      totalPlates: 0,
+      consumedPlates: 0,
+      shift1Count: 0,
+      generalCount: 0,
       photo1stShift: "",
       photoGeneral: "",
       notes: "",
     },
     LUNCH: {
-      isReady: true,
-      totalPlates: 600,
-      consumedPlates: 450,
-      shift1Count: 300,
-      generalCount: 150,
+      isReady: false,
+      totalPlates: 0,
+      consumedPlates: 0,
+      shift1Count: 0,
+      generalCount: 0,
       photo1stShift: "",
       photoGeneral: "",
       notes: "",
     },
-  });
+  };
 
-  // Counter Forms State for Shift 2
-  const [shift2Forms, setShift2Forms] = useState({
+  const emptyShift2 = {
     SNACKS: {
-      isReady: true,
-      totalPlates: 600,
-      consumedPlates: 600,
+      isReady: false,
+      totalPlates: 0,
+      consumedPlates: 0,
       photo: "",
       notes: "",
     },
     DINNER: {
-      isReady: true,
-      totalPlates: 600,
-      consumedPlates: 400,
+      isReady: false,
+      totalPlates: 0,
+      consumedPlates: 0,
       photo: "",
       notes: "",
     },
-  });
+  };
 
-  // Counter Forms State for VIP Counter
-  const [vipForms, setVipForms] = useState({
+  const emptyVip = {
     BREAKFAST: {
-      isReady: true,
-      totalPlates: 10,
-      consumedPlates: 9,
+      isReady: false,
+      totalPlates: 0,
+      consumedPlates: 0,
       photo: "",
       notes: "",
     },
     LUNCH: {
-      isReady: true,
-      totalPlates: 15,
-      consumedPlates: 10,
+      isReady: false,
+      totalPlates: 0,
+      consumedPlates: 0,
       photo: "",
       notes: "",
     },
-  });
+  };
+
+  // Counter Forms State for Shift 1 & General
+  const [shift1Forms, setShift1Forms] = useState(emptyShift1);
+
+  // Counter Forms State for Shift 2
+  const [shift2Forms, setShift2Forms] = useState(emptyShift2);
+
+  // Counter Forms State for VIP Counter
+  const [vipForms, setVipForms] = useState(emptyVip);
 
   useEffect(() => {
     setDate(new Date().toISOString().split("T")[0]);
@@ -99,51 +105,50 @@ export default function OperatorCountersPage() {
     if (!date) return;
     setLoading(true);
     try {
-      const res = await fetch(`/api/counter-logs?date=${date}`);
+      const res = await fetch(`/api/counter-logs?date=${date}`, { cache: "no-store" });
       const json = await res.json();
       if (json.success) {
         setLogs(json.logs || []);
 
+        const nextShift1 = JSON.parse(JSON.stringify(emptyShift1));
+        const nextShift2 = JSON.parse(JSON.stringify(emptyShift2));
+        const nextVip = JSON.parse(JSON.stringify(emptyVip));
+
         // Hydrate forms if logs exist
         (json.logs || []).forEach((log) => {
-          if (log.shift === "SHIFT_1_GEN") {
-            setShift1Forms((prev) => ({
-              ...prev,
-              [log.mealType]: {
-                isReady: log.isReady,
-                totalPlates: log.totalPlates,
-                consumedPlates: log.consumedPlates,
-                shift1Count: log.subShiftBreakdown?.shift1Count || 0,
-                generalCount: log.subShiftBreakdown?.generalCount || 0,
-                photo1stShift: log.photos?.find((p) => p.subShift === "1ST_SHIFT")?.url || "",
-                photoGeneral: log.photos?.find((p) => p.subShift === "GENERAL")?.url || "",
-                notes: log.notes || "",
-              },
-            }));
-          } else if (log.shift === "SHIFT_2") {
-            setShift2Forms((prev) => ({
-              ...prev,
-              [log.mealType]: {
-                isReady: log.isReady,
-                totalPlates: log.totalPlates,
-                consumedPlates: log.consumedPlates,
-                photo: log.photos?.[0]?.url || "",
-                notes: log.notes || "",
-              },
-            }));
-          } else if (log.shift === "VIP") {
-            setVipForms((prev) => ({
-              ...prev,
-              [log.mealType]: {
-                isReady: log.isReady,
-                totalPlates: log.totalPlates,
-                consumedPlates: log.consumedPlates,
-                photo: log.photos?.[0]?.url || "",
-                notes: log.notes || "",
-              },
-            }));
+          if (log.shift === "SHIFT_1_GEN" && nextShift1[log.mealType]) {
+            nextShift1[log.mealType] = {
+              isReady: log.isReady ?? false,
+              totalPlates: log.totalPlates ?? 0,
+              consumedPlates: log.consumedPlates ?? 0,
+              shift1Count: log.subShiftBreakdown?.shift1Count ?? 0,
+              generalCount: log.subShiftBreakdown?.generalCount ?? 0,
+              photo1stShift: log.photos?.find((p) => p.subShift === "1ST_SHIFT")?.url || "",
+              photoGeneral: log.photos?.find((p) => p.subShift === "GENERAL")?.url || "",
+              notes: log.notes || "",
+            };
+          } else if (log.shift === "SHIFT_2" && nextShift2[log.mealType]) {
+            nextShift2[log.mealType] = {
+              isReady: log.isReady ?? false,
+              totalPlates: log.totalPlates ?? 0,
+              consumedPlates: log.consumedPlates ?? 0,
+              photo: log.photos?.[0]?.url || "",
+              notes: log.notes || "",
+            };
+          } else if (log.shift === "VIP" && nextVip[log.mealType]) {
+            nextVip[log.mealType] = {
+              isReady: log.isReady ?? false,
+              totalPlates: log.totalPlates ?? 0,
+              consumedPlates: log.consumedPlates ?? 0,
+              photo: log.photos?.[0]?.url || "",
+              notes: log.notes || "",
+            };
           }
         });
+
+        setShift1Forms(nextShift1);
+        setShift2Forms(nextShift2);
+        setVipForms(nextVip);
       }
     } catch (e) {
       console.error(e);

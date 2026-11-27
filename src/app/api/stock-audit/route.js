@@ -3,12 +3,13 @@ import { connectDB } from "@/lib/db";
 import StockAudit from "@/models/StockAudit";
 import Notification from "@/models/Notification";
 
+
 const PRODUCTS = [
-  { id: "parle-g", name: "Parle-G", defaultInitial: 1000 },
-  { id: "good-day", name: "Good Day", defaultInitial: 500 },
-  { id: "marie-gold", name: "Marie Gold", defaultInitial: 500 },
-  { id: "monaco", name: "Monaco", defaultInitial: 400 },
-  { id: "krackjack", name: "Krackjack", defaultInitial: 400 },
+  { id: "parle-g", name: "Parle-G" },
+  { id: "good-day", name: "Good Day" },
+  { id: "marie-gold", name: "Marie Gold" },
+  { id: "monaco", name: "Monaco" },
+  { id: "krackjack", name: "Krackjack" },
 ];
 
 export async function GET(req) {
@@ -28,8 +29,7 @@ export async function GET(req) {
         .lean();
 
       if (prevEntry) return prevEntry.closingStock;
-      const defaultProd = PRODUCTS.find((p) => p.id === pId);
-      return defaultProd ? defaultProd.defaultInitial : 1000;
+      return 0;
     };
 
     // If fetching for a specific product's full ledger history
@@ -139,7 +139,7 @@ export async function POST(req) {
       })
         .sort({ date: -1 })
         .lean();
-      opening = prev ? prev.closingStock : prodMeta ? prodMeta.defaultInitial : 1000;
+      opening = prev ? prev.closingStock : 0;
     }
 
     // Calculate added stock from deliveries batches if provided, else use newAddedStock

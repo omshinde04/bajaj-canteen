@@ -42,8 +42,8 @@ export default function AdminDashboardPage() {
     setLoading(true);
     try {
       const [repRes, teaRes] = await Promise.all([
-        fetch(`/api/reports/summary?type=${chartPeriod}`).then((r) => r.json()),
-        fetch(`/api/tea-count`).then((r) => r.json()),
+        fetch(`/api/reports/summary?type=${chartPeriod}`, { cache: "no-store" }).then((r) => r.json()),
+        fetch(`/api/tea-count`, { cache: "no-store" }).then((r) => r.json()),
       ]);
 
       if (repRes.success) setReportData(repRes);
@@ -92,19 +92,12 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const totalChecksheets = reportData?.summary?.totalChecksheets || 6;
-  const filledChecksheets = reportData?.summary?.filledChecksheets || 4;
+  const totalChecksheets = reportData?.summary?.totalChecksheets ?? 54;
+  const filledChecksheets = reportData?.summary?.filledChecksheets ?? 0;
   const pendingChecksheets = Math.max(0, totalChecksheets - filledChecksheets);
   const fillupPct = totalChecksheets > 0 ? Math.round((filledChecksheets / totalChecksheets) * 100) : 0;
-  const totalTeaCups = teaData?.totalCupsToday || 970;
-  const deptTotals = teaData?.deptTotals || {
-    "Engine Assembly": 260,
-    "Vehicle Assembly": 210,
-    "Machine Shop": 180,
-    "Paint Shop": 140,
-    "Press Shop": 120,
-    "Quality Assurance": 60,
-  };
+  const totalTeaCups = teaData?.totalCupsToday ?? 0;
+  const deptTotals = teaData?.deptTotals || {};
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto pb-16 font-sans">
@@ -346,10 +339,22 @@ export default function AdminDashboardPage() {
           {/* Quick Compliance Status Pill */}
           <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
             <span className="text-slate-500">Compliance Status:</span>
-            <Badge variant="success" className="gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>SLA Target Met (Above 60%)</span>
-            </Badge>
+            {fillupPct >= 60 ? (
+              <Badge variant="success" className="gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>SLA Target Met (Above 60%)</span>
+              </Badge>
+            ) : fillupPct > 0 ? (
+              <Badge variant="warning" className="gap-1.5">
+                <Clock className="w-3.5 h-3.5" />
+                <span>In Progress ({fillupPct}%)</span>
+              </Badge>
+            ) : (
+              <Badge variant="secondary" className="gap-1.5 text-slate-500">
+                <Clock className="w-3.5 h-3.5" />
+                <span>Awaiting Today&apos;s Runs (0%)</span>
+              </Badge>
+            )}
           </div>
         </Card>
 
@@ -379,28 +384,38 @@ export default function AdminDashboardPage() {
 
           {/* DEPARTMENT BREAKDOWN BARS */}
           <div className="space-y-3.5">
-            {Object.entries(deptTotals).map(([deptName, cups], idx) => {
-              const maxCups = Math.max(...Object.values(deptTotals), 1);
-              const barWidth = Math.round((cups / maxCups) * 100);
+            {Object.keys(deptTotals).length === 0 ? (
+              <div className="p-8 text-center text-xs text-slate-500 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                <Coffee className="w-8 h-8 text-slate-300 mx-auto" />
+                <div className="font-semibold text-slate-700">No Tea Count Logged Yet Today</div>
+                <p className="text-[11px] text-slate-400">
+                  Click &quot;+ Log Tea Count&quot; or have floor operators record departmental tea logistics.
+                </p>
+              </div>
+            ) : (
+              Object.entries(deptTotals).map(([deptName, cups], idx) => {
+                const maxCups = Math.max(...Object.values(deptTotals), 1);
+                const barWidth = Math.round((cups / maxCups) * 100);
 
-              return (
-                <div key={idx} className="space-y-1.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-semibold text-slate-800 flex items-center gap-2">
-                      <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                      {deptName}
-                    </span>
-                    <span className="font-mono font-bold text-indigo-600 text-sm">{cups} cups</span>
+                return (
+                  <div key={idx} className="space-y-1.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-semibold text-slate-800 flex items-center gap-2">
+                        <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                        {deptName}
+                      </span>
+                      <span className="font-mono font-bold text-indigo-600 text-sm">{cups} cups</span>
+                    </div>
+                    <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                      <div
+                        className="bg-indigo-600 h-full rounded-full transition-all duration-500"
+                        style={{ width: `${barWidth}%` }}
+                      />
+                    </div>
                   </div>
-                  <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
-                    <div
-                      className="bg-indigo-600 h-full rounded-full transition-all duration-500"
-                      style={{ width: `${barWidth}%` }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
 
           {/* Quick Footer Summary */}
@@ -429,7 +444,9 @@ export default function AdminDashboardPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {reportData?.checksheets?.slice(0, 6).map((cs, idx) => {
-            const isFilled = idx < filledChecksheets;
+            const hasSubmission = reportData?.submissions?.some(
+              (s) => s.checkSheet?._id === cs._id || s.checkSheet === cs._id || s.checkSheet?.code === cs.code
+            );
             return (
               <div
                 key={idx}
@@ -439,7 +456,7 @@ export default function AdminDashboardPage() {
                   <div className="font-semibold text-slate-900 truncate">{cs.title}</div>
                   <div className="text-[10px] text-slate-500 font-mono">{cs.code} • {cs.category || "JH Inspection"}</div>
                 </div>
-                {isFilled ? (
+                {hasSubmission ? (
                   <Badge variant="success">
                     Filled Up
                   </Badge>
