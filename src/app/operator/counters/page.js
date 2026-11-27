@@ -300,15 +300,15 @@ export default function OperatorCountersPage() {
           <div className="flex items-center gap-2 mb-1">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-indigo-600">
-              * Operator 1 Flow * (Client Sheet 1 & 2)
+              Food Service &amp; Dining
             </span>
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2.5">
             <Utensils className="w-7 h-7 text-indigo-600" />
-            <span>Counter Readiness & Plate Counts</span>
+            <span>Counter Readiness &amp; Plate Counts</span>
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Shift 1 & General, Shift 2, and VIP Counter readiness confirmation + separate live photos + total/consumed plates.
+            Confirm counter service readiness, capture shift verification photos, and record prepared vs consumed plates.
           </p>
         </div>
 
@@ -342,7 +342,7 @@ export default function OperatorCountersPage() {
         </div>
       )}
 
-      {/* TABS SWITCHER: SHIFT 1 & GEN vs SHIFT 2 vs VIP COUNTER */}
+      {/* TABS SWITCHER */}
       <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
         <button
           onClick={() => setActiveTab("SHIFT_1_GEN")}
@@ -353,7 +353,7 @@ export default function OperatorCountersPage() {
           }`}
         >
           <Clock className="w-4 h-4" />
-          <span>1) Shift 1 & General (Separate Clicks)</span>
+          <span>Shift 1 &amp; General Shift</span>
         </button>
 
         <button
@@ -365,7 +365,7 @@ export default function OperatorCountersPage() {
           }`}
         >
           <Layers className="w-4 h-4" />
-          <span>2) Shift 2 (Snacks & Dinner)</span>
+          <span>Shift 2 (Snacks &amp; Dinner)</span>
         </button>
 
         <button
@@ -377,7 +377,7 @@ export default function OperatorCountersPage() {
           }`}
         >
           <Crown className="w-4 h-4 text-amber-300" />
-          <span>3) VIP Counter (Setup)</span>
+          <span>VIP Counter Setup</span>
         </button>
       </div>
 
@@ -391,7 +391,7 @@ export default function OperatorCountersPage() {
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600">
-                  Item 1
+                  Breakfast Service
                 </span>
                 <h3 className="text-lg font-bold text-slate-900">Breakfast Counter Setup</h3>
                 <p className="text-xs text-slate-500">1st Shift & General Shift (Separate Live Photos)</p>
@@ -597,7 +597,7 @@ export default function OperatorCountersPage() {
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600">
-                  Item 2
+                  Lunch Service
                 </span>
                 <h3 className="text-lg font-bold text-slate-900">Lunch Counter Setup</h3>
                 <p className="text-xs text-slate-500">1st Shift & General Shift (Separate Live Photos)</p>
@@ -959,7 +959,7 @@ export default function OperatorCountersPage() {
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600">
-                  Item 2
+                  Lunch Service
                 </span>
                 <h3 className="text-lg font-bold text-slate-900">Dinner Counter Setup</h3>
                 <p className="text-xs text-slate-500">Shift 2 Night Operation</p>

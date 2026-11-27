@@ -150,21 +150,18 @@ export default function BiscuitAuditPage() {
       <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-700">
-              OPERATOR 2 MODULE
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
+              Pantry Inventory
             </span>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700">
-              SHEET 4 - PART 2
-            </span>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
-              AUTO ROLL-OVER LEDGER
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+              Auto Roll-Over Ledger
             </span>
           </div>
           <h1 className="text-2xl font-bold text-slate-900 mt-2 flex items-center gap-2">
             <Package className="w-7 h-7 text-indigo-600" />
-            Biscuit Count & Inventory Audit Ledger
+            Biscuit Count &amp; Inventory Audit Ledger
           </h1>
-          <p className="text-sm text-slate-600 mt-1">
+          <p className="text-sm text-slate-500 mt-1">
             Track daily opening stock, additions, 1st &amp; 2nd shift consumptions, and automatic closing stock roll-over across 5 products.
           </p>
         </div>
@@ -448,24 +445,24 @@ export default function BiscuitAuditPage() {
           </CardContent>
         </Card>
 
-        {/* Client Specification Reference Card */}
+        {/* Inventory Rules Card */}
         <div className="space-y-6">
           <Card className="bg-white border-slate-200 shadow-xs">
             <CardHeader className="pb-3 border-b border-slate-100">
               <CardTitle className="text-sm font-semibold text-slate-900 flex items-center gap-2">
-                <FileSpreadsheet className="w-4 h-4 text-purple-600" />
-                Client Specification Walkthrough
+                <FileSpreadsheet className="w-4 h-4 text-indigo-600" />
+                Inventory Accounting Rules
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-4 space-y-3.5 text-xs text-slate-600">
-              <div className="bg-purple-50 p-3 rounded-lg border border-purple-100 space-y-1">
-                <span className="font-semibold text-purple-900 block">Client Note (Sheet 4):</span>
-                <p className="text-purple-800 text-[11px] leading-relaxed">
-                  &quot;2) Biscuit Count (Audit): Parle-G in stock ex - 1000. New add stock, 1st shift, 2nd shift, Total consumption, Closing stock (Automatic yenar) aani toch stock next day la opening stock asnar.&quot;
+              <div className="bg-indigo-50/70 p-3 rounded-lg border border-indigo-100 space-y-1">
+                <span className="font-semibold text-indigo-950 block">Audit &amp; Roll-Over Standard:</span>
+                <p className="text-indigo-800 text-[11px] leading-relaxed">
+                  Daily closing balance automatically rolls over as tomorrow&apos;s opening balance, maintaining continuous variance-free pantry accounting.
                 </p>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2.5">
                 <div className="flex items-start gap-2">
                   <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 font-bold text-[10px] shrink-0 mt-0.5">
                     1

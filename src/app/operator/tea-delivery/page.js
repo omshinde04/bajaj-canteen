@@ -195,15 +195,15 @@ export default function TeaDeliveryOperatorPage() {
           <div className="flex items-center gap-2 mb-1">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
             <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-amber-600">
-              * Tea Operator Flow * (Client Sheet 3)
+              Shop Floor Logistics
             </span>
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2.5">
             <Coffee className="w-7 h-7 text-amber-500" />
-            <span>Tea Distribution & Waste Tracking</span>
+            <span>Tea Distribution &amp; Wastage Log</span>
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Tea Delivery (Liters) + Live Photo proof &rarr; Tea Return (Liters) &rarr; Automated Consumption & Wastage calculation.
+            Log dispatch kettle volumes in Liters with verification photos, collect returns, and track real-time departmental consumption &amp; wastage.
           </p>
         </div>
 

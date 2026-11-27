@@ -153,22 +153,19 @@ export default function OperatorChecksheetsPage() {
       <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-700">
-              OPERATOR 2 MODULE
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
+              Operational Maintenance
             </span>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700">
-              SHEET 4 - PART 1
-            </span>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
-              LIVE PHOTO PROOF MANDATORY
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+              54 Active Checklists
             </span>
           </div>
           <h1 className="text-2xl font-bold text-slate-900 mt-2 flex items-center gap-2">
             <FileSpreadsheet className="w-7 h-7 text-indigo-600" />
-            50+ Operational &amp; JH Check Sheets
+            Operational &amp; Autonomous Checksheets
           </h1>
-          <p className="text-sm text-slate-600 mt-1">
-            Complete daily kitchen sanitation, cold chain telemetries, and autonomous maintenance checks with camera verification.
+          <p className="text-sm text-slate-500 mt-1">
+            Complete scheduled kitchen hygiene logs, cold chain telemetry, and machine autonomous maintenance with photo verification.
           </p>
         </div>
 
@@ -246,7 +243,7 @@ export default function OperatorChecksheetsPage() {
               }`}
             >
               <UtensilsCrossed className="w-3.5 h-3.5" />
-              0–25 Main Kitchen ({countMain})
+              Main Kitchen ({countMain})
             </button>
             <button
               onClick={() => handleGroupChange("JH")}
@@ -257,7 +254,7 @@ export default function OperatorChecksheetsPage() {
               }`}
             >
               <Wrench className="w-3.5 h-3.5" />
-              25–50 JH Equipment ({countJH})
+              Autonomous Machinery ({countJH})
             </button>
             {countOther > 0 && (
               <button
