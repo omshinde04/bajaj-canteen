@@ -2,40 +2,20 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   Search,
   Bell,
-  LogOut,
   Clock,
   Building2,
   ShieldCheck,
   CheckCircle2,
-  RefreshCw,
   Sparkles,
 } from "lucide-react";
 
 export default function OperatorHeader() {
-  const router = useRouter();
-  const [user, setUser] = useState({
-    name: "Ramesh Pawar",
-    employeeId: "BAJAJ-OP-01",
-    email: "operator@bajaj.com",
-    role: { name: "Operator" },
-  });
   const [currentTime, setCurrentTime] = useState("");
-  const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
-    fetch("/api/auth/me")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.authenticated && data.user) {
-          setUser(data.user);
-        }
-      })
-      .catch(() => {});
-
     const updateTime = () => {
       const now = new Date();
       setCurrentTime(
@@ -51,16 +31,6 @@ export default function OperatorHeader() {
     const timer = setInterval(updateTime, 1000);
     return () => clearInterval(timer);
   }, []);
-
-  const handleLogout = async () => {
-    setLoggingOut(true);
-    try {
-      await fetch("/api/auth/logout", { method: "POST" });
-      router.push("/login");
-    } catch (e) {
-      router.push("/login");
-    }
-  };
 
   return (
     <header className="h-16 border-b border-slate-200 bg-white px-6 flex items-center justify-between sticky top-0 z-40 font-sans shadow-2xs">
@@ -91,8 +61,14 @@ export default function OperatorHeader() {
         </div>
       </div>
 
-      {/* Right Actions: Notifications, Operator Profile & Logout */}
+      {/* Right Actions: Notifications & Plant Bay Status */}
       <div className="flex items-center gap-3">
+        {/* Plant Online Pill */}
+        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span>Akurdi Plant • Floor Active</span>
+        </div>
+
         {/* Notifications Icon with Badge */}
         <button
           type="button"
@@ -102,26 +78,6 @@ export default function OperatorHeader() {
           <Bell className="w-4 h-4" />
           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-600 rounded-full ring-2 ring-white" />
         </button>
-
-        {/* Operator Profile Badge */}
-        <div className="flex items-center gap-2.5 pl-3 border-l border-slate-200">
-          <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-xs">
-            {user.name ? user.name[0] : "O"}
-          </div>
-          <div className="hidden md:block text-left">
-            <div className="text-xs font-bold text-slate-900 leading-tight">{user.name}</div>
-            <div className="text-[10px] text-emerald-600 font-medium">On Duty • Floor</div>
-          </div>
-
-          <button
-            onClick={handleLogout}
-            disabled={loggingOut}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors ml-1 cursor-pointer"
-            title="Sign Out"
-          >
-            <LogOut className="w-4 h-4" />
-          </button>
-        </div>
       </div>
     </header>
   );
