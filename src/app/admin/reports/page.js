@@ -37,6 +37,32 @@ export default function ReportsAndDownloadsPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const getCounterTitle = (c) => {
+    if (c.shift === "VIP") {
+      return c.mealType === "BREAKFAST" ? "VIP Breakfast Counter" : "VIP Lunch Counter";
+    }
+    if (c.shift === "SHIFT_1_GEN") {
+      return c.mealType === "BREAKFAST" ? "Breakfast Counter" : "Lunch Counter";
+    }
+    if (c.shift === "SHIFT_2") {
+      return c.mealType === "SNACKS" ? "Snacks Counter" : "Dinner Counter";
+    }
+    return `${c.mealType ? c.mealType.charAt(0) + c.mealType.slice(1).toLowerCase() : "Main"} Counter`;
+  };
+
+  const getShiftLabel = (shift) => {
+    switch (shift) {
+      case "SHIFT_1_GEN":
+        return "Shift 1 & General";
+      case "SHIFT_2":
+        return "Shift 2";
+      case "VIP":
+        return "VIP Setup";
+      default:
+        return shift;
+    }
+  };
+
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setDate(today);
@@ -123,9 +149,9 @@ export default function ReportsAndDownloadsPage() {
     csvRows.push(["Counter Name", "Shift", "Status", "Prepared Plates", "Consumed Plates", "Balance Plates"]);
     (data.counterLogs || []).forEach((c) => {
       csvRows.push([
-        `"${c.counterName}"`,
-        c.shift,
-        c.status,
+        `"${getCounterTitle(c)}"`,
+        getShiftLabel(c.shift),
+        c.isReady ? "READY" : "NOT READY",
         c.totalPlates || 0,
         c.consumedPlates || 0,
         c.balancePlates || 0,
@@ -343,15 +369,15 @@ export default function ReportsAndDownloadsPage() {
                 <TableBody>
                   {data.counterLogs.map((c) => (
                     <TableRow key={c._id}>
-                      <TableCell className="font-semibold text-slate-900">{c.counterName}</TableCell>
+                      <TableCell className="font-semibold text-slate-900">{getCounterTitle(c)}</TableCell>
                       <TableCell>
                         <Badge variant="outline" className="font-mono text-xs">
-                          {c.shift}
+                          {getShiftLabel(c.shift)}
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={c.status === "READY" ? "success" : "warning"} className="text-[10px]">
-                          {c.status}
+                        <Badge variant={c.isReady ? "success" : "warning"} className="text-[10px]">
+                          {c.isReady ? "Ready" : "Not Ready"}
                         </Badge>
                       </TableCell>
                       <TableCell className="font-mono">{c.totalPlates || 0}</TableCell>
