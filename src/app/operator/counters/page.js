@@ -23,108 +23,135 @@ import {
   Upload,
   Moon,
   Filter,
+  Sun,
 } from "lucide-react";
+
+// Initial state helpers
+const emptyShift1 = {
+  BREAKFAST: {
+    isReady: false,
+    totalPlates: 0,
+    consumedPlates: 0,
+    openingPhoto: "",
+    closingPhoto: "",
+    notes: "",
+  },
+  LUNCH: {
+    isReady: false,
+    totalPlates: 0,
+    consumedPlates: 0,
+    openingPhoto: "",
+    closingPhoto: "",
+    notes: "",
+  },
+};
+
+const emptyGeneral = {
+  BREAKFAST: {
+    isReady: false,
+    totalPlates: 0,
+    consumedPlates: 0,
+    openingPhoto: "",
+    closingPhoto: "",
+    notes: "",
+  },
+  LUNCH: {
+    isReady: false,
+    totalPlates: 0,
+    consumedPlates: 0,
+    openingPhoto: "",
+    closingPhoto: "",
+    notes: "",
+  },
+};
+
+const emptyShift2 = {
+  SNACKS: {
+    isReady: false,
+    totalPlates: 0,
+    consumedPlates: 0,
+    openingPhoto: "",
+    closingPhoto: "",
+    notes: "",
+  },
+  DINNER: {
+    isReady: false,
+    totalPlates: 0,
+    consumedPlates: 0,
+    openingPhoto: "",
+    closingPhoto: "",
+    notes: "",
+  },
+};
+
+const emptyShift3 = {
+  SNACKS: {
+    isReady: false,
+    totalPlates: 0,
+    consumedPlates: 0,
+    openingPhoto: "",
+    closingPhoto: "",
+    notes: "",
+  },
+  DINNER: {
+    isReady: false,
+    totalPlates: 0,
+    consumedPlates: 0,
+    openingPhoto: "",
+    closingPhoto: "",
+    notes: "",
+  },
+};
+
+const emptyVip = {
+  BREAKFAST: {
+    isReady: false,
+    totalPlates: 0,
+    consumedPlates: 0,
+    openingPhoto: "",
+    closingPhoto: "",
+    notes: "",
+  },
+  LUNCH: {
+    isReady: false,
+    totalPlates: 0,
+    consumedPlates: 0,
+    openingPhoto: "",
+    closingPhoto: "",
+    notes: "",
+  },
+  SNACKS: {
+    isReady: false,
+    totalPlates: 0,
+    consumedPlates: 0,
+    openingPhoto: "",
+    closingPhoto: "",
+    notes: "",
+  },
+  DINNER: {
+    isReady: false,
+    totalPlates: 0,
+    consumedPlates: 0,
+    openingPhoto: "",
+    closingPhoto: "",
+    notes: "",
+  },
+};
 
 export default function OperatorCountersPage() {
   const [date, setDate] = useState("");
-  const [activeTab, setActiveTab] = useState("SHIFT_1_GEN"); // "SHIFT_1_GEN", "SHIFT_2", "SHIFT_3", "VIP"
-  const [activeVipTab, setActiveVipTab] = useState("BREAKFAST"); // "BREAKFAST", "LUNCH", "SNACKS", "DINNER"
+  // Tabs: "SHIFT_1", "GENERAL", "SHIFT_2", "SHIFT_3", "VIP"
+  const [activeTab, setActiveTab] = useState("SHIFT_1");
+  const [activeVipTab, setActiveVipTab] = useState("BREAKFAST");
   const [vipFilter, setVipFilter] = useState("ALL"); // "ALL", "CONSUMED", "BALANCE"
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [savingMeal, setSavingMeal] = useState("");
   const [feedback, setFeedback] = useState("");
 
-  const emptyShift1 = {
-    BREAKFAST: {
-      isReady: false,
-      totalPlates: 0,
-      consumedPlates: 0,
-      shift1Count: 0,
-      generalCount: 0,
-      photo1stShift: "",
-      photoGeneral: "",
-      notes: "",
-    },
-    LUNCH: {
-      isReady: false,
-      totalPlates: 0,
-      consumedPlates: 0,
-      shift1Count: 0,
-      generalCount: 0,
-      photo1stShift: "",
-      photoGeneral: "",
-      notes: "",
-    },
-  };
-
-  const emptyShift2 = {
-    SNACKS: {
-      isReady: false,
-      totalPlates: 0,
-      consumedPlates: 0,
-      photo: "",
-      notes: "",
-    },
-    DINNER: {
-      isReady: false,
-      totalPlates: 0,
-      consumedPlates: 0,
-      photo: "",
-      notes: "",
-    },
-  };
-
-  const emptyShift3 = {
-    SNACKS: {
-      isReady: false,
-      totalPlates: 0,
-      consumedPlates: 0,
-      photo: "",
-      notes: "",
-    },
-    DINNER: {
-      isReady: false,
-      totalPlates: 0,
-      consumedPlates: 0,
-      photo: "",
-      notes: "",
-    },
-  };
-
-  const emptyVip = {
-    BREAKFAST: {
-      isReady: false,
-      totalPlates: 0,
-      consumedPlates: 0,
-      photo: "",
-      notes: "",
-    },
-    LUNCH: {
-      isReady: false,
-      totalPlates: 0,
-      consumedPlates: 0,
-      photo: "",
-      notes: "",
-    },
-    SNACKS: {
-      isReady: false,
-      totalPlates: 0,
-      consumedPlates: 0,
-      photo: "",
-      notes: "",
-    },
-    DINNER: {
-      isReady: false,
-      totalPlates: 0,
-      consumedPlates: 0,
-      photo: "",
-      notes: "",
-    },
-  };
-
   // Counter Forms State
   const [shift1Forms, setShift1Forms] = useState(emptyShift1);
+  const [generalForms, setGeneralForms] = useState(emptyGeneral);
   const [shift2Forms, setShift2Forms] = useState(emptyShift2);
   const [shift3Forms, setShift3Forms] = useState(emptyShift3);
   const [vipForms, setVipForms] = useState(emptyVip);
@@ -143,29 +170,92 @@ export default function OperatorCountersPage() {
         setLogs(json.logs || []);
 
         const nextShift1 = JSON.parse(JSON.stringify(emptyShift1));
+        const nextGeneral = JSON.parse(JSON.stringify(emptyGeneral));
         const nextShift2 = JSON.parse(JSON.stringify(emptyShift2));
         const nextShift3 = JSON.parse(JSON.stringify(emptyShift3));
         const nextVip = JSON.parse(JSON.stringify(emptyVip));
 
+        const extractPhotos = (log) => {
+          let opening = log.openingPhoto || "";
+          let closing = log.closingPhoto || "";
+
+          // Fallback to photos array if opening/closing not set directly
+          if (!opening && log.photos && log.photos.length > 0) {
+            const openP = log.photos.find(
+              (p) =>
+                p.caption?.toLowerCase().includes("open") ||
+                p.subShift === "OPENING" ||
+                p.subShift === "1ST_SHIFT"
+            );
+            opening = openP ? openP.url : log.photos[0]?.url || "";
+          }
+
+          if (!closing && log.photos && log.photos.length > 1) {
+            const closeP = log.photos.find(
+              (p) =>
+                p.caption?.toLowerCase().includes("close") ||
+                p.subShift === "CLOSING" ||
+                p.subShift === "GENERAL"
+            );
+            closing = closeP ? closeP.url : log.photos[1]?.url || "";
+          }
+
+          return { opening, closing };
+        };
+
         // Hydrate forms if logs exist
         (json.logs || []).forEach((log) => {
-          if (log.shift === "SHIFT_1_GEN" && nextShift1[log.mealType]) {
+          const { opening, closing } = extractPhotos(log);
+
+          if (log.shift === "SHIFT_1" && nextShift1[log.mealType]) {
             nextShift1[log.mealType] = {
               isReady: log.isReady ?? false,
               totalPlates: log.totalPlates ?? 0,
               consumedPlates: log.consumedPlates ?? 0,
-              shift1Count: log.subShiftBreakdown?.shift1Count ?? 0,
-              generalCount: log.subShiftBreakdown?.generalCount ?? 0,
-              photo1stShift: log.photos?.find((p) => p.subShift === "1ST_SHIFT")?.url || "",
-              photoGeneral: log.photos?.find((p) => p.subShift === "GENERAL")?.url || "",
+              openingPhoto: opening,
+              closingPhoto: closing,
               notes: log.notes || "",
             };
+          } else if (log.shift === "GENERAL" && nextGeneral[log.mealType]) {
+            nextGeneral[log.mealType] = {
+              isReady: log.isReady ?? false,
+              totalPlates: log.totalPlates ?? 0,
+              consumedPlates: log.consumedPlates ?? 0,
+              openingPhoto: opening,
+              closingPhoto: closing,
+              notes: log.notes || "",
+            };
+          } else if (log.shift === "SHIFT_1_GEN") {
+            // Legacy backwards-compatibility hydration
+            if (nextShift1[log.mealType] && !nextShift1[log.mealType].openingPhoto) {
+              const photo1 = log.photos?.find((p) => p.subShift === "1ST_SHIFT")?.url || opening;
+              nextShift1[log.mealType] = {
+                isReady: log.isReady ?? false,
+                totalPlates: log.subShiftBreakdown?.shift1Count || log.totalPlates || 0,
+                consumedPlates: log.consumedPlates ?? 0,
+                openingPhoto: photo1,
+                closingPhoto: "",
+                notes: log.notes || "",
+              };
+            }
+            if (nextGeneral[log.mealType] && !nextGeneral[log.mealType].openingPhoto) {
+              const photoGen = log.photos?.find((p) => p.subShift === "GENERAL")?.url || closing;
+              nextGeneral[log.mealType] = {
+                isReady: log.isReady ?? false,
+                totalPlates: log.subShiftBreakdown?.generalCount || log.totalPlates || 0,
+                consumedPlates: log.consumedPlates ?? 0,
+                openingPhoto: photoGen,
+                closingPhoto: "",
+                notes: log.notes || "",
+              };
+            }
           } else if (log.shift === "SHIFT_2" && nextShift2[log.mealType]) {
             nextShift2[log.mealType] = {
               isReady: log.isReady ?? false,
               totalPlates: log.totalPlates ?? 0,
               consumedPlates: log.consumedPlates ?? 0,
-              photo: log.photos?.[0]?.url || "",
+              openingPhoto: opening,
+              closingPhoto: closing,
               notes: log.notes || "",
             };
           } else if (log.shift === "SHIFT_3" && nextShift3[log.mealType]) {
@@ -173,7 +263,8 @@ export default function OperatorCountersPage() {
               isReady: log.isReady ?? false,
               totalPlates: log.totalPlates ?? 0,
               consumedPlates: log.consumedPlates ?? 0,
-              photo: log.photos?.[0]?.url || "",
+              openingPhoto: opening,
+              closingPhoto: closing,
               notes: log.notes || "",
             };
           } else if (log.shift === "VIP" && nextVip[log.mealType]) {
@@ -181,13 +272,15 @@ export default function OperatorCountersPage() {
               isReady: log.isReady ?? false,
               totalPlates: log.totalPlates ?? 0,
               consumedPlates: log.consumedPlates ?? 0,
-              photo: log.photos?.[0]?.url || "",
+              openingPhoto: opening,
+              closingPhoto: closing,
               notes: log.notes || "",
             };
           }
         });
 
         setShift1Forms(nextShift1);
+        setGeneralForms(nextGeneral);
         setShift2Forms(nextShift2);
         setShift3Forms(nextShift3);
         setVipForms(nextVip);
@@ -221,18 +314,25 @@ export default function OperatorCountersPage() {
     }
   };
 
-  // Save Shift 1 & General Meal
-  const handleSaveShift1 = async (mealType) => {
-    const form = shift1Forms[mealType];
-    setSavingMeal(mealType);
+  // Generic Save Handler for any shift and meal
+  const handleSaveMeal = async (shift, mealType, form) => {
+    setSavingMeal(`${shift}_${mealType}`);
     setFeedback("");
     try {
       const photos = [];
-      if (form.photo1stShift) {
-        photos.push({ url: form.photo1stShift, subShift: "1ST_SHIFT", caption: "1st Shift Counter" });
+      if (form.openingPhoto) {
+        photos.push({
+          url: form.openingPhoto,
+          subShift: "OPENING",
+          caption: `${shift} ${mealType} Opening Photo`,
+        });
       }
-      if (form.photoGeneral) {
-        photos.push({ url: form.photoGeneral, subShift: "GENERAL", caption: "General Shift Counter" });
+      if (form.closingPhoto) {
+        photos.push({
+          url: form.closingPhoto,
+          subShift: "CLOSING",
+          caption: `${shift} ${mealType} Closing Photo`,
+        });
       }
 
       const res = await fetch("/api/counter-logs", {
@@ -240,15 +340,13 @@ export default function OperatorCountersPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           date,
-          shift: "SHIFT_1_GEN",
+          shift,
           mealType,
           isReady: form.isReady,
+          openingPhoto: form.openingPhoto,
+          closingPhoto: form.closingPhoto,
           totalPlates: Number(form.totalPlates),
           consumedPlates: Number(form.consumedPlates),
-          subShiftBreakdown: {
-            shift1Count: Number(form.shift1Count),
-            generalCount: Number(form.generalCount),
-          },
           photos,
           notes: form.notes,
           loggedBy: "Operator 1",
@@ -257,7 +355,17 @@ export default function OperatorCountersPage() {
 
       const json = await res.json();
       if (json.success) {
-        setFeedback(`${mealType} Counter Log saved successfully!`);
+        const shiftDisplay =
+          shift === "SHIFT_1"
+            ? "Shift 1"
+            : shift === "GENERAL"
+            ? "General Shift"
+            : shift === "SHIFT_2"
+            ? "Shift 2"
+            : shift === "SHIFT_3"
+            ? "Shift 3"
+            : "VIP";
+        setFeedback(`${shiftDisplay} ${mealType} saved successfully! (Opening & Closing photos synced)`);
         fetchLogs();
       }
     } catch (e) {
@@ -267,112 +375,226 @@ export default function OperatorCountersPage() {
     }
   };
 
-  // Save Shift 2 Meal
-  const handleSaveShift2 = async (mealType) => {
-    const form = shift2Forms[mealType];
-    setSavingMeal(mealType);
-    setFeedback("");
-    try {
-      const photos = form.photo ? [{ url: form.photo, subShift: "STANDARD", caption: `${mealType} Setup` }] : [];
+  // Reusable Counter Card Component
+  const renderCounterCard = ({
+    shift,
+    mealType,
+    title,
+    subtitle,
+    badgeText,
+    badgeColor = "text-indigo-600",
+    form,
+    setForm,
+    isVip = false,
+  }) => {
+    const isSaving = savingMeal === `${shift}_${mealType}`;
+    const balance = Math.max(0, Number(form.totalPlates || 0) - Number(form.consumedPlates || 0));
 
-      const res = await fetch("/api/counter-logs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          date,
-          shift: "SHIFT_2",
-          mealType,
-          isReady: form.isReady,
-          totalPlates: Number(form.totalPlates),
-          consumedPlates: Number(form.consumedPlates),
-          photos,
-          notes: form.notes,
-          loggedBy: "Operator 1",
-        }),
-      });
+    const updateField = (field, val) => {
+      setForm((prev) => ({
+        ...prev,
+        [mealType]: {
+          ...prev[mealType],
+          [field]: val,
+        },
+      }));
+    };
 
-      const json = await res.json();
-      if (json.success) {
-        setFeedback(`Shift 2 ${mealType} Log saved successfully!`);
-        fetchLogs();
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setSavingMeal("");
-    }
-  };
+    return (
+      <Card
+        className={`p-6 space-y-5 shadow-xs transition-all ${
+          isVip
+            ? "border-amber-200/80 bg-gradient-to-b from-amber-50/20 via-white to-white"
+            : shift === "GENERAL"
+            ? "border-sky-200/80 bg-gradient-to-b from-sky-50/20 via-white to-white"
+            : shift === "SHIFT_3"
+            ? "border-indigo-100 bg-gradient-to-b from-indigo-50/20 via-white to-white"
+            : "border-slate-200 bg-white"
+        }`}
+      >
+        {/* CARD HEADER */}
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <span className={`text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 ${badgeColor}`}>
+              {isVip && <Crown className="w-3.5 h-3.5" />}
+              {shift === "GENERAL" && <Sun className="w-3.5 h-3.5" />}
+              {badgeText}
+            </span>
+            <h3 className="text-lg font-bold text-slate-900 mt-0.5">{title}</h3>
+            <p className="text-xs text-slate-500">{subtitle}</p>
+          </div>
 
-  // Save Shift 3 Meal (Night Snacks & Dinner)
-  const handleSaveShift3 = async (mealType) => {
-    const form = shift3Forms[mealType];
-    setSavingMeal(`SHIFT_3_${mealType}`);
-    setFeedback("");
-    try {
-      const photos = form.photo ? [{ url: form.photo, subShift: "STANDARD", caption: `Shift 3 ${mealType}` }] : [];
+          {/* READY / NOT READY TOGGLE */}
+          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 border border-slate-200">
+            <button
+              type="button"
+              onClick={() => updateField("isReady", true)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                form.isReady ? "bg-emerald-600 text-white shadow-xs" : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Ready
+            </button>
+            <button
+              type="button"
+              onClick={() => updateField("isReady", false)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                !form.isReady ? "bg-rose-600 text-white shadow-xs" : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Not Ready
+            </button>
+          </div>
+        </div>
 
-      const res = await fetch("/api/counter-logs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          date,
-          shift: "SHIFT_3",
-          mealType,
-          isReady: form.isReady,
-          totalPlates: Number(form.totalPlates),
-          consumedPlates: Number(form.consumedPlates),
-          photos,
-          notes: form.notes,
-          loggedBy: "Operator 1",
-        }),
-      });
+        {/* OPENING & CLOSING PHOTO PROOF (SIDE-BY-SIDE) */}
+        <div className="space-y-2">
+          <label className="text-[10px] font-bold uppercase tracking-wider text-slate-600 block">
+            Live Photo Verification (Opening &amp; Closing Required)
+          </label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* 1. Counter Opening Photo */}
+            <div className="border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-2 text-center">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-slate-700">Counter Opening Photo</span>
+                <span className="text-[9px] font-mono font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded">
+                  Service Start
+                </span>
+              </div>
 
-      const json = await res.json();
-      if (json.success) {
-        setFeedback(`Shift 3 ${mealType} Log saved successfully!`);
-        fetchLogs();
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setSavingMeal("");
-    }
-  };
+              {form.openingPhoto ? (
+                <div className="relative aspect-video rounded-lg overflow-hidden border border-slate-200 shadow-2xs">
+                  <img src={form.openingPhoto} alt="Opening" className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => updateField("openingPhoto", "")}
+                    className="absolute top-1 right-1 p-1 bg-black/75 hover:bg-black text-white rounded text-[10px] font-bold cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ) : (
+                <label className="flex flex-col items-center justify-center p-3 border-2 border-dashed border-slate-200 hover:border-indigo-600 rounded-lg cursor-pointer bg-white transition">
+                  <Camera className="w-5 h-5 text-indigo-600 mb-1" />
+                  <span className="text-[11px] font-semibold text-slate-700">Capture Opening Photo</span>
+                  <span className="text-[9px] text-slate-400 mt-0.5">Click or upload start photo</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={(e) => handlePhotoUpload(e, (url) => updateField("openingPhoto", url))}
+                    className="hidden"
+                  />
+                </label>
+              )}
+            </div>
 
-  // Save VIP Counter
-  const handleSaveVip = async (mealType) => {
-    const form = vipForms[mealType];
-    setSavingMeal(mealType);
-    setFeedback("");
-    try {
-      const photos = form.photo ? [{ url: form.photo, subShift: "STANDARD", caption: `VIP ${mealType}` }] : [];
+            {/* 2. Counter Closing Photo */}
+            <div className="border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-2 text-center">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-slate-700">Counter Closing Photo</span>
+                <span className="text-[9px] font-mono font-bold text-indigo-700 bg-indigo-100 px-1.5 py-0.2 rounded">
+                  Service Close
+                </span>
+              </div>
 
-      const res = await fetch("/api/counter-logs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          date,
-          shift: "VIP",
-          mealType,
-          isReady: form.isReady,
-          totalPlates: Number(form.totalPlates),
-          consumedPlates: Number(form.consumedPlates),
-          photos,
-          notes: form.notes,
-          loggedBy: "Operator 1",
-        }),
-      });
+              {form.closingPhoto ? (
+                <div className="relative aspect-video rounded-lg overflow-hidden border border-slate-200 shadow-2xs">
+                  <img src={form.closingPhoto} alt="Closing" className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => updateField("closingPhoto", "")}
+                    className="absolute top-1 right-1 p-1 bg-black/75 hover:bg-black text-white rounded text-[10px] font-bold cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ) : (
+                <label className="flex flex-col items-center justify-center p-3 border-2 border-dashed border-slate-200 hover:border-indigo-600 rounded-lg cursor-pointer bg-white transition">
+                  <Camera className="w-5 h-5 text-indigo-600 mb-1" />
+                  <span className="text-[11px] font-semibold text-slate-700">Capture Closing Photo</span>
+                  <span className="text-[9px] text-slate-400 mt-0.5">Click or upload end photo</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={(e) => handlePhotoUpload(e, (url) => updateField("closingPhoto", url))}
+                    className="hidden"
+                  />
+                </label>
+              )}
+            </div>
+          </div>
+        </div>
 
-      const json = await res.json();
-      if (json.success) {
-        setFeedback(`VIP ${mealType} Log saved successfully!`);
-        fetchLogs();
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setSavingMeal("");
-    }
+        {/* PLATE COUNTS (TOTAL vs CONSUMED & BALANCE) */}
+        <div className="space-y-3 pt-2 border-t border-slate-100">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
+              Plate Count (Prepared / Consumed)
+            </span>
+            <span
+              className={`text-xs font-mono font-bold ${
+                isVip ? "text-amber-700" : shift === "GENERAL" ? "text-sky-700" : "text-indigo-600"
+              }`}
+            >
+              Balance: {balance} plates
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <label className="text-[11px] font-semibold text-slate-700">Total Prepared Plates</label>
+              <Input
+                type="number"
+                min="0"
+                value={form.totalPlates}
+                onChange={(e) => updateField("totalPlates", e.target.value)}
+                className="font-mono text-base font-bold"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[11px] font-semibold text-slate-700">Total Consumed Plates</label>
+              <Input
+                type="number"
+                min="0"
+                value={form.consumedPlates}
+                onChange={(e) => updateField("consumedPlates", e.target.value)}
+                className="font-mono text-base font-bold text-emerald-700"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* OPERATIONAL NOTES */}
+        <div className="space-y-1">
+          <label className="text-[11px] font-semibold text-slate-700">Operational Notes</label>
+          <Input
+            type="text"
+            placeholder="e.g. Counter setup ready, clean inspection completed"
+            value={form.notes || ""}
+            onChange={(e) => updateField("notes", e.target.value)}
+          />
+        </div>
+
+        {/* SAVE BUTTON */}
+        <Button
+          onClick={() => handleSaveMeal(shift, mealType, form)}
+          loading={isSaving}
+          className={`w-full font-bold shadow-xs cursor-pointer ${
+            isVip
+              ? "bg-amber-600 hover:bg-amber-700 text-white"
+              : shift === "GENERAL"
+              ? "bg-sky-600 hover:bg-sky-700 text-white"
+              : "bg-indigo-600 hover:bg-indigo-700 text-white"
+          }`}
+        >
+          <Save className="w-4 h-4 mr-2" />
+          <span>Save {title} Setup &amp; Photos</span>
+        </Button>
+      </Card>
+    );
   };
 
   return (
@@ -391,7 +613,7 @@ export default function OperatorCountersPage() {
             <span>Counter Readiness &amp; Plate Counts</span>
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Confirm counter service readiness, capture shift verification photos, and record prepared vs consumed plates.
+            Confirm counter service readiness, capture shift opening &amp; closing verification photos, and record prepared vs consumed plates.
           </p>
         </div>
 
@@ -403,13 +625,8 @@ export default function OperatorCountersPage() {
               type="date"
               value={date}
               max={new Date().toISOString().split("T")[0]}
-              onChange={(e) => {
-                const val = e.target.value;
-                const today = new Date().toISOString().split("T")[0];
-                if (val > today) return;
-                setDate(val);
-              }}
-              className="bg-transparent text-slate-900 font-mono text-xs focus:outline-none"
+              onChange={(e) => setDate(e.target.value)}
+              className="bg-transparent text-slate-900 font-mono text-xs focus:outline-none cursor-pointer"
             />
           </div>
 
@@ -425,31 +642,46 @@ export default function OperatorCountersPage() {
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             <span>{feedback}</span>
           </div>
-          <button onClick={() => setFeedback("")} className="text-emerald-700 font-bold hover:underline">
+          <button onClick={() => setFeedback("")} className="text-emerald-700 font-bold hover:underline cursor-pointer">
             ✕
           </button>
         </div>
       )}
 
-      {/* TABS SWITCHER */}
+      {/* TOP TABS SWITCHER: 5 DEDICATED SEPARATE TABS */}
       <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
+        {/* TAB 1: SHIFT 1 */}
         <button
-          onClick={() => setActiveTab("SHIFT_1_GEN")}
+          onClick={() => setActiveTab("SHIFT_1")}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
-            activeTab === "SHIFT_1_GEN"
-              ? "bg-indigo-600 text-white shadow-xs"
+            activeTab === "SHIFT_1"
+              ? "bg-indigo-600 text-white shadow-xs ring-2 ring-indigo-200"
               : "bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-slate-200"
           }`}
         >
           <Clock className="w-4 h-4" />
-          <span>Shift 1 &amp; General (Breakfast + Lunch)</span>
+          <span>Shift 1 (Breakfast &amp; Lunch)</span>
         </button>
 
+        {/* TAB 2: GENERAL SHIFT */}
+        <button
+          onClick={() => setActiveTab("GENERAL")}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
+            activeTab === "GENERAL"
+              ? "bg-sky-600 text-white shadow-xs ring-2 ring-sky-200"
+              : "bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-slate-200"
+          }`}
+        >
+          <Sun className="w-4 h-4 text-amber-300" />
+          <span>General Shift (Breakfast &amp; Lunch)</span>
+        </button>
+
+        {/* TAB 3: SHIFT 2 */}
         <button
           onClick={() => setActiveTab("SHIFT_2")}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
             activeTab === "SHIFT_2"
-              ? "bg-indigo-600 text-white shadow-xs"
+              ? "bg-indigo-600 text-white shadow-xs ring-2 ring-indigo-200"
               : "bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-slate-200"
           }`}
         >
@@ -457,11 +689,12 @@ export default function OperatorCountersPage() {
           <span>Shift 2 (Snacks &amp; Dinner)</span>
         </button>
 
+        {/* TAB 4: SHIFT 3 */}
         <button
           onClick={() => setActiveTab("SHIFT_3")}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
             activeTab === "SHIFT_3"
-              ? "bg-indigo-600 text-white shadow-xs"
+              ? "bg-indigo-600 text-white shadow-xs ring-2 ring-indigo-200"
               : "bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-slate-200"
           }`}
         >
@@ -469,1084 +702,190 @@ export default function OperatorCountersPage() {
           <span>Shift 3 (Night Snacks &amp; Dinner)</span>
         </button>
 
+        {/* TAB 5: VIP DINING SUITE */}
         <button
           onClick={() => setActiveTab("VIP")}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
             activeTab === "VIP"
-              ? "bg-amber-600 text-white shadow-xs"
+              ? "bg-amber-600 text-white shadow-xs ring-2 ring-amber-200"
               : "bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-slate-200"
           }`}
         >
-          <Crown className="w-4 h-4 text-amber-400" />
+          <Crown className="w-4 h-4 text-amber-300" />
           <span>VIP Dining Suite (4 Meals)</span>
         </button>
       </div>
 
       {/* ========================================================================= */}
-      {/* VIEW 1: SHIFT 1 & GENERAL (BREAKFAST & LUNCH WITH SEPARATE CLICKS)        */}
+      {/* VIEW 1: FIRST SHIFT (BREAKFAST & LUNCH - OPENING & CLOSING PHOTOS)         */}
       {/* ========================================================================= */}
-      {activeTab === "SHIFT_1_GEN" && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* SECTION 1: BREAKFAST COUNTER */}
-          <Card className="p-6 space-y-5 shadow-xs">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600">
-                  Breakfast Service
-                </span>
-                <h3 className="text-lg font-bold text-slate-900">Breakfast Counter Setup</h3>
-                <p className="text-xs text-slate-500">1st Shift & General Shift (Separate Live Photos)</p>
-              </div>
-
-              {/* Ready / Not Ready Toggle */}
-              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 border border-slate-200">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShift1Forms((p) => ({
-                      ...p,
-                      BREAKFAST: { ...p.BREAKFAST, isReady: true },
-                    }))
-                  }
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                    shift1Forms.BREAKFAST.isReady
-                      ? "bg-emerald-600 text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  Ready
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShift1Forms((p) => ({
-                      ...p,
-                      BREAKFAST: { ...p.BREAKFAST, isReady: false },
-                    }))
-                  }
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                    !shift1Forms.BREAKFAST.isReady
-                      ? "bg-rose-600 text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  Not Ready
-                </button>
-              </div>
+      {activeTab === "SHIFT_1" && (
+        <div className="space-y-4">
+          <div className="bg-indigo-50/50 border border-indigo-100 rounded-xl p-3 flex items-center justify-between text-xs text-indigo-900">
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-indigo-600" />
+              <span className="font-bold">First Shift Operations (06:00 - 14:00)</span>
+              <span className="text-slate-500">• Breakfast Service (07:30 - 09:30) &amp; Lunch Service (11:30 - 13:30)</span>
             </div>
+            <span className="text-[11px] font-semibold text-indigo-700 bg-white px-2 py-0.5 rounded border border-indigo-200">
+              Both Opening &amp; Closing Photos Required
+            </span>
+          </div>
 
-            {/* SEPARATE LIVE PHOTOS */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-600 block">
-                Live Photo Proof (1st Shift & General Separate Click)
-              </label>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {renderCounterCard({
+              shift: "SHIFT_1",
+              mealType: "BREAKFAST",
+              title: "Shift 1 Breakfast Counter Setup",
+              subtitle: "Morning Service (Opening & Closing Live Proof)",
+              badgeText: "Shift 1 • Breakfast",
+              badgeColor: "text-indigo-600",
+              form: shift1Forms.BREAKFAST,
+              setForm: setShift1Forms,
+            })}
 
-              <div className="grid grid-cols-2 gap-3">
-                {/* 1st Shift Live Photo */}
-                <div className="border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-2 text-center">
-                  <span className="text-[11px] font-bold text-slate-700 block">1st Shift Photo</span>
-                  {shift1Forms.BREAKFAST.photo1stShift ? (
-                    <div className="relative aspect-video rounded-lg overflow-hidden border border-slate-200">
-                      <img
-                        src={shift1Forms.BREAKFAST.photo1stShift}
-                        alt="1st Shift"
-                        className="w-full h-full object-cover"
-                      />
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setShift1Forms((p) => ({
-                            ...p,
-                            BREAKFAST: { ...p.BREAKFAST, photo1stShift: "" },
-                          }))
-                        }
-                        className="absolute top-1 right-1 p-1 bg-black/70 text-white rounded-md text-[10px]"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ) : (
-                    <label className="flex flex-col items-center justify-center p-3 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-indigo-600 bg-white">
-                      <Camera className="w-5 h-5 text-indigo-600 mb-1" />
-                      <span className="text-[11px] font-semibold text-slate-700">Capture 1st Shift</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        capture="environment"
-                        onChange={(e) =>
-                          handlePhotoUpload(e, (url) =>
-                            setShift1Forms((p) => ({
-                              ...p,
-                              BREAKFAST: { ...p.BREAKFAST, photo1stShift: url },
-                            }))
-                          )
-                        }
-                        className="hidden"
-                      />
-                    </label>
-                  )}
-                </div>
-
-                {/* General Shift Live Photo */}
-                <div className="border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-2 text-center">
-                  <span className="text-[11px] font-bold text-slate-700 block">General Shift Photo</span>
-                  {shift1Forms.BREAKFAST.photoGeneral ? (
-                    <div className="relative aspect-video rounded-lg overflow-hidden border border-slate-200">
-                      <img
-                        src={shift1Forms.BREAKFAST.photoGeneral}
-                        alt="General Shift"
-                        className="w-full h-full object-cover"
-                      />
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setShift1Forms((p) => ({
-                            ...p,
-                            BREAKFAST: { ...p.BREAKFAST, photoGeneral: "" },
-                          }))
-                        }
-                        className="absolute top-1 right-1 p-1 bg-black/70 text-white rounded-md text-[10px]"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ) : (
-                    <label className="flex flex-col items-center justify-center p-3 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-indigo-600 bg-white">
-                      <Camera className="w-5 h-5 text-indigo-600 mb-1" />
-                      <span className="text-[11px] font-semibold text-slate-700">Capture General</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        capture="environment"
-                        onChange={(e) =>
-                          handlePhotoUpload(e, (url) =>
-                            setShift1Forms((p) => ({
-                              ...p,
-                              BREAKFAST: { ...p.BREAKFAST, photoGeneral: url },
-                            }))
-                          )
-                        }
-                        className="hidden"
-                      />
-                    </label>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* PLATE COUNTS (TOTAL vs CONSUMED) */}
-            <div className="space-y-3 pt-2 border-t border-slate-100">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                  Breakfast Plate Counts (ex: 600 / 550)
-                </span>
-                <span className="text-xs font-mono font-bold text-indigo-600">
-                  Balance:{" "}
-                  {Math.max(
-                    0,
-                    Number(shift1Forms.BREAKFAST.totalPlates) - Number(shift1Forms.BREAKFAST.consumedPlates)
-                  )}{" "}
-                  plates
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-700">Total Prepared Plates</label>
-                  <Input
-                    type="number"
-                    value={shift1Forms.BREAKFAST.totalPlates}
-                    onChange={(e) =>
-                      setShift1Forms((p) => ({
-                        ...p,
-                        BREAKFAST: { ...p.BREAKFAST, totalPlates: e.target.value },
-                      }))
-                    }
-                    className="font-mono text-base font-bold"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-700">Total Consumed Plates</label>
-                  <Input
-                    type="number"
-                    value={shift1Forms.BREAKFAST.consumedPlates}
-                    onChange={(e) =>
-                      setShift1Forms((p) => ({
-                        ...p,
-                        BREAKFAST: { ...p.BREAKFAST, consumedPlates: e.target.value },
-                      }))
-                    }
-                    className="font-mono text-base font-bold text-emerald-700"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <Button
-              onClick={() => handleSaveShift1("BREAKFAST")}
-              loading={savingMeal === "BREAKFAST"}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold"
-            >
-              <Save className="w-4 h-4" />
-              <span>Save Breakfast Setup & Counts</span>
-            </Button>
-          </Card>
-
-          {/* SECTION 2: LUNCH COUNTER */}
-          <Card className="p-6 space-y-5 shadow-xs">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600">
-                  Lunch Service
-                </span>
-                <h3 className="text-lg font-bold text-slate-900">Lunch Counter Setup</h3>
-                <p className="text-xs text-slate-500">1st Shift & General Shift (Separate Live Photos)</p>
-              </div>
-
-              {/* Ready / Not Ready Toggle */}
-              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 border border-slate-200">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShift1Forms((p) => ({
-                      ...p,
-                      LUNCH: { ...p.LUNCH, isReady: true },
-                    }))
-                  }
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                    shift1Forms.LUNCH.isReady
-                      ? "bg-emerald-600 text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  Ready
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShift1Forms((p) => ({
-                      ...p,
-                      LUNCH: { ...p.LUNCH, isReady: false },
-                    }))
-                  }
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                    !shift1Forms.LUNCH.isReady
-                      ? "bg-rose-600 text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  Not Ready
-                </button>
-              </div>
-            </div>
-
-            {/* SEPARATE LIVE PHOTOS */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-600 block">
-                Live Photo Proof (1st Shift & General Separate Click)
-              </label>
-
-              <div className="grid grid-cols-2 gap-3">
-                {/* 1st Shift Live Photo */}
-                <div className="border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-2 text-center">
-                  <span className="text-[11px] font-bold text-slate-700 block">1st Shift Photo</span>
-                  {shift1Forms.LUNCH.photo1stShift ? (
-                    <div className="relative aspect-video rounded-lg overflow-hidden border border-slate-200">
-                      <img
-                        src={shift1Forms.LUNCH.photo1stShift}
-                        alt="1st Shift Lunch"
-                        className="w-full h-full object-cover"
-                      />
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setShift1Forms((p) => ({
-                            ...p,
-                            LUNCH: { ...p.LUNCH, photo1stShift: "" },
-                          }))
-                        }
-                        className="absolute top-1 right-1 p-1 bg-black/70 text-white rounded-md text-[10px]"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ) : (
-                    <label className="flex flex-col items-center justify-center p-3 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-indigo-600 bg-white">
-                      <Camera className="w-5 h-5 text-indigo-600 mb-1" />
-                      <span className="text-[11px] font-semibold text-slate-700">Capture 1st Shift</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        capture="environment"
-                        onChange={(e) =>
-                          handlePhotoUpload(e, (url) =>
-                            setShift1Forms((p) => ({
-                              ...p,
-                              LUNCH: { ...p.LUNCH, photo1stShift: url },
-                            }))
-                          )
-                        }
-                        className="hidden"
-                      />
-                    </label>
-                  )}
-                </div>
-
-                {/* General Shift Live Photo */}
-                <div className="border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-2 text-center">
-                  <span className="text-[11px] font-bold text-slate-700 block">General Shift Photo</span>
-                  {shift1Forms.LUNCH.photoGeneral ? (
-                    <div className="relative aspect-video rounded-lg overflow-hidden border border-slate-200">
-                      <img
-                        src={shift1Forms.LUNCH.photoGeneral}
-                        alt="General Shift Lunch"
-                        className="w-full h-full object-cover"
-                      />
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setShift1Forms((p) => ({
-                            ...p,
-                            LUNCH: { ...p.LUNCH, photoGeneral: "" },
-                          }))
-                        }
-                        className="absolute top-1 right-1 p-1 bg-black/70 text-white rounded-md text-[10px]"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ) : (
-                    <label className="flex flex-col items-center justify-center p-3 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-indigo-600 bg-white">
-                      <Camera className="w-5 h-5 text-indigo-600 mb-1" />
-                      <span className="text-[11px] font-semibold text-slate-700">Capture General</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        capture="environment"
-                        onChange={(e) =>
-                          handlePhotoUpload(e, (url) =>
-                            setShift1Forms((p) => ({
-                              ...p,
-                              LUNCH: { ...p.LUNCH, photoGeneral: url },
-                            }))
-                          )
-                        }
-                        className="hidden"
-                      />
-                    </label>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* PLATE COUNTS (TOTAL vs CONSUMED) */}
-            <div className="space-y-3 pt-2 border-t border-slate-100">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                  Lunch Plate Counts (ex: 600 / 450)
-                </span>
-                <span className="text-xs font-mono font-bold text-indigo-600">
-                  Balance:{" "}
-                  {Math.max(
-                    0,
-                    Number(shift1Forms.LUNCH.totalPlates) - Number(shift1Forms.LUNCH.consumedPlates)
-                  )}{" "}
-                  plates
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-700">Total Prepared Plates</label>
-                  <Input
-                    type="number"
-                    value={shift1Forms.LUNCH.totalPlates}
-                    onChange={(e) =>
-                      setShift1Forms((p) => ({
-                        ...p,
-                        LUNCH: { ...p.LUNCH, totalPlates: e.target.value },
-                      }))
-                    }
-                    className="font-mono text-base font-bold"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-700">Total Consumed Plates</label>
-                  <Input
-                    type="number"
-                    value={shift1Forms.LUNCH.consumedPlates}
-                    onChange={(e) =>
-                      setShift1Forms((p) => ({
-                        ...p,
-                        LUNCH: { ...p.LUNCH, consumedPlates: e.target.value },
-                      }))
-                    }
-                    className="font-mono text-base font-bold text-emerald-700"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <Button
-              onClick={() => handleSaveShift1("LUNCH")}
-              loading={savingMeal === "LUNCH"}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold"
-            >
-              <Save className="w-4 h-4" />
-              <span>Save Lunch Setup & Counts</span>
-            </Button>
-          </Card>
+            {renderCounterCard({
+              shift: "SHIFT_1",
+              mealType: "LUNCH",
+              title: "Shift 1 Lunch Counter Setup",
+              subtitle: "Midday Service (Opening & Closing Live Proof)",
+              badgeText: "Shift 1 • Lunch",
+              badgeColor: "text-indigo-600",
+              form: shift1Forms.LUNCH,
+              setForm: setShift1Forms,
+            })}
+          </div>
         </div>
       )}
 
       {/* ========================================================================= */}
-      {/* VIEW 2: SHIFT 2 (SNACKS & DINNER)                                         */}
+      {/* VIEW 2: GENERAL SHIFT (BREAKFAST & LUNCH - OPENING & CLOSING PHOTOS)       */}
+      {/* ========================================================================= */}
+      {activeTab === "GENERAL" && (
+        <div className="space-y-4">
+          <div className="bg-sky-50/60 border border-sky-200 rounded-xl p-3 flex items-center justify-between text-xs text-sky-950">
+            <div className="flex items-center gap-2">
+              <Sun className="w-4 h-4 text-amber-500" />
+              <span className="font-bold">General Shift Operations (08:30 - 17:00)</span>
+              <span className="text-slate-500">• Dedicated General Shift Breakfast &amp; Lunch Line</span>
+            </div>
+            <span className="text-[11px] font-semibold text-sky-800 bg-white px-2 py-0.5 rounded border border-sky-200">
+              Both Opening &amp; Closing Photos Required
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {renderCounterCard({
+              shift: "GENERAL",
+              mealType: "BREAKFAST",
+              title: "General Shift Breakfast Counter Setup",
+              subtitle: "General Shift Service (Opening & Closing Live Proof)",
+              badgeText: "General Shift • Breakfast",
+              badgeColor: "text-sky-700",
+              form: generalForms.BREAKFAST,
+              setForm: setGeneralForms,
+            })}
+
+            {renderCounterCard({
+              shift: "GENERAL",
+              mealType: "LUNCH",
+              title: "General Shift Lunch Counter Setup",
+              subtitle: "General Shift Service (Opening & Closing Live Proof)",
+              badgeText: "General Shift • Lunch",
+              badgeColor: "text-sky-700",
+              form: generalForms.LUNCH,
+              setForm: setGeneralForms,
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* VIEW 3: SHIFT 2 (SNACKS & DINNER - OPENING & CLOSING PHOTOS)               */}
       {/* ========================================================================= */}
       {activeTab === "SHIFT_2" && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* SNACKS COUNTER */}
-          <Card className="p-6 space-y-5 shadow-xs">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600">
-                  Item 1
-                </span>
-                <h3 className="text-lg font-bold text-slate-900">Snacks (Breakfast) Counter Setup</h3>
-                <p className="text-xs text-slate-500">Shift 2 Afternoon Operation</p>
-              </div>
-
-              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 border border-slate-200">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShift2Forms((p) => ({
-                      ...p,
-                      SNACKS: { ...p.SNACKS, isReady: true },
-                    }))
-                  }
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                    shift2Forms.SNACKS.isReady
-                      ? "bg-emerald-600 text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  Ready
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShift2Forms((p) => ({
-                      ...p,
-                      SNACKS: { ...p.SNACKS, isReady: false },
-                    }))
-                  }
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                    !shift2Forms.SNACKS.isReady
-                      ? "bg-rose-600 text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  Not Ready
-                </button>
-              </div>
+        <div className="space-y-4">
+          <div className="bg-amber-50/40 border border-amber-200/80 rounded-xl p-3 flex items-center justify-between text-xs text-amber-950">
+            <div className="flex items-center gap-2">
+              <Layers className="w-4 h-4 text-amber-600" />
+              <span className="font-bold">Shift 2 Afternoon Operations (14:00 - 22:00)</span>
+              <span className="text-slate-500">• Afternoon Snacks (16:00 - 17:30) &amp; Evening Dinner (19:30 - 21:30)</span>
             </div>
+            <span className="text-[11px] font-semibold text-amber-800 bg-white px-2 py-0.5 rounded border border-amber-200">
+              Both Opening &amp; Closing Photos Required
+            </span>
+          </div>
 
-            {/* LIVE PHOTO */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-600 block">
-                Snacks Live Image
-              </label>
-              {shift2Forms.SNACKS.photo ? (
-                <div className="relative aspect-video rounded-xl overflow-hidden border border-slate-200">
-                  <img src={shift2Forms.SNACKS.photo} alt="Snacks Setup" className="w-full h-full object-cover" />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setShift2Forms((p) => ({
-                        ...p,
-                        SNACKS: { ...p.SNACKS, photo: "" },
-                      }))
-                    }
-                    className="absolute top-1 right-1 p-1 bg-black/70 text-white rounded-md text-[10px]"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ) : (
-                <label className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 rounded-xl cursor-pointer hover:border-indigo-600 bg-slate-50">
-                  <Camera className="w-6 h-6 text-indigo-600 mb-1" />
-                  <span className="text-xs font-semibold text-slate-700">Capture Snacks Counter Live Image</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    onChange={(e) =>
-                      handlePhotoUpload(e, (url) =>
-                        setShift2Forms((p) => ({
-                          ...p,
-                          SNACKS: { ...p.SNACKS, photo: url },
-                        }))
-                      )
-                    }
-                    className="hidden"
-                  />
-                </label>
-              )}
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {renderCounterCard({
+              shift: "SHIFT_2",
+              mealType: "SNACKS",
+              title: "Shift 2 Snacks Counter Setup",
+              subtitle: "Afternoon Refreshment Service (Opening & Closing)",
+              badgeText: "Shift 2 • Snacks",
+              badgeColor: "text-amber-700",
+              form: shift2Forms.SNACKS,
+              setForm: setShift2Forms,
+            })}
 
-            {/* PLATE COUNTS */}
-            <div className="space-y-3 pt-2 border-t border-slate-100">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                  Total Plate Count (ex: 600 / 600)
-                </span>
-                <span className="text-xs font-mono font-bold text-indigo-600">
-                  Balance:{" "}
-                  {Math.max(
-                    0,
-                    Number(shift2Forms.SNACKS.totalPlates) - Number(shift2Forms.SNACKS.consumedPlates)
-                  )}{" "}
-                  plates
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-700">Total Plates</label>
-                  <Input
-                    type="number"
-                    value={shift2Forms.SNACKS.totalPlates}
-                    onChange={(e) =>
-                      setShift2Forms((p) => ({
-                        ...p,
-                        SNACKS: { ...p.SNACKS, totalPlates: e.target.value },
-                      }))
-                    }
-                    className="font-mono text-base font-bold"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-700">Consumed Plates</label>
-                  <Input
-                    type="number"
-                    value={shift2Forms.SNACKS.consumedPlates}
-                    onChange={(e) =>
-                      setShift2Forms((p) => ({
-                        ...p,
-                        SNACKS: { ...p.SNACKS, consumedPlates: e.target.value },
-                      }))
-                    }
-                    className="font-mono text-base font-bold text-emerald-700"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <Button
-              onClick={() => handleSaveShift2("SNACKS")}
-              loading={savingMeal === "SNACKS"}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold"
-            >
-              <Save className="w-4 h-4" />
-              <span>Save Snacks Setup & Counts</span>
-            </Button>
-          </Card>
-
-          {/* DINNER COUNTER */}
-          <Card className="p-6 space-y-5 shadow-xs">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600">
-                  Lunch Service
-                </span>
-                <h3 className="text-lg font-bold text-slate-900">Dinner Counter Setup</h3>
-                <p className="text-xs text-slate-500">Shift 2 Night Operation</p>
-              </div>
-
-              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 border border-slate-200">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShift2Forms((p) => ({
-                      ...p,
-                      DINNER: { ...p.DINNER, isReady: true },
-                    }))
-                  }
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                    shift2Forms.DINNER.isReady
-                      ? "bg-emerald-600 text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  Ready
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShift2Forms((p) => ({
-                      ...p,
-                      DINNER: { ...p.DINNER, isReady: false },
-                    }))
-                  }
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                    !shift2Forms.DINNER.isReady
-                      ? "bg-rose-600 text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  Not Ready
-                </button>
-              </div>
-            </div>
-
-            {/* LIVE PHOTO */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-600 block">
-                Dinner Live Photo
-              </label>
-              {shift2Forms.DINNER.photo ? (
-                <div className="relative aspect-video rounded-xl overflow-hidden border border-slate-200">
-                  <img src={shift2Forms.DINNER.photo} alt="Dinner Setup" className="w-full h-full object-cover" />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setShift2Forms((p) => ({
-                        ...p,
-                        DINNER: { ...p.DINNER, photo: "" },
-                      }))
-                    }
-                    className="absolute top-1 right-1 p-1 bg-black/70 text-white rounded-md text-[10px]"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ) : (
-                <label className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 rounded-xl cursor-pointer hover:border-indigo-600 bg-slate-50">
-                  <Camera className="w-6 h-6 text-indigo-600 mb-1" />
-                  <span className="text-xs font-semibold text-slate-700">Capture Dinner Counter Live Photo</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    onChange={(e) =>
-                      handlePhotoUpload(e, (url) =>
-                        setShift2Forms((p) => ({
-                          ...p,
-                          DINNER: { ...p.DINNER, photo: url },
-                        }))
-                      )
-                    }
-                    className="hidden"
-                  />
-                </label>
-              )}
-            </div>
-
-            {/* PLATE COUNTS */}
-            <div className="space-y-3 pt-2 border-t border-slate-100">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                  Total Plate Count (ex: 600 / 400)
-                </span>
-                <span className="text-xs font-mono font-bold text-indigo-600">
-                  Balance:{" "}
-                  {Math.max(
-                    0,
-                    Number(shift2Forms.DINNER.totalPlates) - Number(shift2Forms.DINNER.consumedPlates)
-                  )}{" "}
-                  plates
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-700">Total Plates</label>
-                  <Input
-                    type="number"
-                    value={shift2Forms.DINNER.totalPlates}
-                    onChange={(e) =>
-                      setShift2Forms((p) => ({
-                        ...p,
-                        DINNER: { ...p.DINNER, totalPlates: e.target.value },
-                      }))
-                    }
-                    className="font-mono text-base font-bold"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-700">Consumed Plates</label>
-                  <Input
-                    type="number"
-                    value={shift2Forms.DINNER.consumedPlates}
-                    onChange={(e) =>
-                      setShift2Forms((p) => ({
-                        ...p,
-                        DINNER: { ...p.DINNER, consumedPlates: e.target.value },
-                      }))
-                    }
-                    className="font-mono text-base font-bold text-emerald-700"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <Button
-              onClick={() => handleSaveShift2("DINNER")}
-              loading={savingMeal === "DINNER"}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold"
-            >
-              <Save className="w-4 h-4" />
-              <span>Save Dinner Setup & Counts</span>
-            </Button>
-          </Card>
+            {renderCounterCard({
+              shift: "SHIFT_2",
+              mealType: "DINNER",
+              title: "Shift 2 Dinner Counter Setup",
+              subtitle: "Evening Service (Opening & Closing)",
+              badgeText: "Shift 2 • Dinner",
+              badgeColor: "text-indigo-600",
+              form: shift2Forms.DINNER,
+              setForm: setShift2Forms,
+            })}
+          </div>
         </div>
       )}
 
       {/* ========================================================================= */}
-      {/* VIEW 3: SHIFT 3 (NIGHT SNACKS & DINNER)                                   */}
+      {/* VIEW 4: SHIFT 3 (NIGHT SNACKS & DINNER - OPENING & CLOSING PHOTOS)         */}
       {/* ========================================================================= */}
       {activeTab === "SHIFT_3" && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* SHIFT 3 SNACKS */}
-          <Card className="p-6 space-y-5 shadow-xs border-indigo-100 bg-gradient-to-b from-indigo-50/20 to-white">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600 flex items-center gap-1">
-                  <Moon className="w-3.5 h-3.5" />
-                  <span>Night Operation 1</span>
-                </span>
-                <h3 className="text-lg font-bold text-slate-900">Shift 3 Snacks Counter</h3>
-                <p className="text-xs text-slate-500">Night Shift Refreshments Setup &amp; Plates</p>
-              </div>
-
-              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 border border-slate-200">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShift3Forms((p) => ({
-                      ...p,
-                      SNACKS: { ...p.SNACKS, isReady: true },
-                    }))
-                  }
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                    shift3Forms.SNACKS.isReady
-                      ? "bg-emerald-600 text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  Ready
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShift3Forms((p) => ({
-                      ...p,
-                      SNACKS: { ...p.SNACKS, isReady: false },
-                    }))
-                  }
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                    !shift3Forms.SNACKS.isReady
-                      ? "bg-rose-600 text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  Not Ready
-                </button>
-              </div>
+        <div className="space-y-4">
+          <div className="bg-indigo-950/10 border border-indigo-200 rounded-xl p-3 flex items-center justify-between text-xs text-indigo-950">
+            <div className="flex items-center gap-2">
+              <Moon className="w-4 h-4 text-indigo-700" />
+              <span className="font-bold">Shift 3 Night Operations (22:00 - 06:00)</span>
+              <span className="text-slate-500">• Night Shift Production Refreshments &amp; Midnight Dinner Service</span>
             </div>
+            <span className="text-[11px] font-semibold text-indigo-800 bg-white px-2 py-0.5 rounded border border-indigo-200">
+              Both Opening &amp; Closing Photos Required
+            </span>
+          </div>
 
-            {/* LIVE PHOTO */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-600 block">
-                Shift 3 Snacks Live Image
-              </label>
-              {shift3Forms.SNACKS.photo ? (
-                <div className="relative aspect-video rounded-xl overflow-hidden border border-slate-200">
-                  <img src={shift3Forms.SNACKS.photo} alt="Shift 3 Snacks" className="w-full h-full object-cover" />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setShift3Forms((p) => ({
-                        ...p,
-                        SNACKS: { ...p.SNACKS, photo: "" },
-                      }))
-                    }
-                    className="absolute top-1 right-1 p-1 bg-black/70 text-white rounded-md text-[10px]"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ) : (
-                <label className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 rounded-xl cursor-pointer hover:border-indigo-600 bg-white">
-                  <Camera className="w-6 h-6 text-indigo-600 mb-1" />
-                  <span className="text-xs font-semibold text-slate-700">Capture Shift 3 Snacks Photo</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    onChange={(e) =>
-                      handlePhotoUpload(e, (url) =>
-                        setShift3Forms((p) => ({
-                          ...p,
-                          SNACKS: { ...p.SNACKS, photo: url },
-                        }))
-                      )
-                    }
-                    className="hidden"
-                  />
-                </label>
-              )}
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {renderCounterCard({
+              shift: "SHIFT_3",
+              mealType: "SNACKS",
+              title: "Shift 3 Night Snacks Counter",
+              subtitle: "Night Shift Refreshments (Opening & Closing)",
+              badgeText: "Shift 3 • Night Snacks",
+              badgeColor: "text-indigo-600",
+              form: shift3Forms.SNACKS,
+              setForm: setShift3Forms,
+            })}
 
-            {/* PLATE COUNTS */}
-            <div className="space-y-3 pt-2 border-t border-slate-100">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                  Plates (Prepared / Consumed)
-                </span>
-                <span className="text-xs font-mono font-bold text-indigo-600">
-                  Balance:{" "}
-                  {Math.max(
-                    0,
-                    Number(shift3Forms.SNACKS.totalPlates) - Number(shift3Forms.SNACKS.consumedPlates)
-                  )}{" "}
-                  plates
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-700">Total Prepared Plates</label>
-                  <Input
-                    type="number"
-                    value={shift3Forms.SNACKS.totalPlates}
-                    onChange={(e) =>
-                      setShift3Forms((p) => ({
-                        ...p,
-                        SNACKS: { ...p.SNACKS, totalPlates: e.target.value },
-                      }))
-                    }
-                    className="font-mono text-base font-bold"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-700">Total Consumed Plates</label>
-                  <Input
-                    type="number"
-                    value={shift3Forms.SNACKS.consumedPlates}
-                    onChange={(e) =>
-                      setShift3Forms((p) => ({
-                        ...p,
-                        SNACKS: { ...p.SNACKS, consumedPlates: e.target.value },
-                      }))
-                    }
-                    className="font-mono text-base font-bold text-emerald-700"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* NOTES */}
-            <div className="space-y-1">
-              <label className="text-[11px] font-semibold text-slate-700">Operational Notes</label>
-              <Input
-                type="text"
-                placeholder="e.g. Dispatched to late night shift line"
-                value={shift3Forms.SNACKS.notes}
-                onChange={(e) =>
-                  setShift3Forms((p) => ({
-                    ...p,
-                    SNACKS: { ...p.SNACKS, notes: e.target.value },
-                  }))
-                }
-              />
-            </div>
-
-            <Button
-              onClick={() => handleSaveShift3("SNACKS")}
-              loading={savingMeal === "SHIFT_3_SNACKS"}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold"
-            >
-              <Save className="w-4 h-4" />
-              <span>Save Shift 3 Snacks Setup &amp; Counts</span>
-            </Button>
-          </Card>
-
-          {/* SHIFT 3 DINNER */}
-          <Card className="p-6 space-y-5 shadow-xs border-indigo-100 bg-gradient-to-b from-indigo-50/20 to-white">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600 flex items-center gap-1">
-                  <Moon className="w-3.5 h-3.5" />
-                  <span>Night Operation 2</span>
-                </span>
-                <h3 className="text-lg font-bold text-slate-900">Shift 3 Dinner Counter</h3>
-                <p className="text-xs text-slate-500">Night Shift Dinner Setup &amp; Plates</p>
-              </div>
-
-              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 border border-slate-200">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShift3Forms((p) => ({
-                      ...p,
-                      DINNER: { ...p.DINNER, isReady: true },
-                    }))
-                  }
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                    shift3Forms.DINNER.isReady
-                      ? "bg-emerald-600 text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  Ready
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShift3Forms((p) => ({
-                      ...p,
-                      DINNER: { ...p.DINNER, isReady: false },
-                    }))
-                  }
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                    !shift3Forms.DINNER.isReady
-                      ? "bg-rose-600 text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  Not Ready
-                </button>
-              </div>
-            </div>
-
-            {/* LIVE PHOTO */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-600 block">
-                Shift 3 Dinner Live Image
-              </label>
-              {shift3Forms.DINNER.photo ? (
-                <div className="relative aspect-video rounded-xl overflow-hidden border border-slate-200">
-                  <img src={shift3Forms.DINNER.photo} alt="Shift 3 Dinner" className="w-full h-full object-cover" />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setShift3Forms((p) => ({
-                        ...p,
-                        DINNER: { ...p.DINNER, photo: "" },
-                      }))
-                    }
-                    className="absolute top-1 right-1 p-1 bg-black/70 text-white rounded-md text-[10px]"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ) : (
-                <label className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 rounded-xl cursor-pointer hover:border-indigo-600 bg-white">
-                  <Camera className="w-6 h-6 text-indigo-600 mb-1" />
-                  <span className="text-xs font-semibold text-slate-700">Capture Shift 3 Dinner Photo</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    onChange={(e) =>
-                      handlePhotoUpload(e, (url) =>
-                        setShift3Forms((p) => ({
-                          ...p,
-                          DINNER: { ...p.DINNER, photo: url },
-                        }))
-                      )
-                    }
-                    className="hidden"
-                  />
-                </label>
-              )}
-            </div>
-
-            {/* PLATE COUNTS */}
-            <div className="space-y-3 pt-2 border-t border-slate-100">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                  Plates (Prepared / Consumed)
-                </span>
-                <span className="text-xs font-mono font-bold text-indigo-600">
-                  Balance:{" "}
-                  {Math.max(
-                    0,
-                    Number(shift3Forms.DINNER.totalPlates) - Number(shift3Forms.DINNER.consumedPlates)
-                  )}{" "}
-                  plates
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-700">Total Prepared Plates</label>
-                  <Input
-                    type="number"
-                    value={shift3Forms.DINNER.totalPlates}
-                    onChange={(e) =>
-                      setShift3Forms((p) => ({
-                        ...p,
-                        DINNER: { ...p.DINNER, totalPlates: e.target.value },
-                      }))
-                    }
-                    className="font-mono text-base font-bold"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-700">Total Consumed Plates</label>
-                  <Input
-                    type="number"
-                    value={shift3Forms.DINNER.consumedPlates}
-                    onChange={(e) =>
-                      setShift3Forms((p) => ({
-                        ...p,
-                        DINNER: { ...p.DINNER, consumedPlates: e.target.value },
-                      }))
-                    }
-                    className="font-mono text-base font-bold text-emerald-700"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* NOTES */}
-            <div className="space-y-1">
-              <label className="text-[11px] font-semibold text-slate-700">Operational Notes</label>
-              <Input
-                type="text"
-                placeholder="e.g. Night shift production dinner service"
-                value={shift3Forms.DINNER.notes}
-                onChange={(e) =>
-                  setShift3Forms((p) => ({
-                    ...p,
-                    DINNER: { ...p.DINNER, notes: e.target.value },
-                  }))
-                }
-              />
-            </div>
-
-            <Button
-              onClick={() => handleSaveShift3("DINNER")}
-              loading={savingMeal === "SHIFT_3_DINNER"}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold"
-            >
-              <Save className="w-4 h-4" />
-              <span>Save Shift 3 Dinner Setup &amp; Counts</span>
-            </Button>
-          </Card>
+            {renderCounterCard({
+              shift: "SHIFT_3",
+              mealType: "DINNER",
+              title: "Shift 3 Night Dinner Counter",
+              subtitle: "Late Night Dinner (Opening & Closing)",
+              badgeText: "Shift 3 • Night Dinner",
+              badgeColor: "text-indigo-600",
+              form: shift3Forms.DINNER,
+              setForm: setShift3Forms,
+            })}
+          </div>
         </div>
       )}
 
       {/* ========================================================================= */}
-      {/* VIEW 4: VIP DINING SUITE (4 DEDICATED TABS & FILTERS)                      */}
+      {/* VIEW 5: VIP DINING SUITE (4 DEDICATED TABS WITH OPENING & CLOSING PHOTOS) */}
       {/* ========================================================================= */}
       {activeTab === "VIP" && (
         <div className="space-y-6">
@@ -1661,7 +1000,7 @@ export default function OperatorCountersPage() {
                     key={flt.key}
                     type="button"
                     onClick={() => setVipFilter(flt.key)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition ${
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${
                       vipFilter === flt.key
                         ? "bg-amber-600 text-white shadow-2xs"
                         : "text-slate-600 hover:text-slate-900"
@@ -1674,7 +1013,7 @@ export default function OperatorCountersPage() {
             </div>
           </div>
 
-          {/* ACTIVE VIP TAB EDIT FORM CARD */}
+          {/* ACTIVE VIP TAB COUNTER CARD (WITH OPENING & CLOSING LIVE PHOTOS) */}
           {(() => {
             const form = vipForms[activeVipTab] || emptyVip[activeVipTab];
             const balancePlates = Math.max(0, Number(form.totalPlates || 0) - Number(form.consumedPlates || 0));
@@ -1685,228 +1024,27 @@ export default function OperatorCountersPage() {
             if (vipFilter === "BALANCE" && balancePlates <= 0) matchesFilter = false;
 
             return (
-              <Card className="p-6 space-y-6 shadow-sm border-amber-200 bg-gradient-to-b from-amber-50/25 via-white to-white">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-amber-100 pb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-sm">
-                      <Crown className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-700 bg-amber-100/80 px-2 py-0.5 rounded-md">
-                          VIP Service Active
-                        </span>
-                        <span
-                          className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
-                            form.isReady
-                              ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
-                              : "bg-rose-100 text-rose-800 border border-rose-200"
-                          }`}
-                        >
-                          {form.isReady ? "READY FOR SERVICE" : "NOT READY"}
-                        </span>
-                      </div>
-                      <h3 className="text-xl font-extrabold text-slate-900 mt-0.5">
-                        VIP {activeVipTab} Dining Setup
-                      </h3>
-                      <p className="text-xs text-slate-500">
-                        Record counter readiness, proof photo, and plate allocation for executive dining.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 bg-slate-100 border border-slate-200 p-1 rounded-xl">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setVipForms((p) => ({
-                          ...p,
-                          [activeVipTab]: { ...p[activeVipTab], isReady: true },
-                        }))
-                      }
-                      className={`px-4 py-2 rounded-lg text-xs font-bold transition cursor-pointer ${
-                        form.isReady
-                          ? "bg-emerald-600 text-white shadow-xs"
-                          : "text-slate-600 hover:text-slate-900"
-                      }`}
-                    >
-                      Ready
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setVipForms((p) => ({
-                          ...p,
-                          [activeVipTab]: { ...p[activeVipTab], isReady: false },
-                        }))
-                      }
-                      className={`px-4 py-2 rounded-lg text-xs font-bold transition cursor-pointer ${
-                        !form.isReady
-                          ? "bg-rose-600 text-white shadow-xs"
-                          : "text-slate-600 hover:text-slate-900"
-                      }`}
-                    >
-                      Not Ready
-                    </button>
-                  </div>
-                </div>
-
+              <div className="space-y-4">
                 {!matchesFilter && (
                   <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs">
                     Notice: Current tab does not match the active filter ({vipFilter}). Reset filter to view normal details.
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* LIVE PHOTO PROOF */}
-                  <div className="space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-slate-700 flex items-center justify-between">
-                      <span>VIP {activeVipTab} Live Photo Proof</span>
-                      {form.photo && <span className="text-emerald-600 text-[10px] font-semibold">Photo Attached</span>}
-                    </label>
+                {renderCounterCard({
+                  shift: "VIP",
+                  mealType: activeVipTab,
+                  title: `VIP ${activeVipTab} Dining Setup`,
+                  subtitle: "Executive Dining Service (Opening & Closing Live Proof)",
+                  badgeText: `VIP Setup • ${activeVipTab}`,
+                  badgeColor: "text-amber-700",
+                  form,
+                  setForm: setVipForms,
+                  isVip: true,
+                })}
 
-                    {form.photo ? (
-                      <div className="relative aspect-video rounded-xl overflow-hidden border border-amber-200 shadow-2xs">
-                        <img
-                          src={form.photo}
-                          alt={`VIP ${activeVipTab}`}
-                          className="w-full h-full object-cover"
-                        />
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setVipForms((p) => ({
-                              ...p,
-                              [activeVipTab]: { ...p[activeVipTab], photo: "" },
-                            }))
-                          }
-                          className="absolute top-2 right-2 px-2 py-1 bg-black/75 hover:bg-black text-white rounded-md text-xs font-bold cursor-pointer"
-                        >
-                          Remove Photo
-                        </button>
-                      </div>
-                    ) : (
-                      <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-amber-300 rounded-xl cursor-pointer hover:border-amber-500 bg-amber-50/30 transition">
-                        <Camera className="w-8 h-8 text-amber-600 mb-2" />
-                        <span className="text-xs font-bold text-slate-800">
-                          Capture VIP {activeVipTab} Counter Photo
-                        </span>
-                        <span className="text-[10px] text-slate-500 mt-0.5">Click or upload live image proof</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          capture="environment"
-                          onChange={(e) =>
-                            handlePhotoUpload(e, (url) =>
-                              setVipForms((p) => ({
-                                ...p,
-                                [activeVipTab]: { ...p[activeVipTab], photo: url },
-                              }))
-                            )
-                          }
-                          className="hidden"
-                        />
-                      </label>
-                    )}
-                  </div>
-
-                  {/* PLATE ALLOCATION & BALANCE */}
-                  <div className="space-y-4 flex flex-col justify-between">
-                    <div className="space-y-4">
-                      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex items-center justify-between">
-                        <div>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                            Calculated Balance
-                          </span>
-                          <span className="text-xl font-extrabold text-amber-700 font-mono">
-                            {balancePlates} Plates
-                          </span>
-                        </div>
-                        <span className="text-xs text-slate-500">
-                          Total Prepared ({form.totalPlates || 0}) - Consumed ({form.consumedPlates || 0})
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="space-y-1">
-                          <label className="text-[11px] font-bold text-slate-700">
-                            Total Prepared Plates *
-                          </label>
-                          <Input
-                            type="number"
-                            min="0"
-                            value={form.totalPlates}
-                            onChange={(e) =>
-                              setVipForms((p) => ({
-                                ...p,
-                                [activeVipTab]: {
-                                  ...p[activeVipTab],
-                                  totalPlates: e.target.value,
-                                },
-                              }))
-                            }
-                            className="font-mono text-lg font-bold"
-                            placeholder="0"
-                          />
-                        </div>
-
-                        <div className="space-y-1">
-                          <label className="text-[11px] font-bold text-slate-700">
-                            Consumed Plates *
-                          </label>
-                          <Input
-                            type="number"
-                            min="0"
-                            value={form.consumedPlates}
-                            onChange={(e) =>
-                              setVipForms((p) => ({
-                                ...p,
-                                [activeVipTab]: {
-                                  ...p[activeVipTab],
-                                  consumedPlates: e.target.value,
-                                },
-                              }))
-                            }
-                            className="font-mono text-lg font-bold text-emerald-700"
-                            placeholder="0"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-1">
-                        <label className="text-[11px] font-bold text-slate-700">
-                          VIP Service Notes / Guest Feedback
-                        </label>
-                        <Input
-                          type="text"
-                          placeholder="e.g. Executive guest arrangement in Private Dining Hall"
-                          value={form.notes || ""}
-                          onChange={(e) =>
-                            setVipForms((p) => ({
-                              ...p,
-                              [activeVipTab]: {
-                                ...p[activeVipTab],
-                                notes: e.target.value,
-                              },
-                            }))
-                          }
-                        />
-                      </div>
-                    </div>
-
-                    <Button
-                      onClick={() => handleSaveVip(activeVipTab)}
-                      loading={savingMeal === activeVipTab}
-                      className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 text-sm shadow-xs cursor-pointer"
-                    >
-                      <Save className="w-4 h-4 mr-2" />
-                      <span>Save VIP {activeVipTab} Setup &amp; Plates</span>
-                    </Button>
-                  </div>
-                </div>
-
-                {/* VIP 4 MEAL STATUS MATRIX */}
-                <div className="pt-4 border-t border-slate-100">
+                {/* VIP 4-MEAL OPERATIONAL STATUS MATRIX */}
+                <Card className="p-4 bg-white border-amber-200/80 shadow-2xs">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block mb-2.5">
                     Today&apos;s VIP 4-Service Operational Summary
                   </span>
@@ -1945,8 +1083,8 @@ export default function OperatorCountersPage() {
                       );
                     })}
                   </div>
-                </div>
-              </Card>
+                </Card>
+              </div>
             );
           })()}
         </div>

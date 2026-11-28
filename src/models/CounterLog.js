@@ -9,7 +9,7 @@ const CounterLogSchema = new mongoose.Schema(
     },
     shift: {
       type: String,
-      enum: ["SHIFT_1_GEN", "SHIFT_2", "SHIFT_3", "VIP"],
+      enum: ["SHIFT_1", "GENERAL", "SHIFT_1_GEN", "SHIFT_2", "SHIFT_3", "VIP"],
       required: true,
       index: true,
     },
@@ -23,11 +23,19 @@ const CounterLogSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    // For Shift 1 & General: Separate live clicks
+    // Opening & Closing Live Photo Proof
+    openingPhoto: {
+      type: String,
+      default: "",
+    },
+    closingPhoto: {
+      type: String,
+      default: "",
+    },
     photos: [
       {
         url: { type: String, required: true },
-        subShift: { type: String, enum: ["1ST_SHIFT", "GENERAL", "STANDARD"], default: "STANDARD" },
+        subShift: { type: String, default: "STANDARD" },
         caption: { type: String, default: "" },
         capturedAt: { type: Date, default: Date.now },
       },
@@ -71,4 +79,8 @@ CounterLogSchema.pre("save", function () {
   this.balancePlates = Math.max(0, this.totalPlates - this.consumedPlates);
 });
 
-export default mongoose.models.CounterLog || mongoose.model("CounterLog", CounterLogSchema);
+if (mongoose.models && mongoose.models.CounterLog) {
+  delete mongoose.models.CounterLog;
+}
+
+export default mongoose.model("CounterLog", CounterLogSchema);

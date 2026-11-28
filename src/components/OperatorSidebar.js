@@ -131,7 +131,7 @@ export default function OperatorSidebar() {
         label: "Counters & Plates",
         href: "/operator/counters",
         icon: UtensilsCrossed,
-        badge: "Shift 1/2/3/VIP",
+        badge: "Shift 1/Gen/2/3/VIP",
         badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-100",
       },
       {

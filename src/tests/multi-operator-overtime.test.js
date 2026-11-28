@@ -51,6 +51,40 @@ describe("Multi-Operator & Overtime Data Integrity Tests", () => {
     expect(vipDinner.balancePlates).toBe(2);
   });
 
+  it("validates Shift 1 and General Shift separate counters with opening and closing photos", () => {
+    const shift1Breakfast = new CounterLog({
+      date: "2026-11-28",
+      shift: "SHIFT_1",
+      mealType: "BREAKFAST",
+      totalPlates: 600,
+      consumedPlates: 550,
+      isReady: true,
+      openingPhoto: "https://bajaj.storage/shift1_open.jpg",
+      closingPhoto: "https://bajaj.storage/shift1_close.jpg",
+      loggedBy: "Operator 1",
+    });
+
+    expect(shift1Breakfast.shift).toBe("SHIFT_1");
+    expect(shift1Breakfast.openingPhoto).toBe("https://bajaj.storage/shift1_open.jpg");
+    expect(shift1Breakfast.closingPhoto).toBe("https://bajaj.storage/shift1_close.jpg");
+
+    const generalBreakfast = new CounterLog({
+      date: "2026-11-28",
+      shift: "GENERAL",
+      mealType: "BREAKFAST",
+      totalPlates: 400,
+      consumedPlates: 380,
+      isReady: true,
+      openingPhoto: "https://bajaj.storage/gen_open.jpg",
+      closingPhoto: "https://bajaj.storage/gen_close.jpg",
+      loggedBy: "Operator 1",
+    });
+
+    expect(generalBreakfast.shift).toBe("GENERAL");
+    expect(generalBreakfast.openingPhoto).toBe("https://bajaj.storage/gen_open.jpg");
+    expect(generalBreakfast.closingPhoto).toBe("https://bajaj.storage/gen_close.jpg");
+  });
+
   it("validates OvertimeLog automatically computes totalCount from 2hr and 3hr OT", () => {
     const otLog = new OvertimeLog({
       date: "2026-11-28",
