@@ -41,6 +41,7 @@ import {
   Trash2,
   Truck,
   Check,
+  ShieldCheck,
 } from "lucide-react";
 
 const PRODUCTS = [
@@ -59,6 +60,7 @@ export default function BiscuitAuditPage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState(null);
   const [user, setUser] = useState(null);
+  const [currentAuditEntry, setCurrentAuditEntry] = useState(null);
 
   // Form states for today's entry
   const [openingStock, setOpeningStock] = useState(0);
@@ -100,6 +102,7 @@ export default function BiscuitAuditPage() {
         const curEntry = (json.currentDayAudit || []).find(
           (e) => e.productId === selectedProduct
         );
+        setCurrentAuditEntry(curEntry || null);
         if (curEntry) {
           setOpeningStock(curEntry.openingStock !== undefined ? curEntry.openingStock : 0);
           setNewAddedStock(curEntry.newAddedStock || 0);
@@ -223,6 +226,26 @@ export default function BiscuitAuditPage() {
   };
 
   const currentProductObj = PRODUCTS.find((p) => p.id === selectedProduct);
+
+  if (user && ["OPERATOR_3", "OT_SUPERVISOR"].includes(user.role?.code)) {
+    return (
+      <div className="max-w-xl mx-auto my-16 p-8 bg-white border border-slate-200 rounded-2xl shadow-xs text-center space-y-4 font-sans">
+        <div className="w-12 h-12 bg-purple-50 text-purple-700 rounded-2xl flex items-center justify-center mx-auto">
+          <ShieldCheck className="w-6 h-6" />
+        </div>
+        <h2 className="text-lg font-bold text-slate-900">Biscuit Audit Restricted</h2>
+        <p className="text-xs text-slate-600">
+          Biscuit inventory audit is managed jointly by <b>Operator 1 and Operator 2</b>.
+          You are currently signed in as <b>{user.name} ({user.role?.name})</b>.
+        </p>
+        <Link href={user.role?.code === "OPERATOR_3" ? "/operator/tea-delivery" : "/operator/overtime"}>
+          <Button className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs">
+            Go to Your Assigned Workspace →
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12 font-sans">
@@ -387,9 +410,17 @@ export default function BiscuitAuditPage() {
                   Update starting stock, log incoming deliveries, and deduct shift consumption.
                 </p>
               </div>
-              <Badge variant="outline" className="border-indigo-200 text-indigo-700 bg-indigo-50">
-                Date: {selectedDate}
-              </Badge>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                {currentAuditEntry?.loggedBy && (
+                  <div className="flex items-center gap-1.5 text-[11px] text-slate-600 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-lg">
+                    <span className="text-slate-400">Last updated by:</span>
+                    <span className="font-bold text-indigo-700">{currentAuditEntry.loggedBy}</span>
+                  </div>
+                )}
+                <Badge variant="outline" className="border-indigo-200 text-indigo-700 bg-indigo-50">
+                  Date: {selectedDate}
+                </Badge>
+              </div>
             </div>
           </CardHeader>
           <CardContent className="pt-6">

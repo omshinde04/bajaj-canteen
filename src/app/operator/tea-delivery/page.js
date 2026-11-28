@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -36,9 +37,11 @@ import {
   ArrowRight,
   TrendingDown,
   Trash2,
+  ShieldCheck,
 } from "lucide-react";
 
 export default function TeaDeliveryOperatorPage() {
+  const [currentUser, setCurrentUser] = useState(null);
   const [date, setDate] = useState("");
   const [data, setData] = useState(null);
   const [departments, setDepartments] = useState([]);
@@ -62,6 +65,12 @@ export default function TeaDeliveryOperatorPage() {
 
   useEffect(() => {
     setDate(new Date().toISOString().split("T")[0]);
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.user) setCurrentUser(d.user);
+      })
+      .catch(() => {});
   }, []);
 
   const fetchData = async () => {
@@ -186,6 +195,26 @@ export default function TeaDeliveryOperatorPage() {
     totalWasteLiters: 0,
     totalDepartmentsServed: 0,
   };
+
+  if (currentUser && ["OPERATOR_1", "OPERATOR_2", "OT_SUPERVISOR"].includes(currentUser.role?.code)) {
+    return (
+      <div className="max-w-xl mx-auto my-16 p-8 bg-white border border-slate-200 rounded-2xl shadow-xs text-center space-y-4 font-sans">
+        <div className="w-12 h-12 bg-amber-50 text-amber-700 rounded-2xl flex items-center justify-center mx-auto">
+          <ShieldCheck className="w-6 h-6" />
+        </div>
+        <h2 className="text-lg font-bold text-slate-900">Operator 3 Module Restricted</h2>
+        <p className="text-xs text-slate-600">
+          Shop floor tea distribution and wastage are managed exclusively by <b>Operator 3</b>.
+          You are currently signed in as <b>{currentUser.name} ({currentUser.role?.name})</b>.
+        </p>
+        <Link href={currentUser.role?.code === "OPERATOR_1" ? "/operator/counters" : currentUser.role?.code === "OPERATOR_2" ? "/operator/checksheets" : "/operator/overtime"}>
+          <Button className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs">
+            Go to Your Assigned Workspace →
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-16 font-sans">

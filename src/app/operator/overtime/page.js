@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -157,6 +158,26 @@ export default function OvertimeOperatorPage() {
   };
 
   const activeDepartment = departments.find((d) => d._id === selectedDeptId);
+
+  if (currentUser && ["OPERATOR_1", "OPERATOR_2", "OPERATOR_3"].includes(currentUser.role?.code)) {
+    return (
+      <div className="max-w-xl mx-auto my-16 p-8 bg-white border border-slate-200 rounded-2xl shadow-xs text-center space-y-4 font-sans">
+        <div className="w-12 h-12 bg-blue-50 text-blue-700 rounded-2xl flex items-center justify-center mx-auto">
+          <ShieldCheck className="w-6 h-6" />
+        </div>
+        <h2 className="text-lg font-bold text-slate-900">Overtime Register Restricted</h2>
+        <p className="text-xs text-slate-600">
+          Department Overtime (OT) registration is managed exclusively by designated <b>OT Supervisors</b>.
+          You are currently signed in as <b>{currentUser.name} ({currentUser.role?.name})</b>.
+        </p>
+        <Link href={currentUser.role?.code === "OPERATOR_1" ? "/operator/counters" : currentUser.role?.code === "OPERATOR_2" ? "/operator/checksheets" : "/operator/tea-delivery"}>
+          <Button className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs">
+            Go to Your Assigned Workspace →
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-16 font-sans">

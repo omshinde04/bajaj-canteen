@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 
 export default function OperatorChecksheetsPage() {
+  const [currentUser, setCurrentUser] = useState(null);
   const [checkSheets, setCheckSheets] = useState([]);
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -54,6 +55,12 @@ export default function OperatorChecksheetsPage() {
 
   useEffect(() => {
     fetchData();
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.user) setCurrentUser(d.user);
+      })
+      .catch(() => {});
   }, []);
 
   // Map each checksheet with today's execution status
@@ -150,6 +157,26 @@ export default function OperatorChecksheetsPage() {
     setActiveGroup(group);
     setCurrentPage(1);
   };
+
+  if (currentUser && ["OPERATOR_1", "OPERATOR_3", "OT_SUPERVISOR"].includes(currentUser.role?.code)) {
+    return (
+      <div className="max-w-xl mx-auto my-16 p-8 bg-white border border-slate-200 rounded-2xl shadow-xs text-center space-y-4 font-sans">
+        <div className="w-12 h-12 bg-indigo-50 text-indigo-700 rounded-2xl flex items-center justify-center mx-auto">
+          <ShieldCheck className="w-6 h-6" />
+        </div>
+        <h2 className="text-lg font-bold text-slate-900">Operator 2 Module Restricted</h2>
+        <p className="text-xs text-slate-600">
+          Kitchen hygiene and autonomous machine checksheets are managed exclusively by <b>Operator 2</b>.
+          You are currently signed in as <b>{currentUser.name} ({currentUser.role?.name})</b>.
+        </p>
+        <Link href={currentUser.role?.code === "OPERATOR_1" ? "/operator/counters" : currentUser.role?.code === "OPERATOR_3" ? "/operator/tea-delivery" : "/operator/overtime"}>
+          <Button className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs">
+            Go to Your Assigned Workspace →
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
