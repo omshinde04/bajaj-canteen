@@ -58,6 +58,7 @@ export default function BiscuitAuditPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState(null);
+  const [user, setUser] = useState(null);
 
   // Form states for today's entry
   const [openingStock, setOpeningStock] = useState(0);
@@ -74,6 +75,13 @@ export default function BiscuitAuditPage() {
 
   useEffect(() => {
     setSelectedDate(new Date().toISOString().split("T")[0]);
+    // Fetch logged in operator details
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.user) setUser(d.user);
+      })
+      .catch(() => {});
   }, []);
 
   const fetchAuditData = async () => {
@@ -110,6 +118,11 @@ export default function BiscuitAuditPage() {
 
   useEffect(() => {
     fetchAuditData();
+    // Auto-sync polling every 20s to reflect changes made by Operator 1 or Operator 2
+    const interval = setInterval(() => {
+      fetchAuditData();
+    }, 20000);
+    return () => clearInterval(interval);
   }, [selectedDate, selectedProduct]);
 
   // Derived calculations
@@ -168,6 +181,12 @@ export default function BiscuitAuditPage() {
     setMessage(null);
 
     try {
+      const operatorName = user?.name
+        ? `${user.name} (${user.role?.name || "Operator"})`
+        : user?.role?.code === "OPERATOR_1"
+        ? "Operator 1"
+        : "Operator 2";
+
       const res = await fetch("/api/stock-audit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -180,6 +199,7 @@ export default function BiscuitAuditPage() {
           shift1Consumption: parsedShift1,
           shift2Consumption: parsedShift2,
           notes,
+          loggedBy: operatorName,
         }),
       });
 
@@ -254,6 +274,48 @@ export default function BiscuitAuditPage() {
             Sync
           </Button>
         </div>
+      </div>
+
+      {/* TWO-WAY OPERATOR 1 & OPERATOR 2 SYNC BANNER */}
+      <div className="bg-gradient-to-r from-indigo-50 via-purple-50 to-emerald-50 border border-indigo-200/80 rounded-2xl p-4 shadow-2xs">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold shadow-2xs">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-900">Shared Biscuit Pantry Synchronization</span>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Live Op 1 ⟷ Op 2
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 mt-0.5">
+                Jointly managed by Operator 1 (Shift 1 &amp; VIP) &amp; Operator 2 (Checksheets). Changes made by either operator are instantly synced.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 self-start md:self-auto text-xs font-medium text-slate-700 bg-white/80 border border-slate-200/80 px-3 py-1.5 rounded-xl">
+            <span className="text-slate-400">Logged in as:</span>
+            <span className="font-bold text-indigo-700">
+              {user?.name || "Operator"} ({user?.role?.name || "Canteen Operator"})
+            </span>
+          </div>
+        </div>
+
+        {/* RECENT NOTIFICATIONS / AUDIT TRAIL */}
+        {data?.recentActivity && data.recentActivity.length > 0 && (
+          <div className="mt-3 pt-3 border-t border-indigo-100/80 flex flex-wrap items-center gap-2 text-xs">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Latest Sync Activity:</span>
+            {data.recentActivity.slice(0, 2).map((act, idx) => (
+              <span key={idx} className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-700 text-[11px] shadow-2xs">
+                <b>{act.sender}:</b> {act.message.slice(0, 65)}...
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Product Selection Tabs */}

@@ -16,7 +16,9 @@ export function middleware(request) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("bajaj_token")?.value;
   const payload = token ? decodeJwt(token) : null;
-  const isOperator = payload?.roleCode === "OPERATOR";
+  const roleCode = payload?.roleCode || "";
+  const isOperator = roleCode.startsWith("OPERATOR") || roleCode === "OT_SUPERVISOR";
+  const isOTSupervisor = roleCode === "OT_SUPERVISOR";
 
   // Require authentication for all protected routes
   if (pathname.startsWith("/admin") || pathname.startsWith("/operator")) {
@@ -27,17 +29,28 @@ export function middleware(request) {
     }
   }
 
-  // Strict RBAC boundary: Operators cannot access /admin console routes
+  // Strict RBAC boundary: Operators & OT Supervisors cannot access /admin console routes
   if (pathname.startsWith("/admin") && isOperator) {
+    if (isOTSupervisor) return NextResponse.redirect(new URL("/operator/overtime", request.url));
+    if (roleCode === "OPERATOR_1") return NextResponse.redirect(new URL("/operator/counters", request.url));
+    if (roleCode === "OPERATOR_2") return NextResponse.redirect(new URL("/operator/checksheets", request.url));
+    if (roleCode === "OPERATOR_3") return NextResponse.redirect(new URL("/operator/tea-delivery", request.url));
     return NextResponse.redirect(new URL("/operator", request.url));
+  }
+
+  // OT Supervisor is locked strictly to /operator/overtime
+  if (isOTSupervisor && pathname.startsWith("/operator") && !pathname.startsWith("/operator/overtime")) {
+    return NextResponse.redirect(new URL("/operator/overtime", request.url));
   }
 
   // Route / and /login to role-appropriate home
   if (pathname === "/" || pathname === "/login") {
     if (token && payload) {
-      if (isOperator) {
-        return NextResponse.redirect(new URL("/operator", request.url));
-      }
+      if (roleCode === "OPERATOR_1") return NextResponse.redirect(new URL("/operator/counters", request.url));
+      if (roleCode === "OPERATOR_2") return NextResponse.redirect(new URL("/operator/checksheets", request.url));
+      if (roleCode === "OPERATOR_3") return NextResponse.redirect(new URL("/operator/tea-delivery", request.url));
+      if (isOTSupervisor) return NextResponse.redirect(new URL("/operator/overtime", request.url));
+      if (isOperator) return NextResponse.redirect(new URL("/operator", request.url));
       return NextResponse.redirect(new URL("/admin/dashboard", request.url));
     }
     if (pathname === "/") {

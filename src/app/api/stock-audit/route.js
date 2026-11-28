@@ -81,6 +81,14 @@ export async function GET(req) {
       .limit(30)
       .lean();
 
+    // Fetch recent stock audit activity / two-way notifications for Op 1 & Op 2
+    const recentActivity = await Notification.find({
+      link: "/operator/biscuit-audit",
+    })
+      .sort({ createdAt: -1 })
+      .limit(6)
+      .lean();
+
     return NextResponse.json({
       success: true,
       date,
@@ -88,6 +96,7 @@ export async function GET(req) {
       activeProduct: activeProd,
       currentDayAudit: entries,
       recentLedger,
+      recentActivity,
     });
   } catch (error) {
     console.error("GET /api/stock-audit error:", error);
@@ -195,15 +204,19 @@ export async function POST(req) {
       console.warn("Future stock audit cascade warning:", cascadeErr.message);
     }
 
-    // Auto-dispatch in-app notification to Admin
+    // Auto-dispatch two-way notification so Operator 1 and Operator 2 stay synchronized
     try {
+      const isOp1 = loggedBy?.includes("1") || loggedBy?.toLowerCase().includes("op1");
+      const recipient = isOp1 ? "Operator 2 & Admin" : "Operator 1 & Admin";
+      const sender = loggedBy || "Canteen Operator";
+
       await Notification.create({
-        title: `Biscuit Inventory Audit: ${productName}`,
-        message: `${totalConsumed} consumed (S1: ${s1}, S2: ${s2}), closing stock: ${closing} packets for ${date}.`,
+        title: `Shared Biscuit Update: ${productName}`,
+        message: `${sender} updated stock on ${date}: Added +${added}, Consumed ${totalConsumed} (S1: ${s1}, S2: ${s2}), Closing Balance: ${closing} pkts.`,
         channel: "NORMAL",
         direction: "INCOMING",
-        sender: loggedBy || "Operator 2",
-        recipient: "Admin Console",
+        sender,
+        recipient,
         priority: closing < 100 ? "HIGH" : "NORMAL",
         status: "RECEIVED",
         isRead: false,

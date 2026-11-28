@@ -7,6 +7,7 @@ import Department from "@/models/Department";
 import CounterLog from "@/models/CounterLog";
 import TeaDeliveryLog from "@/models/TeaDeliveryLog";
 import StockAudit from "@/models/StockAudit";
+import OvertimeLog from "@/models/OvertimeLog";
 
 
 export async function GET(req) {
@@ -87,6 +88,16 @@ export async function GET(req) {
     const stockFilter = reportType === "monthly" ? { date: { $regex: `^${month}` } } : { date };
     const stockAuditLogs = await StockAudit.find(stockFilter).sort({ date: -1, productId: 1 }).lean();
 
+    // 7. Overtime (OT) Headcount Logs (2-Hour & 3-Hour OT across 6 Departments)
+    const otFilter = reportType === "monthly" ? { date: { $regex: `^${month}` } } : { date };
+    const overtimeLogs = await OvertimeLog.find(otFilter).sort({ date: -1, departmentName: 1 }).lean();
+
+    const overtimeSummary = {
+      totalTwoHourOT: overtimeLogs.reduce((acc, o) => acc + (o.twoHourCount || 0), 0),
+      totalThreeHourOT: overtimeLogs.reduce((acc, o) => acc + (o.threeHourCount || 0), 0),
+      totalOvertimeCount: overtimeLogs.reduce((acc, o) => acc + (o.totalCount || 0), 0),
+    };
+
     return NextResponse.json({
       success: true,
       reportType,
@@ -99,6 +110,7 @@ export async function GET(req) {
         totalTeaCount,
         ...teaLitersSummary,
         ...counterSummary,
+        ...overtimeSummary,
       },
       teaByDepartment: teaByDept,
       teaRecords,
@@ -109,6 +121,8 @@ export async function GET(req) {
       counterLogs,
       counterSummary,
       stockAuditLogs,
+      overtimeLogs,
+      overtimeSummary,
     });
   } catch (error) {
     if (error?.digest === "NEXT_PRERENDER_INTERRUPTED") {

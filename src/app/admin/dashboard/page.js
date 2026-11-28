@@ -31,6 +31,7 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [reportData, setReportData] = useState(null);
   const [teaData, setTeaData] = useState(null);
+  const [otData, setOtData] = useState(null);
   const [chartPeriod, setChartPeriod] = useState("daily"); // "daily" or "monthly"
   const [quickTeaModal, setQuickTeaModal] = useState(false);
   const [selectedDeptId, setSelectedDeptId] = useState("");
@@ -41,9 +42,11 @@ export default function AdminDashboardPage() {
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
-      const [repRes, teaRes] = await Promise.all([
+      const todayStr = new Date().toISOString().split("T")[0];
+      const [repRes, teaRes, otRes] = await Promise.all([
         fetch(`/api/reports/summary?type=${chartPeriod}`, { cache: "no-store" }).then((r) => r.json()),
         fetch(`/api/tea-count`, { cache: "no-store" }).then((r) => r.json()),
+        fetch(`/api/overtime?date=${todayStr}`, { cache: "no-store" }).then((r) => r.json()).catch(() => ({})),
       ]);
 
       if (repRes.success) setReportData(repRes);
@@ -53,6 +56,7 @@ export default function AdminDashboardPage() {
           setSelectedDeptId(teaRes.departments[0]._id);
         }
       }
+      if (otRes?.success) setOtData(otRes);
     } catch (e) {
       console.error("Dashboard data fetch error:", e);
     } finally {
@@ -427,6 +431,105 @@ export default function AdminDashboardPage() {
           </div>
         </Card>
       </div>
+
+      {/* 6-DEPARTMENT FACTORY OVERTIME (OT) LIVE HEADCOUNT */}
+      <Card className="p-6 space-y-5 border-blue-200/80 bg-gradient-to-b from-blue-50/20 via-white to-white shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-blue-100 text-blue-700">
+              <Clock className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="font-bold text-slate-900 text-sm">
+                  Factory Overtime (OT) Live Monitoring
+                </h3>
+                <Badge variant="outline" className="text-blue-700 border-blue-200 bg-blue-50 text-[10px]">
+                  6 Factory Bays
+                </Badge>
+              </div>
+              <p className="text-[11px] text-slate-500">
+                2-Hour and 3-Hour overtime headcounts logged by bay supervisors for canteen meal allocation.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <div className="text-xs font-bold text-slate-900 font-mono">
+                Total OT: <span className="text-blue-700">{otData?.summary?.grandTotal || 0}</span> Workers
+              </div>
+              <div className="text-[10px] text-slate-500">
+                2h: <b>{otData?.summary?.totalTwoHour || 0}</b> | 3h: <b>{otData?.summary?.totalThreeHour || 0}</b>
+              </div>
+            </div>
+            <Button variant="outline" size="sm" asChild>
+              <Link href="/operator/overtime">
+                <span>OT Terminal →</span>
+              </Link>
+            </Button>
+          </div>
+        </div>
+
+        {/* 6 DEPARTMENT CARDS GRID */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {[
+            { code: "DEPT_ENG_ASSY", name: "Engine Assembly" },
+            { code: "DEPT_VEH_ASSY", name: "Vehicle Assembly" },
+            { code: "DEPT_MACHINE_SHOP", name: "Machine Shop" },
+            { code: "DEPT_PAINT_SHOP", name: "Paint Shop" },
+            { code: "DEPT_PRESS_SHOP", name: "Press Shop" },
+            { code: "DEPT_QA", name: "Quality Assurance" },
+          ].map((bay, idx) => {
+            const log = (otData?.logs || []).find(
+              (l) => l.departmentCode === bay.code || l.departmentName === bay.name
+            );
+            const isLogged = !!log;
+
+            return (
+              <div
+                key={idx}
+                className={`p-3.5 rounded-xl border transition text-xs space-y-2 ${
+                  isLogged
+                    ? "bg-blue-50/40 border-blue-200"
+                    : "bg-slate-50 border-slate-200"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`w-2 h-2 rounded-full ${
+                        isLogged ? "bg-emerald-500 animate-pulse" : "bg-slate-300"
+                      }`}
+                    />
+                    <span className="font-bold text-slate-900">{bay.name}</span>
+                  </div>
+                  {isLogged ? (
+                    <Badge variant="success" className="text-[9px] px-1.5 py-0.2">
+                      Submitted
+                    </Badge>
+                  ) : (
+                    <Badge variant="secondary" className="text-[9px] px-1.5 py-0.2">
+                      Pending
+                    </Badge>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between text-slate-600 font-mono text-[11px] bg-white/80 p-2 rounded-lg border border-slate-100">
+                  <span>2h: <b className="text-slate-900">{log?.twoHourCount || 0}</b></span>
+                  <span>3h: <b className="text-slate-900">{log?.threeHourCount || 0}</b></span>
+                  <span className="font-bold text-blue-700">Total: {log?.totalCount || 0}</span>
+                </div>
+
+                <div className="flex items-center justify-between text-[10px] text-slate-400">
+                  <span>{log?.loggedBy ? `By: ${log.loggedBy}` : "Awaiting supervisor"}</span>
+                  <span>{log?.shift || "General"}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </Card>
 
       {/* POINT 3: REAL-TIME CHECKSHEET STATUS STREAM */}
       <Card className="p-6 space-y-4">

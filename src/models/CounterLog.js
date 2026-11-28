@@ -9,7 +9,7 @@ const CounterLogSchema = new mongoose.Schema(
     },
     shift: {
       type: String,
-      enum: ["SHIFT_1_GEN", "SHIFT_2", "VIP"],
+      enum: ["SHIFT_1_GEN", "SHIFT_2", "SHIFT_3", "VIP"],
       required: true,
       index: true,
     },

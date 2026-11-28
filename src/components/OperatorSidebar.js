@@ -115,43 +115,131 @@ export default function OperatorSidebar() {
     user?.role?.code === "SUPER_ADMIN" ||
     user?.role?.code === "ADMIN";
 
-  const navigationItems = [
-    {
-      label: "Overview",
-      href: "/operator",
-      icon: LayoutDashboard,
-      badge: "Live",
-      badgeColor: "bg-indigo-50 text-indigo-700 border-indigo-100",
-    },
-    {
-      label: "Counters & Plates",
-      href: "/operator/counters",
-      icon: UtensilsCrossed,
-      badge: "Food Service",
-      badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-100",
-    },
-    {
-      label: "Tea Logistics",
-      href: "/operator/tea-delivery",
-      icon: Coffee,
-      badge: "Liters Log",
-      badgeColor: "bg-amber-50 text-amber-700 border-amber-100",
-    },
-    {
-      label: "50+ Checksheets",
-      href: "/operator/checksheets",
-      icon: ClipboardCheck,
-      badge: `${metrics.totalSheets} Active`,
-      badgeColor: "bg-indigo-50 text-indigo-700 border-indigo-100",
-    },
-    {
-      label: "Biscuit Audit",
-      href: "/operator/biscuit-audit",
-      icon: PackageCheck,
-      badge: "Ledger",
-      badgeColor: "bg-purple-50 text-purple-700 border-purple-100",
-    },
-  ];
+  const roleCode = user?.role?.code;
+
+  let navigationItems = [];
+  if (roleCode === "OPERATOR_1") {
+    navigationItems = [
+      {
+        label: "Overview",
+        href: "/operator",
+        icon: LayoutDashboard,
+        badge: "Op 1 Hub",
+        badgeColor: "bg-indigo-50 text-indigo-700 border-indigo-100",
+      },
+      {
+        label: "Counters & Plates",
+        href: "/operator/counters",
+        icon: UtensilsCrossed,
+        badge: "Shift 1/2/3/VIP",
+        badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-100",
+      },
+      {
+        label: "Biscuit Audit",
+        href: "/operator/biscuit-audit",
+        icon: PackageCheck,
+        badge: "Shared Sync",
+        badgeColor: "bg-purple-50 text-purple-700 border-purple-100",
+      },
+    ];
+  } else if (roleCode === "OPERATOR_2") {
+    navigationItems = [
+      {
+        label: "Overview",
+        href: "/operator",
+        icon: LayoutDashboard,
+        badge: "Op 2 Hub",
+        badgeColor: "bg-indigo-50 text-indigo-700 border-indigo-100",
+      },
+      {
+        label: "54 Checksheets",
+        href: "/operator/checksheets",
+        icon: ClipboardCheck,
+        badge: "0-25 & 26-50+",
+        badgeColor: "bg-indigo-50 text-indigo-700 border-indigo-100",
+      },
+      {
+        label: "Biscuit Audit",
+        href: "/operator/biscuit-audit",
+        icon: PackageCheck,
+        badge: "Shared Sync",
+        badgeColor: "bg-purple-50 text-purple-700 border-purple-100",
+      },
+    ];
+  } else if (roleCode === "OPERATOR_3") {
+    navigationItems = [
+      {
+        label: "Overview",
+        href: "/operator",
+        icon: LayoutDashboard,
+        badge: "Op 3 Hub",
+        badgeColor: "bg-indigo-50 text-indigo-700 border-indigo-100",
+      },
+      {
+        label: "Tea Logistics",
+        href: "/operator/tea-delivery",
+        icon: Coffee,
+        badge: "Liters Log",
+        badgeColor: "bg-amber-50 text-amber-700 border-amber-100",
+      },
+    ];
+  } else if (roleCode === "OT_SUPERVISOR") {
+    navigationItems = [
+      {
+        label: "Overtime (OT) Log",
+        href: "/operator/overtime",
+        icon: Clock,
+        badge: user?.department?.name ? user.department.name.replace("Shop", "").trim() : "2h & 3h OT",
+        badgeColor: "bg-blue-50 text-blue-700 border-blue-100",
+      },
+    ];
+  } else {
+    // Admin or General Operator: All modules
+    navigationItems = [
+      {
+        label: "Overview",
+        href: "/operator",
+        icon: LayoutDashboard,
+        badge: "Live",
+        badgeColor: "bg-indigo-50 text-indigo-700 border-indigo-100",
+      },
+      {
+        label: "Counters & Plates",
+        href: "/operator/counters",
+        icon: UtensilsCrossed,
+        badge: "Food Service",
+        badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-100",
+      },
+      {
+        label: "Tea Logistics",
+        href: "/operator/tea-delivery",
+        icon: Coffee,
+        badge: "Liters Log",
+        badgeColor: "bg-amber-50 text-amber-700 border-amber-100",
+      },
+      {
+        label: "54 Checksheets",
+        href: "/operator/checksheets",
+        icon: ClipboardCheck,
+        badge: `${metrics.totalSheets} Active`,
+        badgeColor: "bg-indigo-50 text-indigo-700 border-indigo-100",
+      },
+      {
+        label: "Biscuit Audit",
+        href: "/operator/biscuit-audit",
+        icon: PackageCheck,
+        badge: "Ledger",
+        badgeColor: "bg-purple-50 text-purple-700 border-purple-100",
+      },
+      {
+        label: "Overtime (OT) Log",
+        href: "/operator/overtime",
+        icon: Clock,
+        badge: "6 Depts",
+        badgeColor: "bg-blue-50 text-blue-700 border-blue-100",
+      },
+    ];
+  }
 
   return (
     <aside className="w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 h-screen sticky top-0 overflow-hidden z-30 font-sans shadow-xs">

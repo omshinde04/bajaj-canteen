@@ -60,8 +60,12 @@ export function requirePermission(requiredPermission) {
       const { user } = auth;
       const permissions = user.role?.permissions || [];
 
-      // Super Admin role code bypasses all permission checks
-      if (user.role?.code === "SUPER_ADMIN" || permissions.includes(requiredPermission)) {
+      // Super Admin and Admin role codes bypass all permission checks
+      if (
+        user.role?.code === "SUPER_ADMIN" ||
+        user.role?.code === "ADMIN" ||
+        permissions.includes(requiredPermission)
+      ) {
         return handler(req, { ...context, user });
       }
 

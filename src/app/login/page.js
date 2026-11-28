@@ -68,7 +68,16 @@ function LoginForm() {
 
       setSuccess(true);
       setTimeout(() => {
-        if (data.user?.role?.code === "OPERATOR") {
+        const code = data.user?.role?.code || "";
+        if (code === "OPERATOR_1") {
+          router.push("/operator/counters");
+        } else if (code === "OPERATOR_2") {
+          router.push("/operator/checksheets");
+        } else if (code === "OPERATOR_3") {
+          router.push("/operator/tea-delivery");
+        } else if (code === "OT_SUPERVISOR") {
+          router.push("/operator/overtime");
+        } else if (code === "OPERATOR") {
           router.push("/operator");
         } else {
           router.push("/admin/dashboard");
@@ -82,9 +91,18 @@ function LoginForm() {
   };
 
   const handleFillDemo = (type = "admin") => {
-    if (type === "operator") {
-      setEmail("operator@bajaj.com");
-      setPassword("Operator@2026");
+    if (type === "op1") {
+      setEmail("op1.counter@bajaj.com");
+      setPassword("Operator1@2026");
+    } else if (type === "op2") {
+      setEmail("op2.checks@bajaj.com");
+      setPassword("Operator2@2026");
+    } else if (type === "op3") {
+      setEmail("op3.tea@bajaj.com");
+      setPassword("Operator3@2026");
+    } else if (type === "ot") {
+      setEmail("ot.engine@bajaj.com");
+      setPassword("OTSupervisor@2026");
     } else {
       setEmail("admin@bajaj.com");
       setPassword("AdminPassword@2026");
@@ -190,7 +208,7 @@ function LoginForm() {
         <div className="flex items-center justify-between text-[11px] text-slate-500">
           <span className="flex items-center gap-1.5 font-medium">
             <KeyRound className="w-3.5 h-3.5 text-indigo-600" />
-            <span>Authorized Logins (Admin & Operator)</span>
+            <span>Authorized Logins</span>
           </span>
           <span className="text-[10px] text-slate-400 font-mono">1-Click Fast Fill</span>
         </div>
@@ -199,7 +217,7 @@ function LoginForm() {
           <button
             type="button"
             onClick={() => handleFillDemo("admin")}
-            className="p-2.5 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-left transition-all group shadow-xs cursor-pointer"
+            className="p-2 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-left transition-all group shadow-xs cursor-pointer"
           >
             <div className="text-slate-800 font-semibold text-[11px] group-hover:text-indigo-600">
               Admin
@@ -209,13 +227,46 @@ function LoginForm() {
 
           <button
             type="button"
-            onClick={() => handleFillDemo("operator")}
-            className="p-2.5 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-left transition-all group shadow-xs cursor-pointer"
+            onClick={() => handleFillDemo("op1")}
+            className="p-2 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-left transition-all group shadow-xs cursor-pointer"
           >
             <div className="text-slate-800 font-semibold text-[11px] group-hover:text-indigo-600">
-              Operator
+              Operator 1
             </div>
-            <div className="text-slate-500 text-[10px] font-mono truncate">operator@bajaj.com</div>
+            <div className="text-slate-500 text-[10px] font-mono truncate">op1.counter@bajaj.com</div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleFillDemo("op2")}
+            className="p-2 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-left transition-all group shadow-xs cursor-pointer"
+          >
+            <div className="text-slate-800 font-semibold text-[11px] group-hover:text-indigo-600">
+              Operator 2
+            </div>
+            <div className="text-slate-500 text-[10px] font-mono truncate">op2.checks@bajaj.com</div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleFillDemo("op3")}
+            className="p-2 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-left transition-all group shadow-xs cursor-pointer"
+          >
+            <div className="text-slate-800 font-semibold text-[11px] group-hover:text-indigo-600">
+              Operator 3 (Tea)
+            </div>
+            <div className="text-slate-500 text-[10px] font-mono truncate">op3.tea@bajaj.com</div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleFillDemo("ot")}
+            className="col-span-2 p-2 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-left transition-all group shadow-xs cursor-pointer"
+          >
+            <div className="text-slate-800 font-semibold text-[11px] group-hover:text-indigo-600">
+              OT Supervisor (Engine Assy)
+            </div>
+            <div className="text-slate-500 text-[10px] font-mono truncate">ot.engine@bajaj.com</div>
           </button>
         </div>
       </div>

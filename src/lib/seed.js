@@ -37,7 +37,7 @@ export async function seedDatabase() {
   await connectDB();
   console.log("Seeding Master Enterprise Data into MongoDB Atlas...");
 
-  // 1. Roles (Strictly Admin and Operator as per Client Specifications)
+  // 1. Roles (Enterprise Multi-Operator & OT Roles)
   const roles = [
     {
       name: "Super Admin",
@@ -45,6 +45,34 @@ export async function seedDatabase() {
       description: "Full system-wide administrative control across all facilities and modules",
       isSystemRole: true,
       permissions: ALL_PERMISSIONS,
+    },
+    {
+      name: "Operator 1 (Counters, VIP & Biscuits)",
+      code: "OPERATOR_1",
+      description: "Meal counter readiness, Shift 1, General, Shift 2, 3, VIP 4-tab suite, biscuit inventory",
+      isSystemRole: true,
+      permissions: ["view", "add", "upload"],
+    },
+    {
+      name: "Operator 2 (Checksheets & Biscuits)",
+      code: "OPERATOR_2",
+      description: "54 Checksheets execution across Main (1-25) & JH (26-50+) and biscuit verification",
+      isSystemRole: true,
+      permissions: ["view", "add", "upload"],
+    },
+    {
+      name: "Operator 3 (Tea Logistics)",
+      code: "OPERATOR_3",
+      description: "Shop floor tea kettle distribution in Liters, returns, and wastage tracking",
+      isSystemRole: true,
+      permissions: ["view", "add", "upload"],
+    },
+    {
+      name: "Overtime Supervisor",
+      code: "OT_SUPERVISOR",
+      description: "Department-locked Overtime manpower tracking for 2-hour and 3-hour durations",
+      isSystemRole: true,
+      permissions: ["view", "add", "upload"],
     },
     {
       name: "Operator",
@@ -159,11 +187,11 @@ export async function seedDatabase() {
   }
   console.log("✓ Departments seeded:", Object.keys(deptMap));
 
-  // 4. Default Logins (Strictly Admin & Operator as per Handwritten Specification)
+  // 4. Default Logins (Enterprise Multi-Operator & OT Logins)
   const staffMembers = [
     {
       employeeId: "BAJAJ-001",
-      name: "Admin",
+      name: "Super Administrator",
       email: "admin@bajaj.com",
       passwordRaw: "AdminPassword@2026",
       roleCode: "SUPER_ADMIN",
@@ -172,19 +200,110 @@ export async function seedDatabase() {
       phoneNumber: "+91 98000 00001",
     },
     {
+      employeeId: "BAJAJ-OP1-01",
+      name: "Ramesh Pawar (Operator 1)",
+      email: "op1.counter@bajaj.com",
+      passwordRaw: "Operator1@2026",
+      roleCode: "OPERATOR_1",
+      deptCode: "DEPT_KITCHEN",
+      shiftCode: "SHIFT_A",
+      phoneNumber: "+91 98000 00002",
+    },
+    {
+      employeeId: "BAJAJ-OP2-01",
+      name: "Suresh Gaikwad (Operator 2)",
+      email: "op2.checks@bajaj.com",
+      passwordRaw: "Operator2@2026",
+      roleCode: "OPERATOR_2",
+      deptCode: "DEPT_KITCHEN",
+      shiftCode: "SHIFT_A",
+      phoneNumber: "+91 98000 00003",
+    },
+    {
+      employeeId: "BAJAJ-OP3-01",
+      name: "Ganesh Kadam (Operator 3)",
+      email: "op3.tea@bajaj.com",
+      passwordRaw: "Operator3@2026",
+      roleCode: "OPERATOR_3",
+      deptCode: "DEPT_KITCHEN",
+      shiftCode: "SHIFT_A",
+      phoneNumber: "+91 98000 00004",
+    },
+    {
+      employeeId: "BAJAJ-OT-01",
+      name: "Engine Assy Supervisor",
+      email: "ot.engine@bajaj.com",
+      passwordRaw: "OTSupervisor@2026",
+      roleCode: "OT_SUPERVISOR",
+      deptCode: "DEPT_ENG_ASSY",
+      shiftCode: "SHIFT_A",
+      phoneNumber: "+91 98000 00011",
+    },
+    {
+      employeeId: "BAJAJ-OT-02",
+      name: "Vehicle Assy Supervisor",
+      email: "ot.vehicle@bajaj.com",
+      passwordRaw: "OTSupervisor@2026",
+      roleCode: "OT_SUPERVISOR",
+      deptCode: "DEPT_VEH_ASSY",
+      shiftCode: "SHIFT_A",
+      phoneNumber: "+91 98000 00012",
+    },
+    {
+      employeeId: "BAJAJ-OT-03",
+      name: "Machine Shop Supervisor",
+      email: "ot.machine@bajaj.com",
+      passwordRaw: "OTSupervisor@2026",
+      roleCode: "OT_SUPERVISOR",
+      deptCode: "DEPT_MACHINE_SHOP",
+      shiftCode: "SHIFT_A",
+      phoneNumber: "+91 98000 00013",
+    },
+    {
+      employeeId: "BAJAJ-OT-04",
+      name: "Paint Shop Supervisor",
+      email: "ot.paint@bajaj.com",
+      passwordRaw: "OTSupervisor@2026",
+      roleCode: "OT_SUPERVISOR",
+      deptCode: "DEPT_PAINT_SHOP",
+      shiftCode: "SHIFT_A",
+      phoneNumber: "+91 98000 00014",
+    },
+    {
+      employeeId: "BAJAJ-OT-05",
+      name: "Press Shop Supervisor",
+      email: "ot.press@bajaj.com",
+      passwordRaw: "OTSupervisor@2026",
+      roleCode: "OT_SUPERVISOR",
+      deptCode: "DEPT_PRESS_SHOP",
+      shiftCode: "SHIFT_A",
+      phoneNumber: "+91 98000 00015",
+    },
+    {
+      employeeId: "BAJAJ-OT-06",
+      name: "QA Supervisor",
+      email: "ot.qa@bajaj.com",
+      passwordRaw: "OTSupervisor@2026",
+      roleCode: "OT_SUPERVISOR",
+      deptCode: "DEPT_QA",
+      shiftCode: "SHIFT_A",
+      phoneNumber: "+91 98000 00016",
+    },
+    {
       employeeId: "BAJAJ-OP-01",
-      name: "Ramesh Pawar (Operator)",
+      name: "General Operator",
       email: "operator@bajaj.com",
       passwordRaw: "Operator@2026",
       roleCode: "OPERATOR",
       deptCode: "DEPT_KITCHEN",
       shiftCode: "SHIFT_A",
-      phoneNumber: "+91 98000 00004",
+      phoneNumber: "+91 98000 00000",
     },
   ];
 
-  // Remove any non-whitelisted accounts
-  await User.deleteMany({ email: { $nin: ["admin@bajaj.com", "operator@bajaj.com"] } });
+  // Whitelisted accounts
+  const allowedEmails = staffMembers.map((s) => s.email);
+  await User.deleteMany({ email: { $nin: allowedEmails } });
 
   for (const s of staffMembers) {
     const existing = await User.findOne({ email: s.email });

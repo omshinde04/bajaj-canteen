@@ -11,6 +11,7 @@ import Notification from "./Notification.js";
 import CounterLog from "./CounterLog.js";
 import TeaDeliveryLog from "./TeaDeliveryLog.js";
 import StockAudit from "./StockAudit.js";
+import OvertimeLog from "./OvertimeLog.js";
 
 export {
   Role,
@@ -26,6 +27,7 @@ export {
   CounterLog,
   TeaDeliveryLog,
   StockAudit,
+  OvertimeLog,
 };
 
 export default {
@@ -42,4 +44,5 @@ export default {
   CounterLog,
   TeaDeliveryLog,
   StockAudit,
+  OvertimeLog,
 };

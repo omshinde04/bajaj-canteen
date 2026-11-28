@@ -29,7 +29,7 @@ export default function OperatorChecksheetsPage() {
   const [checkSheets, setCheckSheets] = useState([]);
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeGroup, setActiveGroup] = useState("ALL"); // ALL, MAIN, JH, OTHER
+  const [activeGroup, setActiveGroup] = useState("MAIN"); // MAIN (0-25), JH (26-50), ALL
   const [statusFilter, setStatusFilter] = useState("ALL"); // ALL, DUE, COMPLETED
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -85,13 +85,11 @@ export default function OperatorChecksheetsPage() {
       }
     }
 
-    // Classify into Client Sheet 4 groups:
-    // 0-25 are Main sheets (CS-MAIN-xx)
-    // 25-50 are JH equipment sheets (CS-JH-xx)
-    let group = "OTHER";
-    if (cs.code && cs.code.startsWith("CS-MAIN-")) {
-      group = "MAIN";
-    } else if (cs.code && cs.code.startsWith("CS-JH-")) {
+    // Classify into Client 2 Primary Groups:
+    // 0-25 are Main sheets (CS-MAIN-xx & kitchen hygiene)
+    // 26-50 are JH equipment sheets (CS-JH-xx)
+    let group = "MAIN";
+    if (cs.code && cs.code.startsWith("CS-JH-")) {
       group = "JH";
     }
 
@@ -109,10 +107,16 @@ export default function OperatorChecksheetsPage() {
   const countTotal = mappedSheets.length;
   const countMain = mappedSheets.filter((s) => s.group === "MAIN").length;
   const countJH = mappedSheets.filter((s) => s.group === "JH").length;
-  const countOther = mappedSheets.filter((s) => s.group === "OTHER").length;
 
   const countDue = mappedSheets.filter((s) => s.taskStatus === "DUE" || s.taskStatus === "REJECTED").length;
   const countCompleted = mappedSheets.filter((s) => s.taskStatus === "COMPLETED" || s.taskStatus === "PENDING_REVIEW").length;
+
+  const mainCompleted = mappedSheets.filter(
+    (s) => s.group === "MAIN" && (s.taskStatus === "COMPLETED" || s.taskStatus === "PENDING_REVIEW")
+  ).length;
+  const jhCompleted = mappedSheets.filter(
+    (s) => s.group === "JH" && (s.taskStatus === "COMPLETED" || s.taskStatus === "PENDING_REVIEW")
+  ).length;
 
   // Filter list
   const filtered = mappedSheets.filter((sheet) => {
@@ -222,52 +226,60 @@ export default function OperatorChecksheetsPage() {
       {/* Tabs and Filters */}
       <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-          {/* Group Tabs */}
+          {/* Primary Operator 2 Tabs: 0-25 Main Checksheets & 26-50 JH Machine Sheets */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1">
             <button
+              onClick={() => handleGroupChange("MAIN")}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer ${
+                activeGroup === "MAIN"
+                  ? "bg-indigo-600 text-white shadow-sm ring-2 ring-indigo-200"
+                  : "bg-indigo-50/80 text-indigo-700 hover:bg-indigo-100 border border-indigo-200"
+              }`}
+            >
+              <UtensilsCrossed className="w-4 h-4" />
+              <span>0–25 Main Checksheets</span>
+              <span
+                className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
+                  activeGroup === "MAIN"
+                    ? "bg-white/20 text-white font-bold"
+                    : "bg-indigo-200 text-indigo-900 font-semibold"
+                }`}
+              >
+                {mainCompleted} / {countMain} Done
+              </span>
+            </button>
+
+            <button
+              onClick={() => handleGroupChange("JH")}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer ${
+                activeGroup === "JH"
+                  ? "bg-purple-600 text-white shadow-sm ring-2 ring-purple-200"
+                  : "bg-purple-50/80 text-purple-700 hover:bg-purple-100 border border-purple-200"
+              }`}
+            >
+              <Wrench className="w-4 h-4" />
+              <span>26–50+ JH Checksheets</span>
+              <span
+                className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
+                  activeGroup === "JH"
+                    ? "bg-white/20 text-white font-bold"
+                    : "bg-purple-200 text-purple-900 font-semibold"
+                }`}
+              >
+                {jhCompleted} / {countJH} Done
+              </span>
+            </button>
+
+            <button
               onClick={() => handleGroupChange("ALL")}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
+              className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
                 activeGroup === "ALL"
-                  ? "bg-slate-900 text-white"
-                  : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                  ? "bg-slate-900 text-white shadow-sm"
+                  : "bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200"
               }`}
             >
               All Sheets ({countTotal})
             </button>
-            <button
-              onClick={() => handleGroupChange("MAIN")}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 ${
-                activeGroup === "MAIN"
-                  ? "bg-indigo-600 text-white"
-                  : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200"
-              }`}
-            >
-              <UtensilsCrossed className="w-3.5 h-3.5" />
-              Main Kitchen ({countMain})
-            </button>
-            <button
-              onClick={() => handleGroupChange("JH")}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 ${
-                activeGroup === "JH"
-                  ? "bg-purple-600 text-white"
-                  : "bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200"
-              }`}
-            >
-              <Wrench className="w-3.5 h-3.5" />
-              Autonomous Machinery ({countJH})
-            </button>
-            {countOther > 0 && (
-              <button
-                onClick={() => handleGroupChange("OTHER")}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
-                  activeGroup === "OTHER"
-                    ? "bg-slate-900 text-white"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                }`}
-              >
-                Other Ops ({countOther})
-              </button>
-            )}
           </div>
 
           {/* Status Segmented Control */}

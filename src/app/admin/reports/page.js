@@ -174,6 +174,31 @@ export default function ReportsAndDownloadsPage() {
         s.closingStock,
       ]);
     });
+    csvRows.push([]);
+
+    // 6. Overtime (OT) Headcount Dossier
+    csvRows.push(["6. FACTORY OVERTIME (OT) HEADCOUNT DOSSIER"]);
+    csvRows.push(["Department", "Date", "Shift", "2-Hour OT Count", "3-Hour OT Count", "Total OT Count", "Supervisor"]);
+    (data.overtimeLogs || []).forEach((o) => {
+      csvRows.push([
+        `"${o.departmentName}"`,
+        o.date,
+        o.shift,
+        o.twoHourCount || 0,
+        o.threeHourCount || 0,
+        o.totalCount || 0,
+        `"${o.loggedBy || "Supervisor"}"`,
+      ]);
+    });
+    csvRows.push([
+      "Total Factory OT Headcount",
+      data.period,
+      "",
+      data.summary?.totalTwoHourOT || 0,
+      data.summary?.totalThreeHourOT || 0,
+      data.summary?.totalOvertimeCount || 0,
+      "",
+    ]);
 
     const csvContent = "data:text/csv;charset=utf-8," + csvRows.map((e) => e.join(",")).join("\n");
     const encodedUri = encodeURI(csvContent);
@@ -465,6 +490,52 @@ export default function ReportsAndDownloadsPage() {
                       <TableCell className="font-mono">{s.shift2Consumption}</TableCell>
                       <TableCell className="font-mono font-bold text-amber-600">{s.totalConsumption}</TableCell>
                       <TableCell className="font-mono font-bold text-right text-emerald-700">{s.closingStock}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        )}
+
+        {/* FACTORY OVERTIME (OT) HEADCOUNT DOSSIER */}
+        {data?.overtimeLogs && data.overtimeLogs.length > 0 && (
+          <div className="space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <Clock className="w-4 h-4 text-blue-600" />
+                <span>Factory Overtime (OT) Headcount Dossier</span>
+              </h3>
+              <span className="text-xs font-mono font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100 self-start sm:self-auto">
+                Total OT Workers: {data.summary?.totalOvertimeCount || 0} (2h: {data.summary?.totalTwoHourOT || 0}, 3h: {data.summary?.totalThreeHourOT || 0})
+              </span>
+            </div>
+
+            <div className="overflow-x-auto border border-slate-200 rounded-xl">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Department / Factory Bay</TableHead>
+                    <TableHead>Shift</TableHead>
+                    <TableHead>2-Hour OT Count</TableHead>
+                    <TableHead>3-Hour OT Count</TableHead>
+                    <TableHead>Total OT Headcount</TableHead>
+                    <TableHead className="text-right">Submitted By</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {data.overtimeLogs.map((o) => (
+                    <TableRow key={o._id}>
+                      <TableCell className="font-semibold text-slate-900">{o.departmentName}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="font-mono text-[10px]">
+                          {o.shift}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="font-mono font-bold text-blue-600">{o.twoHourCount || 0}</TableCell>
+                      <TableCell className="font-mono font-bold text-indigo-600">{o.threeHourCount || 0}</TableCell>
+                      <TableCell className="font-mono font-extrabold text-emerald-700">{o.totalCount || 0}</TableCell>
+                      <TableCell className="text-right text-slate-500 text-xs">{o.loggedBy || "Supervisor"}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
