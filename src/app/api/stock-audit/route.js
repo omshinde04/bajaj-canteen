@@ -28,8 +28,18 @@ export async function GET(req) {
         .sort({ date: -1 })
         .lean();
 
-      if (prevEntry) return prevEntry.closingStock;
-      return 0;
+      if (prevEntry) {
+        return {
+          closingStock: prevEntry.closingStock,
+          date: prevEntry.date,
+          hasPrevious: true,
+        };
+      }
+      return {
+        closingStock: 0,
+        date: null,
+        hasPrevious: false,
+      };
     };
 
     // If fetching for a specific product's full ledger history
@@ -46,7 +56,7 @@ export async function GET(req) {
     const entries = [];
     for (const prod of PRODUCTS) {
       let item = await StockAudit.findOne({ date, productId: prod.id }).lean();
-      const autoOpening = await getPreviousClosing(prod.id, date);
+      const prevInfo = await getPreviousClosing(prod.id, date);
 
       if (!item) {
         // Auto-fetch opening stock from previous day's closing stock!
@@ -54,20 +64,28 @@ export async function GET(req) {
           date,
           productId: prod.id,
           productName: prod.name,
-          openingStock: autoOpening,
+          openingStock: prevInfo.closingStock,
           newAddedStock: 0,
           shift1Consumption: 0,
           shift2Consumption: 0,
           totalConsumption: 0,
-          closingStock: autoOpening,
+          closingStock: prevInfo.closingStock,
           isDraft: true,
+          previousClosingStock: prevInfo.closingStock,
+          previousDate: prevInfo.date,
+          hasPrevious: prevInfo.hasPrevious,
         };
+      } else {
+        item.previousClosingStock = prevInfo.closingStock;
+        item.previousDate = prevInfo.date;
+        item.hasPrevious = prevInfo.hasPrevious;
       }
       entries.push(item);
     }
 
-    // Also fetch the last 15 days table history for the active product (default Parle-G)
+    // Also fetch the last 30 days table history for the active product (default Parle-G)
     const activeProd = productId || "parle-g";
+    const activePrevInfo = await getPreviousClosing(activeProd, date);
     const recentLedger = await StockAudit.find({ productId: activeProd })
       .sort({ date: 1 })
       .limit(30)
@@ -86,6 +104,7 @@ export async function GET(req) {
       date,
       products: PRODUCTS,
       activeProduct: activeProd,
+      previousInfo: activePrevInfo,
       currentDayAudit: entries,
       recentLedger,
       recentActivity,
