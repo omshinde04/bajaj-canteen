@@ -62,14 +62,6 @@ export async function GET(req) {
           closingStock: autoOpening,
           isDraft: true,
         };
-      } else if (item.openingStock !== autoOpening) {
-        // Auto-heal: synchronize opening stock with the actual previous day closing
-        item.openingStock = autoOpening;
-        item.closingStock = autoOpening + (item.newAddedStock || 0) - (item.totalConsumption || 0);
-        await StockAudit.updateOne(
-          { _id: item._id },
-          { openingStock: item.openingStock, closingStock: item.closingStock }
-        );
       }
       entries.push(item);
     }

@@ -42,6 +42,7 @@ import {
   Truck,
   Check,
   ShieldCheck,
+  AlertTriangle,
 } from "lucide-react";
 
 const PRODUCTS = [
@@ -86,9 +87,9 @@ export default function BiscuitAuditPage() {
       .catch(() => {});
   }, []);
 
-  const fetchAuditData = async () => {
+  const fetchAuditData = async (isBackground = false) => {
     if (!selectedDate) return;
-    setLoading(true);
+    if (!isBackground) setLoading(true);
     try {
       const res = await fetch(
         `/api/stock-audit?date=${selectedDate}&productId=${selectedProduct}`,
@@ -103,27 +104,38 @@ export default function BiscuitAuditPage() {
           (e) => e.productId === selectedProduct
         );
         setCurrentAuditEntry(curEntry || null);
-        if (curEntry) {
-          setOpeningStock(curEntry.openingStock !== undefined ? curEntry.openingStock : 0);
-          setNewAddedStock(curEntry.newAddedStock || 0);
-          setDeliveries(curEntry.deliveries || []);
-          setShift1Consumption(curEntry.shift1Consumption || 0);
-          setShift2Consumption(curEntry.shift2Consumption || 0);
-          setNotes(curEntry.notes || "");
+
+        // ONLY update form input fields on explicit load/reset/save, NEVER during silent background polling!
+        if (!isBackground) {
+          if (curEntry) {
+            setOpeningStock(curEntry.openingStock !== undefined ? curEntry.openingStock : 0);
+            setNewAddedStock(curEntry.newAddedStock || 0);
+            setDeliveries(curEntry.deliveries || []);
+            setShift1Consumption(curEntry.shift1Consumption || 0);
+            setShift2Consumption(curEntry.shift2Consumption || 0);
+            setNotes(curEntry.notes || "");
+          } else {
+            setOpeningStock(0);
+            setNewAddedStock(0);
+            setDeliveries([]);
+            setShift1Consumption(0);
+            setShift2Consumption(0);
+            setNotes("");
+          }
         }
       }
     } catch (err) {
       console.error("Failed to load biscuit audit:", err);
     } finally {
-      setLoading(false);
+      if (!isBackground) setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchAuditData();
-    // Auto-sync polling every 20s to reflect changes made by Operator 1 or Operator 2
+    fetchAuditData(false);
+    // Background polling every 20s updates ledger & notifications WITHOUT overwriting user's active inputs
     const interval = setInterval(() => {
-      fetchAuditData();
+      fetchAuditData(true);
     }, 20000);
     return () => clearInterval(interval);
   }, [selectedDate, selectedProduct]);
@@ -614,18 +626,28 @@ export default function BiscuitAuditPage() {
                 />
               </div>
 
+              {closingStock < 0 && (
+                <div className="p-3 bg-amber-50 border border-amber-200 text-amber-900 rounded-xl text-xs flex items-start gap-2.5">
+                  <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold">Negative Balance Warning ({closingStock} pkts):</span>{" "}
+                    Total consumption ({totalConsumption}) exceeds available stock ({totalAvailable}). Please check if starting stock or fresh deliveries need adjustment.
+                  </div>
+                </div>
+              )}
+
               <div className="flex items-center justify-end gap-3 pt-2">
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={fetchAuditData}
+                  onClick={() => fetchAuditData(false)}
                   className="border-slate-200 cursor-pointer"
                 >
                   Reset Form
                 </Button>
                 <Button
                   type="submit"
-                  disabled={saving || closingStock < 0}
+                  disabled={saving}
                   className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold cursor-pointer"
                 >
                   {saving ? (
