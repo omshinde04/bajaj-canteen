@@ -46,7 +46,7 @@ export async function GET(req) {
     const frequency = searchParams.get("frequency");
     const search = searchParams.get("search");
     const page = parseInt(searchParams.get("page") || "1", 10);
-    const limit = Math.min(parseInt(searchParams.get("limit") || "20", 10), 100);
+    const limit = Math.min(parseInt(searchParams.get("limit") || "100", 10), 200);
 
     const filter = { isDeleted: false, isActive: true };
     if (department) filter.department = department;

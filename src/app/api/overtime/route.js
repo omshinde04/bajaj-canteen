@@ -86,6 +86,8 @@ export async function GET(req) {
       summary: {
         totalTwoHour,
         totalThreeHour,
+        totalTwoHourCount: totalTwoHour,
+        totalThreeHourCount: totalThreeHour,
         grandTotal,
         departmentsLogged: distinctDeptsLogged,
         totalDepartments: departments.length || 6,

@@ -104,6 +104,7 @@ export async function GET(req) {
       date,
       products: PRODUCTS,
       activeProduct: activeProd,
+      record: entries.find((e) => e.productId === activeProd) || null,
       previousInfo: activePrevInfo,
       currentDayAudit: entries,
       recentLedger,

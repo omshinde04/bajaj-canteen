@@ -421,7 +421,7 @@ export default function OperatorSidebar() {
               <div className="text-[10px] text-slate-500 font-mono truncate flex items-center gap-1">
                 <span>{user.employeeId}</span>
                 <span>•</span>
-                <span className="text-emerald-700 font-semibold">Operator</span>
+                <span className="text-emerald-700 font-semibold">{user?.role?.name || "Operator"}</span>
               </div>
             </div>
           </div>
